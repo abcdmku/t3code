@@ -63,6 +63,7 @@ import { readLocalApi } from "../localApi";
 import { desktopLocalBackendId } from "../connection/desktopLocal";
 import { filesystemEnvironment } from "../state/filesystem";
 import { projectEnvironment } from "../state/projects";
+import { previewEnvironment } from "../state/preview";
 import { useEnvironmentQuery } from "../state/query";
 import { sourceControlEnvironment } from "../state/sourceControl";
 import { useAtomCommand } from "../state/use-atom-command";
@@ -84,6 +85,7 @@ import {
 } from "../lib/projectPaths";
 import { onOpenCommandPalette } from "../commandPaletteBus";
 import { isPreviewFocused } from "../lib/previewFocus";
+import { isPreviewSupportedInRuntime } from "../previewStateStore";
 import { isTerminalFocused } from "../lib/terminalFocus";
 import { selectActiveRightPanel, useRightPanelStore } from "../rightPanelStore";
 import { getLatestThreadForProject, sortThreads } from "../lib/threadSort";
@@ -123,6 +125,8 @@ import { AzureDevOpsIcon, BitbucketIcon, GitHubIcon, GitLabIcon } from "./Icons"
 import { ProjectFavicon } from "./ProjectFavicon";
 import { ProjectFilePicker } from "./files/ProjectFilePicker";
 import { ProjectContentSearchDialog } from "./search/ProjectContentSearchDialog";
+import { openProjectSurface } from "./preview/openProjectSurface";
+import { SurfaceEntryIcon } from "./surfaces/SurfaceEntryIcon";
 import { toggleThemeEditorForTheme } from "./settings/themeEditorStore";
 import { ThreadCommandSubtitle } from "./ThreadCommandSubtitle";
 import { ThreadRowLeadingStatus, ThreadRowTrailingStatus } from "./ThreadStatusIndicators";
@@ -147,6 +151,7 @@ import {
   buildSidebarProjectSnapshots,
 } from "../sidebarProjectGrouping";
 import type { Project } from "../types";
+import { useT3ProjectFileSurfaces } from "../hooks/useT3ProjectFileScripts";
 
 const EMPTY_BROWSE_ENTRIES: FilesystemBrowseResult["entries"] = [];
 
@@ -828,9 +833,14 @@ function OpenCommandPaletteDialog(props: {
     [environments],
   );
 
-  const projectCwdById = useMemo(
+  const projectCwdByKey = useMemo(
     () =>
-      new Map<ProjectId, string>(projects.map((project) => [project.id, project.workspaceRoot])),
+      new Map(
+        projects.map((project) => [
+          `${project.environmentId}:${project.id}`,
+          project.workspaceRoot,
+        ]),
+      ),
     [projects],
   );
   const projectFaviconPathById = useMemo(
@@ -846,9 +856,16 @@ function OpenCommandPaletteDialog(props: {
   const currentProjectEnvironmentId =
     activeThread?.environmentId ?? activeDraftThread?.environmentId ?? null;
   const currentProjectId = activeThread?.projectId ?? activeDraftThread?.projectId ?? null;
-  const currentProjectCwd = currentProjectId
-    ? (projectCwdById.get(currentProjectId) ?? null)
-    : null;
+  const currentProjectCwd =
+    currentProjectEnvironmentId && currentProjectId
+      ? (projectCwdByKey.get(`${currentProjectEnvironmentId}:${currentProjectId}`) ?? null)
+      : null;
+  const openPreview = useAtomCommand(previewEnvironment.open, { reportFailure: false });
+  const projectSurfaces = useT3ProjectFileSurfaces(
+    activeThread?.environmentId ?? null,
+    activeThread ? currentProjectCwd : null,
+    activeThread !== null && isPreviewSupportedInRuntime(),
+  );
   const currentProjectCwdForBrowse =
     browseEnvironmentId && currentProjectEnvironmentId === browseEnvironmentId
       ? currentProjectCwd
@@ -1031,7 +1048,9 @@ function OpenCommandPaletteDialog(props: {
           return (
             <ThreadCommandSubtitle
               environmentId={thread.environmentId}
-              projectCwd={projectCwdById.get(thread.projectId) ?? null}
+              projectCwd={
+                projectCwdByKey.get(`${thread.environmentId}:${thread.projectId}`) ?? null
+              }
               projectFaviconPath={projectFaviconPathById.get(thread.projectId) ?? null}
               projectTitle={projectTitle ?? null}
               branch={thread.branch}
@@ -1070,7 +1089,7 @@ function OpenCommandPaletteDialog(props: {
       activeThreadId,
       clientSettings.sidebarThreadSortOrder,
       navigate,
-      projectCwdById,
+      projectCwdByKey,
       projectFaviconPathById,
       projectTitleById,
       providerEntryByEnvironmentAndInstanceId,
@@ -1467,6 +1486,43 @@ function OpenCommandPaletteDialog(props: {
       openOverlayMode("files");
     },
   });
+
+  if (activeThread && isPreviewSupportedInRuntime()) {
+    const threadRef = scopeThreadRef(activeThread.environmentId, activeThread.id);
+    for (const [index, surface] of projectSurfaces.entries()) {
+      actionItems.push({
+        kind: "action",
+        value: `action:open-project-surface:${index}:${surface.name}`,
+        searchTerms: ["open custom project surface", "surface", surface.name.toLowerCase()],
+        title: (
+          <>
+            Open <span className="font-semibold">{surface.name}</span>
+          </>
+        ),
+        description: "Custom project surface",
+        icon: <SurfaceEntryIcon icon={surface.icon} className={ITEM_ICON_CLASS} />,
+        run: async () => {
+          const result = await openProjectSurface({
+            threadRef,
+            projectId: activeThread.projectId,
+            urlTemplate: surface.url,
+            openPreview,
+          });
+          if (result._tag === "Failure" && !isAtomCommandInterrupted(result)) {
+            const error = squashAtomCommandFailure(result);
+            toastManager.add(
+              stackedThreadToast({
+                type: "error",
+                title: "Unable to open custom project surface",
+                description:
+                  error instanceof Error ? error.message : "The URL could not be opened.",
+              }),
+            );
+          }
+        },
+      });
+    }
+  }
 
   actionItems.push({
     kind: "action",

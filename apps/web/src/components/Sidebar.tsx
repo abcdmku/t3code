@@ -29,7 +29,7 @@ import {
   scopeThreadRef,
   scopedThreadKey,
 } from "@t3tools/client-runtime/environment";
-import type { ScopedThreadRef, ThreadId } from "@t3tools/contracts";
+import type { ScopedThreadRef, T3ProjectFileSurface, ThreadId } from "@t3tools/contracts";
 import type { TimestampFormat } from "@t3tools/contracts/settings";
 import {
   AlarmClockIcon,
@@ -110,6 +110,7 @@ import { vcsEnvironment } from "../state/vcs";
 import { threadEnvironment } from "../state/threads";
 import { useEnvironmentQuery } from "../state/query";
 import { useAtomCommand } from "../state/use-atom-command";
+import { previewEnvironment } from "../state/preview";
 import {
   buildThreadRouteParams,
   resolveActiveThreadRouteRef,
@@ -161,6 +162,8 @@ import { deriveProviderInstanceEntries, type ProviderInstanceEntry } from "../pr
 import { primaryServerProvidersAtom } from "../state/server";
 import { useThreadRunningTerminalIds } from "../state/terminalSessions";
 import { stackedThreadToast, toastManager } from "./ui/toast";
+import { openProjectSurface } from "./preview/openProjectSurface";
+import { SidebarProjectSurfaces } from "./surfaces/SidebarProjectSurfaces";
 import { Button } from "@t3tools/ui/button";
 import { Input } from "@t3tools/ui/input";
 import { Menu, MenuPopup, MenuRadioGroup, MenuRadioItem, MenuTrigger } from "@t3tools/ui/menu";
@@ -175,6 +178,11 @@ import {
   type ComposerThreadDraftState,
   type DraftSessionState,
 } from "../composerDraftStore";
+import { pickSurfaceHostThread } from "../lib/surfaceHostThread";
+import { openSurfaceBeforeNavigate } from "../lib/projectSurfaceLaunch";
+import { selectSurfaceProjectMember } from "../lib/surfaceProjectSelection";
+import { useT3ProjectFileSurfaces } from "../hooks/useT3ProjectFileScripts";
+import { isPreviewSupportedInRuntime } from "../previewStateStore";
 
 // Settled-tail paging: recent history is the common lookup; the deep tail
 // stays behind an explicit Show more.
@@ -1843,6 +1851,36 @@ export default function Sidebar() {
           ),
     [scopedProjectGroup],
   );
+  const routeThread = useMemo(
+    () =>
+      routeThreadKey === null
+        ? null
+        : (threads.find(
+            (thread) =>
+              scopedThreadKey(scopeThreadRef(thread.environmentId, thread.id)) === routeThreadKey,
+          ) ?? null),
+    [routeThreadKey, threads],
+  );
+  const surfaceProjectMember = useMemo(
+    () =>
+      scopedProjectGroup === null
+        ? null
+        : selectSurfaceProjectMember(
+            scopedProjectGroup.memberProjects,
+            {
+              environmentId: scopedProjectGroup.environmentId,
+              projectId: scopedProjectGroup.id,
+            },
+            routeThread,
+          ),
+    [routeThread, scopedProjectGroup],
+  );
+  const projectSurfaces = useT3ProjectFileSurfaces(
+    surfaceProjectMember?.environmentId ?? null,
+    surfaceProjectMember?.workspaceRoot ?? null,
+    surfaceProjectMember !== null,
+  );
+  const openPreview = useAtomCommand(previewEnvironment.open, { reportFailure: false });
   useEffect(() => {
     if (projectScopeKey !== null && scopedProjectGroup === null) {
       setProjectScopeKey(null);
@@ -2208,6 +2246,52 @@ export default function Sidebar() {
       });
     },
     [clearSelection, isMobile, router, setOpenMobile, setSelectionAnchor],
+  );
+
+  const handleOpenProjectSurface = useCallback(
+    async (surface: T3ProjectFileSurface) => {
+      if (surfaceProjectMember === null) return;
+      const targetThread = pickSurfaceHostThread(
+        threads,
+        {
+          environmentId: surfaceProjectMember.environmentId,
+          projectId: surfaceProjectMember.id,
+        },
+        (thread) =>
+          scopedThreadKey(scopeThreadRef(thread.environmentId, thread.id)) === routeThreadKey,
+      );
+      if (targetThread === null) {
+        toastManager.add({
+          type: "error",
+          title: "Unable to open custom project surface",
+          description: "Create a thread in this project first.",
+        });
+        return;
+      }
+      const threadRef = scopeThreadRef(targetThread.environmentId, targetThread.id);
+      const result = await openSurfaceBeforeNavigate(
+        () =>
+          openProjectSurface({
+            threadRef,
+            projectId: surfaceProjectMember.id,
+            urlTemplate: surface.url,
+            openPreview,
+          }),
+        () => navigateToThread(threadRef),
+      );
+      if (result._tag === "Failure" && !isAtomCommandInterrupted(result)) {
+        const error = squashAtomCommandFailure(result);
+        toastManager.add(
+          stackedThreadToast({
+            type: "error",
+            title: "Unable to open custom project surface",
+            description: error instanceof Error ? error.message : "The URL could not be opened.",
+          }),
+        );
+        return;
+      }
+    },
+    [navigateToThread, openPreview, routeThreadKey, surfaceProjectMember, threads],
   );
 
   const navigateToDraft = useCallback(
@@ -3428,6 +3512,14 @@ export default function Sidebar() {
         }
       >
         <SidebarGroup className="ps-[calc(var(--sidebar-content-inset)+1px)] pe-[var(--sidebar-content-inset)] pb-1 pt-0">
+          {!isSearchingThreads && surfaceProjectMember !== null ? (
+            <SidebarProjectSurfaces
+              surfaces={projectSurfaces}
+              browserAvailable={isPreviewSupportedInRuntime()}
+              onOpenSurface={(surface) => void handleOpenProjectSurface(surface)}
+              className="pb-1"
+            />
+          ) : null}
           {isSearchingThreads ? (
             threadSearchResults.length > 0 ? (
               <TooltipProvider

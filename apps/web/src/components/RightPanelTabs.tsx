@@ -1,4 +1,9 @@
-import type { ContextMenuItem, PreviewSessionSnapshot, PullRequestState } from "@t3tools/contracts";
+import type {
+  ContextMenuItem,
+  PreviewSessionSnapshot,
+  PullRequestState,
+  T3ProjectFileSurface,
+} from "@t3tools/contracts";
 import { getTerminalLabel } from "@t3tools/shared/terminalLabels";
 import {
   Bot,
@@ -32,9 +37,12 @@ import { ScrollArea } from "@t3tools/ui/scroll-area";
 import { faviconUrlForOrigin } from "~/lib/favicon";
 import { useTheme } from "~/hooks/useTheme";
 import { COLLAPSED_SIDEBAR_TITLEBAR_INSET_CLASS } from "~/workspaceTitlebar";
+import { surfaceEntryKey } from "~/lib/surfaceUrls";
 
 import { PreviewPanelShell, type PreviewPanelMode } from "./preview/PreviewPanelShell";
 import { PierreEntryIcon } from "./chat/PierreEntryIcon";
+import { SurfaceEntryIcon } from "./surfaces/SurfaceEntryIcon";
+import { PROJECT_SURFACE_DISABLED_REASON } from "./surfaces/surfacePresentation";
 
 interface RightPanelTabsProps {
   mode: PreviewPanelMode;
@@ -70,6 +78,8 @@ interface RightPanelTabsProps {
   pullRequestStatuses?: Readonly<Record<string, PullRequestTabStatus>>;
   /** Running + waiting subagents; badges the Agents card in the empty state. */
   liveAgentCount: number;
+  projectSurfaces?: ReadonlyArray<T3ProjectFileSurface>;
+  onOpenProjectSurface?: (surface: T3ProjectFileSurface) => void;
   children: ReactNode;
 }
 
@@ -663,6 +673,42 @@ export function RightPanelTabs(props: RightPanelTabsProps) {
                     <TooltipPopup>{title}</TooltipPopup>
                   </Tooltip>
                 </div>
+              );
+            })}
+            {(props.projectSurfaces ?? []).map((surface, index) => {
+              const key = surfaceEntryKey(surface, index);
+              const launcher = (
+                <button
+                  type="button"
+                  aria-label={`Open custom project surface ${surface.name}`}
+                  aria-disabled={!props.browserAvailable}
+                  className={cn(
+                    "flex h-6 max-w-36 shrink-0 items-center gap-1.5 rounded-md px-2 text-xs outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                    props.browserAvailable
+                      ? "cursor-pointer text-muted-foreground hover:bg-accent/60 hover:text-foreground"
+                      : "cursor-not-allowed text-muted-foreground opacity-40",
+                  )}
+                  onClick={() => {
+                    if (props.browserAvailable) props.onOpenProjectSurface?.(surface);
+                  }}
+                >
+                  <SurfaceEntryIcon icon={surface.icon} className="size-3 shrink-0" />
+                  <span className="truncate">{surface.name}</span>
+                </button>
+              );
+              if (props.browserAvailable) {
+                return (
+                  <span key={key} className="contents">
+                    {launcher}
+                  </span>
+                );
+              }
+              return (
+                <DisabledReasonTooltip
+                  key={key}
+                  reason={PROJECT_SURFACE_DISABLED_REASON}
+                  trigger={launcher}
+                />
               );
             })}
             {props.surfaces.length > 0 ? (

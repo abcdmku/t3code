@@ -47,6 +47,7 @@ import {
   type ScopedThreadRef,
   type ResolvedKeybindingsConfig,
   type SidebarProjectGroupingMode,
+  type T3ProjectFileSurface,
   ThreadId,
 } from "@t3tools/contracts";
 import {
@@ -87,6 +88,8 @@ import { selectThreadTerminalUiState, useTerminalUiStateStore } from "../termina
 import { useThreadRunningTerminalIds } from "../state/terminalSessions";
 import { useThreadDiscoveredPorts } from "../portDiscoveryState";
 import { openDiscoveredPort } from "./preview/openDiscoveredPort";
+import { openProjectSurface } from "./preview/openProjectSurface";
+import { SidebarProjectSurfaces } from "./surfaces/SidebarProjectSurfaces";
 import { useAtomCommand } from "../state/use-atom-command";
 import { previewEnvironment } from "../state/preview";
 import {
@@ -145,7 +148,14 @@ import {
   DialogTitle,
 } from "@t3tools/ui/dialog";
 import { Input } from "@t3tools/ui/input";
-import { Menu, MenuGroup, MenuPopup, MenuRadioGroup, MenuRadioItem, MenuTrigger } from "@t3tools/ui/menu";
+import {
+  Menu,
+  MenuGroup,
+  MenuPopup,
+  MenuRadioGroup,
+  MenuRadioItem,
+  MenuTrigger,
+} from "@t3tools/ui/menu";
 import {
   NumberField,
   NumberFieldDecrement,
@@ -186,6 +196,11 @@ import {
   ThreadStatusPill,
 } from "./Sidebar.logic";
 import { sortThreads } from "../lib/threadSort";
+import { pickSurfaceHostThread } from "../lib/surfaceHostThread";
+import { openSurfaceBeforeNavigate } from "../lib/projectSurfaceLaunch";
+import { selectActiveSurfaceProjectMember } from "../lib/surfaceProjectSelection";
+import { useT3ProjectFileSurfaces } from "../hooks/useT3ProjectFileScripts";
+import { isPreviewSupportedInRuntime } from "../previewStateStore";
 import { SidebarChromeFooter, SidebarChromeHeader } from "./sidebar/SidebarChrome";
 import { useCopyToClipboard } from "~/hooks/useCopyToClipboard";
 import { useIsMobile } from "~/hooks/useMediaQuery";
@@ -1725,6 +1740,68 @@ const SidebarProjectItem = memo(function SidebarProjectItem(props: SidebarProjec
     [clearSelection, isMobile, router, setOpenMobile, setSelectionAnchor],
   );
 
+  const surfaceProjectMember = useMemo(
+    () =>
+      selectActiveSurfaceProjectMember(
+        project.memberProjects,
+        projectThreads,
+        activeRouteThreadKey,
+        (thread) => scopedThreadKey(scopeThreadRef(thread.environmentId, thread.id)),
+      ),
+    [activeRouteThreadKey, project.memberProjects, projectThreads],
+  );
+  const projectSurfaces = useT3ProjectFileSurfaces(
+    surfaceProjectMember?.environmentId ?? null,
+    surfaceProjectMember?.workspaceRoot ?? null,
+    projectExpanded && surfaceProjectMember !== null,
+  );
+  const openPreview = useAtomCommand(previewEnvironment.open, { reportFailure: false });
+  const handleOpenProjectSurface = useCallback(
+    async (surface: T3ProjectFileSurface) => {
+      if (surfaceProjectMember === null) return;
+      const targetThread = pickSurfaceHostThread(
+        projectThreads,
+        {
+          environmentId: surfaceProjectMember.environmentId,
+          projectId: surfaceProjectMember.id,
+        },
+        (thread) =>
+          scopedThreadKey(scopeThreadRef(thread.environmentId, thread.id)) === activeRouteThreadKey,
+      );
+      if (targetThread === null) {
+        toastManager.add({
+          type: "error",
+          title: "Unable to open custom project surface",
+          description: "Create a thread in this project first.",
+        });
+        return;
+      }
+      const threadRef = scopeThreadRef(targetThread.environmentId, targetThread.id);
+      const result = await openSurfaceBeforeNavigate(
+        () =>
+          openProjectSurface({
+            threadRef,
+            projectId: surfaceProjectMember.id,
+            urlTemplate: surface.url,
+            openPreview,
+          }),
+        () => navigateToThread(threadRef),
+      );
+      if (result._tag === "Failure" && !isAtomCommandInterrupted(result)) {
+        const error = squashAtomCommandFailure(result);
+        toastManager.add(
+          stackedThreadToast({
+            type: "error",
+            title: "Unable to open custom project surface",
+            description: error instanceof Error ? error.message : "The URL could not be opened.",
+          }),
+        );
+        return;
+      }
+    },
+    [activeRouteThreadKey, navigateToThread, openPreview, projectThreads, surfaceProjectMember],
+  );
+
   const handleThreadClick = useCallback(
     (
       event: React.MouseEvent,
@@ -2350,6 +2427,15 @@ const SidebarProjectItem = memo(function SidebarProjectItem(props: SidebarProjec
           </TooltipPopup>
         </Tooltip>
       </div>
+
+      {surfaceProjectMember !== null ? (
+        <SidebarProjectSurfaces
+          surfaces={projectSurfaces}
+          browserAvailable={isPreviewSupportedInRuntime()}
+          onOpenSurface={(surface) => void handleOpenProjectSurface(surface)}
+          className="px-6 pb-1"
+        />
+      ) : null}
 
       <SidebarProjectThreadList
         projectKey={project.projectKey}

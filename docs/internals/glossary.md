@@ -24,6 +24,10 @@ The top-level workspace record in the app. In [the orchestration contracts][1], 
 
 The root filesystem path for a project. In [the orchestration model][1], it is the base directory for branches and optional worktrees. See [workspace-layout.md][2].
 
+#### Custom project surface
+
+A URL declared in a repository's `t3.json` and opened in the desktop preview. Each entry belongs to one physical environment and project. It can use the environment ID, project ID, thread ID, or connected server URL when T3 Code builds the final URL. See [the user guide](../user/project-surfaces.md).
+
 #### Worktree
 
 A Git worktree used as an isolated workspace for a thread. If a thread has a `worktreePath` in [the contracts][1], it runs there instead of in the main working tree. Git operations live behind the VCS driver contract in `apps/server/src/vcs/VcsDriver.ts`, implemented by [GitVcsDriverCore.ts][3].

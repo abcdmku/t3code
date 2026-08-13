@@ -13,6 +13,7 @@ import {
   type ServerProvider,
   type ResolvedKeybindingsConfig,
   type ScopedThreadRef,
+  type T3ProjectFileSurface,
   type ThreadId,
   type TurnId,
   type KeybindingCommand,
@@ -137,6 +138,7 @@ import {
 } from "../previewStateStore";
 import { addBrowserSurface } from "./preview/addBrowserSurface";
 import { closePreviewSession } from "./preview/closePreviewSession";
+import { openProjectSurface } from "./preview/openProjectSurface";
 import { ThreadPreviewMiniPlayer } from "./preview/ThreadPreviewMiniPlayer";
 import { subscribePreviewAction } from "./preview/previewActionBus";
 import { getConfiguredPreviewUrls } from "./preview/previewEmptyStateLogic";
@@ -186,6 +188,7 @@ import {
   useEnvironmentSettings,
 } from "../hooks/useSettings";
 import { useNowMinute } from "../hooks/useNowMinute";
+import { useT3ProjectFileSurfaces } from "../hooks/useT3ProjectFileScripts";
 import { useNewThreadHandler } from "../hooks/useHandleNewThread";
 import { resolveAppModelSelectionForInstance } from "../modelSelection";
 import { getTerminalFocusOwner } from "../lib/terminalFocus";
@@ -1707,6 +1710,37 @@ function ChatViewContent(props: ChatViewProps) {
     ? scopeProjectRef(activeThread.environmentId, activeThread.projectId)
     : null;
   const activeProject = useProject(activeProjectRef);
+  const projectFileSurfaces = useT3ProjectFileSurfaces(
+    activeThread?.environmentId ?? null,
+    activeProject?.workspaceRoot ?? null,
+    activeThread !== null && activeProject !== null,
+  );
+  const threadProjectSurfaces = useMemo(
+    () => projectFileSurfaces.filter((surface) => surface.threadUrl !== undefined),
+    [projectFileSurfaces],
+  );
+  const handleOpenThreadProjectSurface = useCallback(
+    async (surface: T3ProjectFileSurface) => {
+      if (!activeThreadRef || !activeThread || surface.threadUrl === undefined) return;
+      const result = await openProjectSurface({
+        threadRef: activeThreadRef,
+        projectId: activeThread.projectId,
+        urlTemplate: surface.threadUrl,
+        openPreview,
+      });
+      if (result._tag === "Failure" && !isAtomCommandInterrupted(result)) {
+        const error = squashAtomCommandFailure(result);
+        toastManager.add(
+          stackedThreadToast({
+            type: "error",
+            title: "Unable to open custom project surface",
+            description: error instanceof Error ? error.message : "The URL could not be opened.",
+          }),
+        );
+      }
+    },
+    [activeThread, activeThreadRef, openPreview],
+  );
   const handleNewThreadInActiveProject = useCallback(() => {
     startNewThreadForProject(activeProjectRef, handleNewThread);
   }, [activeProjectRef, handleNewThread]);
@@ -6563,6 +6597,8 @@ function ChatViewContent(props: ChatViewProps) {
           agentsAvailable
           pullRequestStatuses={pullRequestTabStatuses}
           liveAgentCount={agentPanelModel.liveCount}
+          projectSurfaces={threadProjectSurfaces}
+          onOpenProjectSurface={(surface) => void handleOpenThreadProjectSurface(surface)}
         >
           {rightPanelContent}
         </RightPanelTabs>
@@ -6597,6 +6633,8 @@ function ChatViewContent(props: ChatViewProps) {
             agentsAvailable
             pullRequestStatuses={pullRequestTabStatuses}
             liveAgentCount={agentPanelModel.liveCount}
+            projectSurfaces={threadProjectSurfaces}
+            onOpenProjectSurface={(surface) => void handleOpenThreadProjectSurface(surface)}
           >
             {rightPanelContent}
           </RightPanelTabs>
