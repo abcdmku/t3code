@@ -25,6 +25,7 @@ describe("buildT3ProjectFileJsonSchema", () => {
         string,
         {
           description?: string;
+          maxItems?: number;
           items?: { properties: Record<string, unknown>; required: ReadonlyArray<string> };
         }
       >;
@@ -36,6 +37,7 @@ describe("buildT3ProjectFileJsonSchema", () => {
       "defaultThreadEnvMode",
       "iconPath",
       "scripts",
+      "surfaces",
     ]);
     expect(schema.required).toBeUndefined();
     expect(schema.properties.iconPath?.description).toContain("Workspace-relative path");
@@ -50,6 +52,16 @@ describe("buildT3ProjectFileJsonSchema", () => {
       "name",
       "previewUrl",
       "runOnWorktreeCreate",
+    ]);
+
+    const surface = schema.properties.surfaces?.items;
+    expect(schema.properties.surfaces?.maxItems).toBe(20);
+    expect(surface?.required).toEqual(["name", "url"]);
+    expect(Object.keys(surface?.properties ?? {}).sort()).toEqual([
+      "icon",
+      "name",
+      "threadUrl",
+      "url",
     ]);
   });
 
@@ -75,6 +87,19 @@ describe("T3ProjectFileFromJson", () => {
 
   it("fails on malformed JSON", () => {
     expect(() => decodeJson("{ not json")).toThrow();
+  });
+
+  it("keeps valid surfaces when another entry is invalid", () => {
+    const decoded = decodeJson(`{
+      "scripts": [{ "name": "Dev", "command": "pnpm dev" }],
+      "surfaces": [
+        { "name": "Missing URL" },
+        { "name": "Board", "url": "http://127.0.0.1:5000/" },
+      ],
+    }`);
+
+    expect(decoded.scripts).toEqual([{ name: "Dev", command: "pnpm dev" }]);
+    expect(decoded.surfaces).toEqual([{ name: "Board", url: "http://127.0.0.1:5000/" }]);
   });
 });
 

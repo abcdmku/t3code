@@ -33,6 +33,61 @@ describe("T3ProjectFile", () => {
     expect(decode({ futureField: true })).toEqual({});
   });
 
+  it("decodes custom project surfaces", () => {
+    const decoded = decode({
+      surfaces: [
+        {
+          name: "Sketch",
+          icon: "play",
+          url: "http://127.0.0.1:4820/",
+          threadUrl: "http://127.0.0.1:4820/threads/{threadId}",
+        },
+        { name: "Sketch", url: "https://app.example/projects/{projectId}" },
+      ],
+    });
+
+    expect(decoded.surfaces).toEqual([
+      {
+        name: "Sketch",
+        icon: "play",
+        url: "http://127.0.0.1:4820/",
+        threadUrl: "http://127.0.0.1:4820/threads/{threadId}",
+      },
+      { name: "Sketch", url: "https://app.example/projects/{projectId}" },
+    ]);
+  });
+
+  it("trims surface fields", () => {
+    expect(
+      decode({ surfaces: [{ name: " Sketch ", url: " http://127.0.0.1:4820/ " }] }).surfaces?.[0],
+    ).toEqual({ name: "Sketch", url: "http://127.0.0.1:4820/" });
+  });
+
+  it("drops invalid surface entries without dropping the file", () => {
+    const decoded = decode({
+      scripts: [{ name: "Dev", command: "pnpm dev" }],
+      surfaces: [
+        { name: "Missing URL" },
+        { name: "Board", url: "http://127.0.0.1:5000/" },
+        "not-an-object",
+      ],
+    });
+
+    expect(decoded.scripts).toEqual([{ name: "Dev", command: "pnpm dev" }]);
+    expect(decoded.surfaces).toEqual([{ name: "Board", url: "http://127.0.0.1:5000/" }]);
+  });
+
+  it("drops surface entries with URLs longer than the preview contract allows", () => {
+    expect(
+      decode({
+        surfaces: [
+          { name: "Too long", url: `https://example.com/${"x".repeat(2048)}` },
+          { name: "Board", url: "http://127.0.0.1:5000/" },
+        ],
+      }).surfaces,
+    ).toEqual([{ name: "Board", url: "http://127.0.0.1:5000/" }]);
+  });
+
   it("trims icon paths and script fields", () => {
     const decoded = decode({
       iconPath: " assets/logo.svg ",

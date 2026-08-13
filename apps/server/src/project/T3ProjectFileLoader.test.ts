@@ -51,6 +51,36 @@ it.layer(TestLayer)("T3ProjectFileLoader", (it) => {
       }),
     );
 
+    it.effect("loads custom project surfaces", () =>
+      Effect.gen(function* () {
+        const loader = yield* T3ProjectFileLoader.T3ProjectFileLoader;
+        const cwd = yield* makeTempDir;
+        yield* writeProjectFile(
+          cwd,
+          `{
+            "surfaces": [{
+              "name": "Sketch",
+              "url": "http://127.0.0.1:4820/",
+              "threadUrl": "http://127.0.0.1:4820/threads/{threadId}",
+            }],
+          }`,
+        );
+
+        const loaded = yield* loader.load(cwd);
+
+        expect(Option.isSome(loaded)).toBe(true);
+        if (Option.isSome(loaded)) {
+          expect(loaded.value.surfaces).toEqual([
+            {
+              name: "Sketch",
+              url: "http://127.0.0.1:4820/",
+              threadUrl: "http://127.0.0.1:4820/threads/{threadId}",
+            },
+          ]);
+        }
+      }),
+    );
+
     it.effect("returns none when t3.json is missing", () =>
       Effect.gen(function* () {
         const loader = yield* T3ProjectFileLoader.T3ProjectFileLoader;

@@ -1,7 +1,12 @@
 import * as Exit from "effect/Exit";
 import * as Schema from "effect/Schema";
 
-import { T3ProjectFile, T3_PROJECT_FILE_SCHEMA_URL } from "@t3tools/contracts";
+import {
+  T3ProjectFile,
+  T3ProjectFileSurface,
+  T3_PROJECT_FILE_MAX_SURFACES,
+  T3_PROJECT_FILE_SCHEMA_URL,
+} from "@t3tools/contracts";
 
 import { fromLenientJson } from "./schemaJson.ts";
 
@@ -35,6 +40,15 @@ export function buildT3ProjectFileJsonSchema(): Record<string, unknown> {
     $schema: "https://json-schema.org/draft/2020-12/schema",
     $id: T3_PROJECT_FILE_SCHEMA_URL,
     ...document.schema,
+    properties: {
+      ...(document.schema as { properties?: Record<string, unknown> }).properties,
+      surfaces: {
+        description: "Custom project surfaces shown in T3 Code.",
+        type: "array",
+        items: Schema.toJsonSchemaDocument(T3ProjectFileSurface).schema,
+        maxItems: T3_PROJECT_FILE_MAX_SURFACES,
+      },
+    },
   };
   if (document.definitions && Object.keys(document.definitions).length > 0) {
     jsonSchema.$defs = document.definitions;

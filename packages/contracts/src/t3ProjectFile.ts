@@ -1,6 +1,7 @@
 import * as Schema from "effect/Schema";
 import * as SchemaTransformation from "effect/SchemaTransformation";
 
+import { ForwardCompatibleArray } from "./baseSchemas.ts";
 import { ThreadEnvMode } from "./environment.ts";
 import { ProjectScriptIcon } from "./orchestration.ts";
 
@@ -12,6 +13,8 @@ export const T3_PROJECT_FILE_SCHEMA_URL = "https://t3.codes/schema/t3.json";
 
 const T3_PROJECT_FILE_PATH_MAX_LENGTH = 512;
 const T3_PROJECT_FILE_MAX_SCRIPTS = 50;
+export const T3_PROJECT_FILE_MAX_SURFACES = 20;
+const T3_PROJECT_FILE_SURFACE_URL_MAX_LENGTH = 2048;
 
 // Annotations go on the encoded (string) side so they survive into the
 // published JSON Schema; decoding still trims and re-validates non-emptiness.
@@ -59,6 +62,37 @@ export const T3ProjectFileScript = Schema.Struct({
 });
 export type T3ProjectFileScript = typeof T3ProjectFileScript.Type;
 
+export const T3ProjectFileSurface = Schema.Struct({
+  name: trimmedNonEmpty({
+    description: "Name shown in T3 Code.",
+  }),
+  icon: Schema.optionalKey(
+    trimmedNonEmpty({
+      description:
+        'Optional icon name. Supported values are "play", "test", "lint", "configure", "build", and "debug". Other values use the app icon.',
+    }),
+  ),
+  url: trimmedNonEmpty(
+    {
+      description:
+        "Project URL. Supports {environmentId}, {projectId}, and {serverUrl} placeholders.",
+    },
+    T3_PROJECT_FILE_SURFACE_URL_MAX_LENGTH,
+  ),
+  threadUrl: Schema.optionalKey(
+    trimmedNonEmpty(
+      {
+        description:
+          "Optional thread URL. Supports {environmentId}, {projectId}, {serverUrl}, and {threadId} placeholders.",
+      },
+      T3_PROJECT_FILE_SURFACE_URL_MAX_LENGTH,
+    ),
+  ),
+}).annotate({
+  description: "A custom project surface that opens in T3 Code's desktop preview.",
+});
+export type T3ProjectFileSurface = typeof T3ProjectFileSurface.Type;
+
 export const T3ProjectFile = Schema.Struct({
   $schema: Schema.optionalKey(
     Schema.String.annotate({
@@ -86,6 +120,11 @@ export const T3ProjectFile = Schema.Struct({
         description: "Project scripts shared with everyone who opens this repository in T3 Code.",
       })
       .check(Schema.isMaxLength(T3_PROJECT_FILE_MAX_SCRIPTS)),
+  ),
+  surfaces: Schema.optionalKey(
+    ForwardCompatibleArray(T3ProjectFileSurface).check(
+      Schema.isMaxLength(T3_PROJECT_FILE_MAX_SURFACES),
+    ),
   ),
 }).annotate({
   title: "T3 project file",
