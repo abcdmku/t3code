@@ -1,5 +1,5 @@
 import * as Schema from "effect/Schema";
-import { describe, expect, it } from "vite-plus/test";
+import { describe, expect, it } from "@effect/vitest";
 
 import { ExecutionEnvironmentDescriptor } from "./environment.ts";
 
@@ -24,6 +24,19 @@ describe("ExecutionEnvironmentDescriptor", () => {
         ...descriptor,
         capabilities: { ...descriptor.capabilities, pullRequests: true },
       }).capabilities.pullRequests,
+    ).toBe(true);
+  });
+
+  it("treats a missing UI control capability as unsupported", () => {
+    expect(decodeDescriptor(descriptor).capabilities.uiControl).toBeUndefined();
+  });
+
+  it("preserves an advertised UI control capability", () => {
+    expect(
+      decodeDescriptor({
+        ...descriptor,
+        capabilities: { ...descriptor.capabilities, uiControl: true },
+      }).capabilities.uiControl,
     ).toBe(true);
   });
 });

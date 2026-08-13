@@ -149,6 +149,12 @@ import {
   PreviewAutomationStreamEvent,
 } from "./previewAutomation.ts";
 import {
+  UiControlHost,
+  UiControlHostFocus,
+  UiControlResponse,
+  UiControlStreamEvent,
+} from "./uiControl.ts";
+import {
   ServerConfigStreamEvent,
   ServerConfig,
   ServerProviderUpdateError,
@@ -247,6 +253,11 @@ export const WS_METHODS = {
   previewAutomationConnect: "previewAutomation.connect",
   previewAutomationRespond: "previewAutomation.respond",
   previewAutomationFocusHost: "previewAutomation.focusHost",
+
+  // UI control host methods
+  uiControlConnect: "uiControl.connect",
+  uiControlRespond: "uiControl.respond",
+  uiControlFocusHost: "uiControl.focusHost",
 
   // Server meta
   serverProbe: "server.probe",
@@ -839,6 +850,23 @@ export const WsPreviewAutomationFocusHostRpc = Rpc.make(WS_METHODS.previewAutoma
   error: EnvironmentAuthorizationError,
 });
 
+export const WsUiControlConnectRpc = Rpc.make(WS_METHODS.uiControlConnect, {
+  payload: UiControlHost,
+  success: UiControlStreamEvent,
+  error: EnvironmentAuthorizationError,
+  stream: true,
+});
+
+export const WsUiControlRespondRpc = Rpc.make(WS_METHODS.uiControlRespond, {
+  payload: UiControlResponse,
+  error: EnvironmentAuthorizationError,
+});
+
+export const WsUiControlFocusHostRpc = Rpc.make(WS_METHODS.uiControlFocusHost, {
+  payload: UiControlHostFocus,
+  error: EnvironmentAuthorizationError,
+});
+
 export const WsSubscribePreviewEventsRpc = Rpc.make(WS_METHODS.subscribePreviewEvents, {
   payload: Schema.Struct({}),
   success: PreviewEvent,
@@ -1054,6 +1082,9 @@ export const WsRpcGroup = RpcGroup.make(
   WsPreviewAutomationConnectRpc,
   WsPreviewAutomationRespondRpc,
   WsPreviewAutomationFocusHostRpc,
+  WsUiControlConnectRpc,
+  WsUiControlRespondRpc,
+  WsUiControlFocusHostRpc,
   WsSubscribePreviewEventsRpc,
   WsSubscribeDiscoveredLocalServersRpc,
   WsSubscribeServerConfigRpc,

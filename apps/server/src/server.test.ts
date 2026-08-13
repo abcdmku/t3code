@@ -8,6 +8,7 @@ import {
   AuthAccessTokenType,
   AuthEnvironmentBootstrapTokenType,
   AuthTokenExchangeGrantType,
+  AuthUiOperateScope,
   CommandId,
   DEFAULT_SERVER_SETTINGS,
   EnvironmentId,
@@ -1628,6 +1629,92 @@ it.layer(NodeServices.layer)("server router seam", (it) => {
         "access:write",
         "relay:write",
       ]);
+    }).pipe(Effect.provide(NodeHttpServer.layerTest)),
+  );
+
+  it.effect("routes an HTTP UI invocation through the connected WebSocket host", () =>
+    Effect.scoped(
+      Effect.gen(function* () {
+        yield* buildAppUnderTest();
+
+        const connected = yield* Deferred.make<void>();
+        const routedThreadId = yield* Deferred.make<string>();
+        const wsUrl = yield* getWsServerUrl("/ws");
+        yield* withWsRpcClient(wsUrl, (client) =>
+          client[WS_METHODS.uiControlConnect]({
+            clientId: "web-integration-host",
+            environmentId: testEnvironmentDescriptor.environmentId,
+            supportedOperations: ["ui.revealThread"],
+          }).pipe(
+            Stream.runForEach((event) => {
+              if (event.type === "connected") return Deferred.succeed(connected, undefined);
+              if (event.type === "cancel") return Effect.void;
+              const input = event.request.input as { readonly threadId?: string };
+              return Deferred.succeed(routedThreadId, input.threadId ?? "").pipe(
+                Effect.andThen(
+                  client[WS_METHODS.uiControlRespond]({
+                    clientId: "web-integration-host",
+                    connectionId: event.connectionId,
+                    requestId: event.request.requestId,
+                    ok: true,
+                  }),
+                ),
+              );
+            }),
+          ),
+        ).pipe(Effect.forkScoped);
+        yield* Deferred.await(connected);
+
+        const { response: tokenResponse, body: tokenBody } = yield* exchangeAccessToken(
+          defaultDesktopBootstrapToken,
+          { scope: AuthUiOperateScope },
+        );
+        assert.equal(tokenResponse.status, 200);
+        assert.isDefined(tokenBody.access_token);
+
+        const response = yield* HttpClient.post("/api/ui/invoke", {
+          headers: { authorization: `Bearer ${tokenBody.access_token ?? ""}` },
+          body: yield* HttpBody.json({
+            operation: "ui.revealThread",
+            input: { threadId: "thread-from-http" },
+          }),
+        });
+        const body = yield* responseJsonEffect<{ readonly delivered: boolean }>(response);
+
+        assert.equal(response.status, 200);
+        assert.deepEqual(body, { delivered: true });
+        assert.equal(yield* Deferred.await(routedThreadId), "thread-from-http");
+      }),
+    ).pipe(Effect.provide(NodeHttpServer.layerTest)),
+  );
+
+  it.effect("does not let a ui-only token register as a host", () =>
+    Effect.gen(function* () {
+      yield* buildAppUnderTest();
+      const { response: tokenResponse, body: tokenBody } = yield* exchangeAccessToken(
+        defaultDesktopBootstrapToken,
+        { scope: AuthUiOperateScope },
+      );
+      assert.equal(tokenResponse.status, 200);
+      assert.isDefined(tokenBody.access_token);
+
+      const ticketResponse = yield* HttpClient.post("/api/auth/websocket-ticket", {
+        headers: { authorization: `Bearer ${tokenBody.access_token ?? ""}` },
+      });
+      const ticketBody = yield* responseJsonEffect<{ readonly ticket: string }>(ticketResponse);
+      const wsUrl = `${yield* getWsServerUrl("/ws", { authenticated: false })}?wsTicket=${encodeURIComponent(ticketBody.ticket)}`;
+      const error = yield* withWsRpcClient(wsUrl, (client) =>
+        client[WS_METHODS.uiControlConnect]({
+          clientId: "ui-only-client",
+          environmentId: testEnvironmentDescriptor.environmentId,
+          supportedOperations: ["ui.revealThread"],
+        }).pipe(Stream.runHead),
+      ).pipe(Effect.scoped, Effect.flip);
+
+      assert.equal(error._tag, "EnvironmentAuthorizationError");
+      if (error._tag === "EnvironmentAuthorizationError") {
+        assert.equal(error.requiredScope, "orchestration:operate");
+      }
     }).pipe(Effect.provide(NodeHttpServer.layerTest)),
   );
 

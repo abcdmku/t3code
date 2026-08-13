@@ -33,6 +33,7 @@ import {
   OrchestrationShellSnapshot,
   OrchestrationThreadDetailSnapshot,
 } from "./orchestration.ts";
+import { UiControlInvocation, UiControlInvokeResult } from "./uiControl.ts";
 import {
   PullRequestDiffInput,
   PullRequestDiffResult,
@@ -530,6 +531,15 @@ export class EnvironmentOrchestrationHttpApi extends HttpApiGroup.make("orchestr
     }).middleware(EnvironmentAuthenticatedAuth),
   ) {}
 
+export class EnvironmentUiHttpApi extends HttpApiGroup.make("ui").add(
+  HttpApiEndpoint.post("invoke", "/api/ui/invoke", {
+    headers: OptionalBearerHeaders,
+    payload: UiControlInvocation,
+    success: UiControlInvokeResult,
+    error: EnvironmentScopedOperationErrors,
+  }).middleware(EnvironmentAuthenticatedAuth),
+) {}
+
 /** Large, compressible pull-request payloads travel over HTTP rather than the RPC socket. */
 export class EnvironmentPullRequestsHttpApi extends HttpApiGroup.make("pullRequests").add(
   HttpApiEndpoint.post("diff", "/api/pull-requests/diff", {
@@ -611,5 +621,6 @@ export class EnvironmentHttpApi extends HttpApi.make("environment")
   .add(EnvironmentMetadataHttpApi)
   .add(EnvironmentAuthHttpApi)
   .add(EnvironmentOrchestrationHttpApi)
+  .add(EnvironmentUiHttpApi)
   .add(EnvironmentPullRequestsHttpApi)
   .add(EnvironmentConnectHttpApi) {}
