@@ -8,7 +8,7 @@ import type * as Electron from "electron";
 import * as DesktopBackendManager from "../../backend/DesktopBackendManager.ts";
 import * as DesktopBackendPool from "../../backend/DesktopBackendPool.ts";
 import * as ElectronWindow from "../../electron/ElectronWindow.ts";
-import { getLocalEnvironmentBootstraps, getWindowFullscreenState } from "./window.ts";
+import { getLocalEnvironmentBootstraps, getWindowFullscreenState, revealWindow } from "./window.ts";
 
 const readyWslConfig: DesktopBackendManager.DesktopBackendStartConfig = {
   executablePath: "wsl.exe",
@@ -145,4 +145,36 @@ describe("getWindowFullscreenState", () => {
       ),
     );
   });
+});
+
+describe("revealWindow", () => {
+  it.effect("raises the current main window", () => {
+    const revealed: Electron.BrowserWindow[] = [];
+    const window = { id: 1 } as Electron.BrowserWindow;
+
+    return Effect.gen(function* () {
+      yield* revealWindow.handler(undefined);
+      assert.deepEqual(revealed, [window]);
+    }).pipe(
+      Effect.provide(
+        Layer.mock(ElectronWindow.ElectronWindow)({
+          currentMainOrFirst: Effect.succeed(Option.some(window)),
+          reveal: (target) =>
+            Effect.sync(() => {
+              revealed.push(target);
+            }),
+        }),
+      ),
+    );
+  });
+
+  it.effect("does nothing when no window is open", () =>
+    revealWindow.handler(undefined).pipe(
+      Effect.provide(
+        Layer.mock(ElectronWindow.ElectronWindow)({
+          currentMainOrFirst: Effect.succeed(Option.none()),
+        }),
+      ),
+    ),
+  );
 });
