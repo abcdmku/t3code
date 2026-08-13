@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 690" role="img" aria-labelledby="title desc">
+  <title id="title">Custom project surface flow</title>
+  <desc id="desc">A sequence diagram with lanes for the repository, T3 server, desktop client, and surface web app. It shows loading t3.json, validation, launcher display, URL resolution, and opening a normal preview tab.</desc>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #ffffff;
+      --lane: #f8fafc;
+      --header: #ecfdf5;
+      --border: #cbd5e1;
+      --grid: #94a3b8;
+      --text: #0f172a;
+      --muted: #475569;
+      --request: #2563eb;
+      --response: #047857;
+      --open: #c2410c;
+      --note: #f1f5f9;
+      --note-border: #94a3b8;
+      --warning: #fff7ed;
+      --warning-border: #f97316;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b0f14;
+        --lane: #111827;
+        --header: #064e3b;
+        --border: #334155;
+        --grid: #64748b;
+        --text: #f8fafc;
+        --muted: #cbd5e1;
+        --request: #60a5fa;
+        --response: #34d399;
+        --open: #fb923c;
+        --note: #1e293b;
+        --note-border: #64748b;
+        --warning: #431407;
+        --warning-border: #fb923c;
+      }
+    }
+    text { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--text); }
+    .bg { fill: var(--bg); }
+    .lane { fill: var(--lane); stroke: var(--border); stroke-width: 1; }
+    .lane-header { fill: var(--header); stroke: var(--border); stroke-width: 1; }
+    .title { font-size: 24px; font-weight: 600; }
+    .subtitle { font-size: 15px; fill: var(--muted); }
+    .lane-title { font-size: 17px; font-weight: 600; text-anchor: middle; }
+    .lane-subtitle { font-size: 13px; fill: var(--muted); text-anchor: middle; }
+    .lifeline { stroke: var(--grid); stroke-width: 1.5; stroke-dasharray: 5 7; }
+    .request { stroke: var(--request); fill: none; stroke-width: 2.5; marker-end: url(#request-arrow); }
+    .response { stroke: var(--response); fill: none; stroke-width: 2.5; marker-end: url(#response-arrow); }
+    .open { stroke: var(--open); fill: none; stroke-width: 2.5; marker-end: url(#open-arrow); }
+    .event-label { font-size: 15px; font-weight: 600; text-anchor: middle; }
+    .event-detail { font-size: 13px; fill: var(--muted); text-anchor: middle; }
+    .request-label { fill: var(--request); }
+    .response-label { fill: var(--response); }
+    .open-label { fill: var(--open); }
+    .note { fill: var(--note); stroke: var(--note-border); stroke-width: 1; }
+    .note-title { font-size: 14px; font-weight: 600; text-anchor: middle; }
+    .note-text { font-size: 12px; fill: var(--muted); text-anchor: middle; }
+    .warning { fill: var(--warning); stroke: var(--warning-border); stroke-width: 1.5; }
+    .warning-text { font-size: 13px; font-weight: 600; text-anchor: middle; }
+    .step { fill: var(--bg); stroke: var(--border); stroke-width: 1; }
+    .step-number { font-size: 12px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+  </style>
+  <defs>
+    <marker id="request-arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="var(--request)" />
+    </marker>
+    <marker id="response-arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="var(--response)" />
+    </marker>
+    <marker id="open-arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="var(--open)" />
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1200" height="690" />
+  <text class="title" x="28" y="36">Custom project surfaces</text>
+  <text class="subtitle" x="28" y="62">A repository declares URLs. The desktop client validates context and opens a normal preview tab.</text>
+
+  <rect class="lane" x="20" y="86" width="270" height="574" rx="10" />
+  <rect class="lane" x="310" y="86" width="270" height="574" rx="10" />
+  <rect class="lane" x="600" y="86" width="270" height="574" rx="10" />
+  <rect class="lane" x="890" y="86" width="290" height="574" rx="10" />
+
+  <rect class="lane-header" x="20" y="86" width="270" height="68" rx="10" />
+  <rect class="lane-header" x="310" y="86" width="270" height="68" rx="10" />
+  <rect class="lane-header" x="600" y="86" width="270" height="68" rx="10" />
+  <rect class="lane-header" x="890" y="86" width="290" height="68" rx="10" />
+
+  <text class="lane-title" x="155" y="114">Repository</text>
+  <text class="lane-subtitle" x="155" y="136">t3.json in one physical project</text>
+  <text class="lane-title" x="445" y="114">T3 server</text>
+  <text class="lane-subtitle" x="445" y="136">Bounded project file read</text>
+  <text class="lane-title" x="735" y="114">Desktop client</text>
+  <text class="lane-subtitle" x="735" y="136">Validate, resolve, and preview</text>
+  <text class="lane-title" x="1035" y="114">Surface app</text>
+  <text class="lane-subtitle" x="1035" y="136">Regular HTTP or HTTPS page</text>
+
+  <line class="lifeline" x1="155" y1="154" x2="155" y2="612" />
+  <line class="lifeline" x1="445" y1="154" x2="445" y2="612" />
+  <line class="lifeline" x1="735" y1="154" x2="735" y2="612" />
+  <line class="lifeline" x1="1035" y1="154" x2="1035" y2="612" />
+
+  <circle class="step" cx="615" cy="195" r="14" />
+  <text class="step-number" x="615" y="195">1</text>
+  <line class="request" x1="735" y1="195" x2="455" y2="195" />
+  <text class="event-label request-label" x="590" y="182">read active project's t3.json</text>
+
+  <circle class="step" cx="325" cy="250" r="14" />
+  <text class="step-number" x="325" y="250">2</text>
+  <line class="request" x1="445" y1="235" x2="165" y2="235" />
+  <text class="event-label request-label" x="300" y="222">bounded file request</text>
+  <line class="response" x1="155" y1="275" x2="725" y2="275" />
+  <text class="event-label response-label" x="445" y="300">surfaces[] with name, URL, thread URL, and icon</text>
+
+  <circle class="step" cx="615" cy="355" r="14" />
+  <text class="step-number" x="615" y="355">3</text>
+  <rect class="note" x="620" y="325" width="230" height="73" rx="8" />
+  <text class="note-title" x="735" y="347">Validate before display</text>
+  <text class="note-text" x="735" y="368">HTTP(S), known placeholders,</text>
+  <text class="note-text" x="735" y="385">physical project, remote route</text>
+
+  <circle class="step" cx="615" cy="445" r="14" />
+  <text class="step-number" x="615" y="445">4</text>
+  <rect class="note" x="620" y="415" width="230" height="73" rx="8" />
+  <text class="note-title" x="735" y="437">Show launchers</text>
+  <text class="note-text" x="735" y="458">Sidebar, command palette,</text>
+  <text class="note-text" x="735" y="475">and thread preview rail</text>
+
+  <circle class="step" cx="615" cy="535" r="14" />
+  <text class="step-number" x="615" y="535">5</text>
+  <line class="open" x1="735" y1="525" x2="1025" y2="525" />
+  <text class="event-label open-label" x="880" y="512">GET resolved URL</text>
+  <text class="event-detail" x="880" y="548">IDs are encoded, server credentials are stripped</text>
+  <line class="response" x1="1035" y1="575" x2="745" y2="575" />
+  <text class="event-label response-label" x="880" y="600">open or focus preview tab</text>
+
+  <rect class="note" x="39" y="630" width="232" height="45" rx="7" />
+  <text class="note-title" x="155" y="650">Repository-owned config</text>
+  <text class="note-text" x="155" y="666">Edit or remove entries in t3.json</text>
+  <rect class="note" x="329" y="630" width="232" height="45" rx="7" />
+  <text class="note-title" x="445" y="650">Remote-aware read</text>
+  <text class="note-text" x="445" y="666">The server owns the filesystem</text>
+  <rect class="note" x="619" y="630" width="232" height="45" rx="7" />
+  <text class="note-title" x="735" y="650">Desktop only</text>
+  <text class="note-text" x="735" y="666">Web and mobile do not host previews</text>
+  <rect class="warning" x="899" y="630" width="272" height="45" rx="7" />
+  <text class="warning-text" x="1035" y="649">No plugin code or injected bridge</text>
+  <text class="note-text" x="1035" y="666">The page receives URL context only</text>
+</svg>
