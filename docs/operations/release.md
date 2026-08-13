@@ -24,7 +24,8 @@ This document covers the unified release workflow for stable and nightly desktop
   - Nightly runs are always GitHub prereleases and never marked latest.
   - Automatically generated release notes are pinned to the previous tag in the same channel, so stable compares to the previous stable tag and nightly compares to the previous nightly tag.
 - Includes Electron auto-update metadata (for example `latest*.yml`, `nightly*.yml`, and `*.blockmap`) in release assets.
-- Publishes the CLI package (`apps/server`, npm package `t3`) with OIDC trusted publishing from the same workflow file:
+- Publishes `@t3tools/contracts`, `@t3tools/sdk`, `@t3tools/ui`, and the CLI package `t3` with
+  OIDC trusted publishing from the same workflow file. The scoped packages publish in that order:
   - stable releases publish npm dist-tag `latest`
   - nightly releases publish npm dist-tag `nightly`
 - Deploys the hosted web app to Vercel only after a release is published:
@@ -168,7 +169,7 @@ One-time Vercel dashboard setup:
   - `make_latest` is always `false`
 - Uses the next stable patch version as the nightly base. For example, `0.0.17` produces nightlies on `0.0.18-nightly.*`.
 - Publishes Electron auto-update metadata to the dedicated `nightly` updater channel, so desktop users can opt into that track independently from stable.
-- Publishes the CLI package (`apps/server`, npm package `t3`) to the `nightly` npm dist-tag using the same nightly version.
+- Publishes all npm packages to the `nightly` dist-tag with the same nightly version.
 - Does not commit version bumps back to `main`.
 
 ## Server self-update release invariant
@@ -179,8 +180,8 @@ npm before users can receive that client.
 
 The workflow enforces this ordering:
 
-1. `publish_cli` publishes the exact stable or nightly version to npm.
-2. `release` depends on `publish_cli` before exposing desktop artifacts in GitHub Releases.
+1. `publish_npm` publishes the exact stable or nightly version to npm.
+2. `release` depends on `publish_npm` before exposing desktop artifacts in GitHub Releases.
 3. `deploy_web` depends on `release` before moving the hosted channel to the new client.
 
 Preserve these dependencies when changing the release graph. Publishing a client first would leave
@@ -214,32 +215,34 @@ desktop-managed guidance when those environments are available.
   - `electron-updater` reads `latest-mac.yml` on stable and `nightly-mac.yml` on nightly, for both Intel and Apple Silicon.
   - The workflow merges the per-arch mac manifests into one channel-specific mac manifest before publishing the GitHub Release.
 
-## 0) npm OIDC trusted publishing setup (CLI)
+## 0) npm trusted publishing setup
 
-The workflow invokes `node apps/server/scripts/cli.ts publish` after aligning package versions. That
-script temporarily prepares the `t3` package, then runs `vp pm publish --filter t3 ...` from the
-repository root so workspace publish configuration is applied correctly.
+The workflow builds every public package before publishing. It publishes contracts, SDK, and UI in
+dependency order, then invokes `node apps/server/scripts/cli.ts publish` for `t3`.
 
 Checklist:
 
-1. Confirm npm org/user owns package `t3` (or rename package first if needed).
-2. In npm package settings, configure Trusted Publisher:
+1. Confirm the npm org owns `t3`, `@t3tools/contracts`, `@t3tools/sdk`, and `@t3tools/ui`.
+2. npm cannot add a trusted publisher to a package that does not exist. For each new package,
+   publish a lower bootstrap version with authenticated npm access. Do not use the version planned
+   for the next tagged release.
+3. In each npm package's settings, configure Trusted Publisher:
    - Provider: GitHub Actions
    - Repository: this repo
    - Workflow file: `.github/workflows/release.yml`
    - Environment (if used): match your npm trusted publishing config
-3. Ensure npm account and org policies allow trusted publishing for the package.
-4. Create release tag `vX.Y.Z` and push; workflow will:
+4. Ensure npm account and org policies allow trusted publishing for all four packages.
+5. Create release tag `vX.Y.Z` and push. The workflow will:
    - align the release package versions to `X.Y.Z`
-   - build web + server
-   - invoke the CLI publish script with npm dist-tag `latest`
-5. Nightly runs invoke the same publish script with npm dist-tag `nightly`.
+   - build the public packages, web app, and server
+   - publish each npm package with dist-tag `latest`
+6. Nightly runs publish the same package set with npm dist-tag `nightly`.
 
 ## 1) Release validation and unsigned builds
 
 There is no dry-run tag path. Pushing any accepted non-nightly tag, including
-`v0.0.0-test.1`, classifies the run as the stable channel. It publishes `t3` with npm dist-tag
-`latest`, creates a real GitHub Release, aliases the hosted app to `latest.app.t3.codes` and
+`v0.0.0-test.1`, classifies the run as the stable channel. It publishes all npm packages with
+dist-tag `latest`, creates a real GitHub Release, aliases the hosted app to `latest.app.t3.codes` and
 `app.t3.codes`, and can commit a version bump to `main` in the finalize job. Do not push a test tag
 to validate the workflow.
 
@@ -335,7 +338,7 @@ Checklist:
 5. Verify workflow steps:
    - preflight passes
    - all matrix builds pass
-   - `publish_cli` publishes the exact release version before the release job
+   - `publish_npm` publishes the exact release version of every npm package before the release job
    - release job uploads expected files
 6. Smoke test downloaded artifacts.
 

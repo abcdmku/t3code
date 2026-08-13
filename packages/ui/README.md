@@ -2,7 +2,19 @@
 
 React components and theme tokens used by the T3 Code web client.
 
-This package is not published to npm yet. Use the workspace package or a local tarball.
+Install the UI package with its React, Base UI, and Tailwind peers:
+
+```sh
+pnpm add @t3tools/ui @base-ui/react react react-dom tailwindcss
+```
+
+Import the theme and scan the compiled package for Tailwind classes:
+
+```css
+@import "tailwindcss";
+@import "@t3tools/ui/theme.css";
+@source "../node_modules/@t3tools/ui/dist";
+```
 
 ## Use it in this workspace
 

@@ -3,31 +3,14 @@
 Connect a local app to one T3 Code environment. The default client uses promises and async
 iterables. An Effect entry is available for apps that already use Effect.
 
-This package is not published to npm yet. Build tarballs from this repository while the API is
-under review.
-
-## Install from a checkout
-
-Run these commands at the repository root after `vp install`:
+Install the SDK and its Effect peer:
 
 ```sh
-mkdir artifacts
-vp run --filter @t3tools/contracts build
-vp run --filter @t3tools/sdk build
-pnpm --dir packages/contracts pack --pack-destination ../../artifacts
-pnpm --dir packages/sdk pack --pack-destination ../../artifacts
+pnpm add @t3tools/sdk effect
 ```
 
-Install both tarballs and the exact Effect peer in your app:
-
-```sh
-pnpm add ../t3code/artifacts/t3tools-contracts-0.0.33.tgz \
-  ../t3code/artifacts/t3tools-sdk-0.0.33.tgz \
-  effect@4.0.0-beta.103
-```
-
-The final tarball names come from `pnpm pack`. Check the `artifacts` directory if your package
-manager escapes the scope in a different way.
+Keep the SDK and T3 server on the same version. Use `@t3tools/sdk/effect` for Effect programs and
+`@t3tools/sdk/unstable` only when the stable client does not expose the command you need.
 
 ## Read an environment
 

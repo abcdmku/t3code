@@ -72,6 +72,14 @@ const captureLogs = <A, E, R>(effect: Effect.Effect<A, E, R>) =>
     return { result, logs };
   });
 
+it("keeps every published integration package on the release version", () => {
+  assert.deepStrictEqual(releasePackageFiles.slice(-3), [
+    "packages/contracts/package.json",
+    "packages/sdk/package.json",
+    "packages/ui/package.json",
+  ]);
+});
+
 it.layer(ScriptTestLayer)("update-release-package-versions", (it) => {
   it.effect("updates all release package versions under the provided root", () =>
     Effect.gen(function* () {

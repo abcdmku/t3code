@@ -344,6 +344,7 @@
     "react": "19.2.6",
     "react-dom": "19.2.6",
     "tailwindcss": "^4.0.0",
+    "typescript": "catalog:",
     "vite-plus": "catalog:"
   },
   "peerDependencies": {
@@ -351,5 +352,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwindcss": "^4.0.0"
+  },
+  "engines": {
+    "node": "^22.16 || ^23.11 || >=24.10"
   }
 }

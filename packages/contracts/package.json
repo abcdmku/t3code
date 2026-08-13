@@ -1,7 +1,6 @@
 {
   "name": "@t3tools/contracts",
   "version": "0.0.33",
-  "private": true,
   "description": "Public wire contracts for T3 Code integrations",
   "license": "MIT",
   "repository": {
@@ -58,6 +57,7 @@
   "devDependencies": {
     "@effect/vitest": "catalog:",
     "effect": "catalog:",
+    "typescript": "catalog:",
     "vite-plus": "catalog:"
   },
   "peerDependencies": {

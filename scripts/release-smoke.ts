@@ -26,12 +26,28 @@ const workspaceFiles = [
   "oxlint-plugin-t3code/package.json",
   "packages/client-runtime/package.json",
   "packages/contracts/package.json",
+  "packages/sdk/package.json",
   "packages/shared/package.json",
   "packages/ssh/package.json",
   "packages/tailscale/package.json",
+  "packages/ui/package.json",
   "packages/effect-acp/package.json",
   "packages/effect-codex-app-server/package.json",
   "scripts/package.json",
+] as const;
+
+const integrationPackageDirectories = [
+  "packages/contracts",
+  "packages/sdk",
+  "packages/ui",
+] as const;
+
+const integrationPackageImports = [
+  "@t3tools/contracts/integration",
+  "@t3tools/sdk",
+  "@t3tools/sdk/effect",
+  "@t3tools/sdk/unstable",
+  "@t3tools/ui/button",
 ] as const;
 
 function copyWorkspaceManifestFixture(targetRoot: string): void {
@@ -46,6 +62,296 @@ function copyWorkspaceManifestFixture(targetRoot: string): void {
   if (NodeFS.existsSync(patchesDirectory)) {
     NodeFS.cpSync(patchesDirectory, NodePath.resolve(targetRoot, "patches"), { recursive: true });
   }
+}
+
+function copyIntegrationPackageFixture(targetRoot: string): void {
+  copyWorkspaceManifestFixture(targetRoot);
+  NodeFS.cpSync(
+    NodePath.resolve(repoRoot, "tsconfig.base.json"),
+    NodePath.resolve(targetRoot, "tsconfig.base.json"),
+  );
+
+  const workspacePath = NodePath.resolve(targetRoot, "pnpm-workspace.yaml");
+  const workspaceYaml = NodeFS.readFileSync(workspacePath, "utf8");
+  const integrationWorkspaceYaml = workspaceYaml.replace(
+    /packages:\r?\n(?:  - [^\r\n]+\r?\n)+/u,
+    `packages:
+  - packages/contracts
+  - packages/sdk
+  - packages/ui
+`,
+  );
+  if (integrationWorkspaceYaml === workspaceYaml) {
+    throw new Error("Could not limit the integration package fixture workspace.");
+  }
+  NodeFS.writeFileSync(workspacePath, `${integrationWorkspaceYaml}\nallowUnusedPatches: true\n`);
+
+  for (const packageDirectory of integrationPackageDirectories) {
+    const sourcePath = NodePath.resolve(repoRoot, packageDirectory);
+    const destinationPath = NodePath.resolve(targetRoot, packageDirectory);
+    NodeFS.mkdirSync(NodePath.dirname(destinationPath), { recursive: true });
+    NodeFS.cpSync(sourcePath, destinationPath, {
+      recursive: true,
+      filter: (path) => !["dist", "node_modules", ".vite-plus"].includes(NodePath.basename(path)),
+    });
+
+    assertMissing(
+      NodePath.resolve(targetRoot, packageDirectory, "dist"),
+      `Integration package fixture copied stale output from ${packageDirectory}.`,
+    );
+  }
+}
+
+function executableName(command: string): string {
+  return process.platform === "win32" ? `${command}.cmd` : command;
+}
+
+function shellPath(path: string): string {
+  return path.replaceAll("\\", "/");
+}
+
+const pnpmScript = process.env.npm_execpath;
+if (pnpmScript === undefined) {
+  throw new Error("Run release:smoke through pnpm.");
+}
+
+function runVp(cwd: string, args: ReadonlyArray<string>): void {
+  NodeChildProcess.execFileSync(process.execPath, [pnpmScript, "exec", "vp", ...args], {
+    cwd,
+    stdio: "inherit",
+  });
+}
+
+function packIntegrationPackage(
+  fixtureRoot: string,
+  tarballDirectory: string,
+  packageDirectory: (typeof integrationPackageDirectories)[number],
+): string {
+  const before = new Set(NodeFS.readdirSync(tarballDirectory));
+  runVp(NodePath.resolve(fixtureRoot, packageDirectory), [
+    "pm",
+    "pack",
+    "--pack-destination",
+    tarballDirectory,
+  ]);
+  const createdTarballs = NodeFS.readdirSync(tarballDirectory).filter(
+    (fileName) => fileName.endsWith(".tgz") && !before.has(fileName),
+  );
+
+  if (createdTarballs.length !== 1) {
+    throw new Error(`Expected ${packageDirectory} to produce one tarball.`);
+  }
+
+  return NodePath.resolve(tarballDirectory, createdTarballs[0]!);
+}
+
+function readPackageJson(path: string): Record<string, unknown> {
+  return JSON.parse(NodeFS.readFileSync(path, "utf8")) as Record<string, unknown>;
+}
+
+function collectExportTargets(value: unknown): ReadonlyArray<string> {
+  if (typeof value === "string") {
+    return [value];
+  }
+  if (value === null || typeof value !== "object") {
+    return [];
+  }
+  return Object.values(value).flatMap(collectExportTargets);
+}
+
+function assertInstalledIntegrationPackage(
+  consumerRoot: string,
+  packageName: "@t3tools/contracts" | "@t3tools/sdk" | "@t3tools/ui",
+): void {
+  const packageDirectory = NodePath.resolve(consumerRoot, "node_modules", packageName);
+  const manifestPath = NodePath.resolve(packageDirectory, "package.json");
+  const manifestText = NodeFS.readFileSync(manifestPath, "utf8");
+  const manifest = JSON.parse(manifestText) as {
+    readonly version?: unknown;
+    readonly exports?: unknown;
+    readonly dependencies?: Record<string, unknown>;
+  };
+
+  if (manifest.version !== "9.9.9-smoke.0") {
+    throw new Error(`${packageName} has the wrong installed version.`);
+  }
+  if (manifestText.includes("workspace:") || manifestText.includes("catalog:")) {
+    throw new Error(`${packageName} contains an unresolved workspace dependency.`);
+  }
+  assertMissing(
+    NodePath.resolve(packageDirectory, "src"),
+    `${packageName} unexpectedly includes source files.`,
+  );
+  for (const target of collectExportTargets(manifest.exports)) {
+    if (target !== "./theme.css" && !target.startsWith("./dist/")) {
+      throw new Error(`${packageName} export '${target}' does not use built output.`);
+    }
+  }
+  if (
+    packageName === "@t3tools/sdk" &&
+    manifest.dependencies?.["@t3tools/contracts"] !== "9.9.9-smoke.0"
+  ) {
+    throw new Error("The packed SDK does not require its matching contracts version.");
+  }
+}
+
+function smokeIntegrationPackages(fixtureRoot: string, consumerRoot: string): void {
+  copyIntegrationPackageFixture(fixtureRoot);
+  NodeChildProcess.execFileSync(
+    process.execPath,
+    [
+      NodePath.resolve(repoRoot, "scripts/update-release-package-versions.ts"),
+      "9.9.9-smoke.0",
+      "--root",
+      fixtureRoot,
+    ],
+    {
+      cwd: repoRoot,
+      stdio: "inherit",
+    },
+  );
+  NodeFS.rmSync(NodePath.resolve(fixtureRoot, "pnpm-lock.yaml"), { force: true });
+  runVp(fixtureRoot, ["install", "--ignore-scripts"]);
+
+  for (const packageDirectory of integrationPackageDirectories) {
+    assertPackageVersion(
+      NodePath.resolve(fixtureRoot, packageDirectory, "package.json"),
+      "9.9.9-smoke.0",
+    );
+    runVp(fixtureRoot, [
+      "run",
+      "--filter",
+      JSON.parse(
+        NodeFS.readFileSync(
+          NodePath.resolve(fixtureRoot, packageDirectory, "package.json"),
+          "utf8",
+        ),
+      ).name as string,
+      "build",
+    ]);
+    assertExists(
+      NodePath.resolve(fixtureRoot, packageDirectory, "dist"),
+      `${packageDirectory} did not create dist output.`,
+    );
+  }
+
+  const tarballDirectory = NodePath.resolve(fixtureRoot, "tarballs");
+  NodeFS.mkdirSync(tarballDirectory, { recursive: true });
+  const tarballs = integrationPackageDirectories.map((packageDirectory) =>
+    packIntegrationPackage(fixtureRoot, tarballDirectory, packageDirectory),
+  );
+
+  NodeFS.mkdirSync(consumerRoot, { recursive: true });
+  NodeFS.writeFileSync(
+    NodePath.resolve(consumerRoot, "package.json"),
+    `${JSON.stringify({ private: true, type: "module" }, null, 2)}\n`,
+  );
+  const uiManifest = readPackageJson(NodePath.resolve(fixtureRoot, "packages/ui/package.json")) as {
+    readonly devDependencies?: Record<string, string>;
+  };
+  const reactTypes = uiManifest.devDependencies?.["@types/react"];
+  const reactDomTypes = uiManifest.devDependencies?.["@types/react-dom"];
+  if (reactTypes === undefined || reactDomTypes === undefined) {
+    throw new Error("The UI package must pin React types for the external package smoke.");
+  }
+
+  NodeChildProcess.execFileSync(
+    executableName("npm"),
+    [
+      "install",
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund",
+      ...tarballs,
+      `@types/react@${reactTypes}`,
+      `@types/react-dom@${reactDomTypes}`,
+    ],
+    {
+      cwd: consumerRoot,
+      shell: process.platform === "win32",
+      stdio: "inherit",
+    },
+  );
+
+  for (const packageName of ["@t3tools/contracts", "@t3tools/sdk", "@t3tools/ui"] as const) {
+    assertInstalledIntegrationPackage(consumerRoot, packageName);
+  }
+
+  NodeFS.writeFileSync(
+    NodePath.resolve(consumerRoot, "smoke.mjs"),
+    `import { access } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+
+const contracts = await import("@t3tools/contracts/integration");
+const sdk = await import("@t3tools/sdk");
+const effectSdk = await import("@t3tools/sdk/effect");
+const unstableSdk = await import("@t3tools/sdk/unstable");
+const ui = await import("@t3tools/ui/button");
+
+for (const [entry, exports] of ${JSON.stringify(integrationPackageImports)}.map((entry, index) => [
+  entry,
+  [contracts, sdk, effectSdk, unstableSdk, ui][index],
+])) {
+  if (Object.keys(exports).length === 0) {
+    throw new Error(\`\${entry} has no runtime exports.\`);
+  }
+}
+
+if (!("ThreadId" in contracts) || !("createT3Client" in sdk) || !("layer" in effectSdk)) {
+  throw new Error("An SDK package entry is missing its main export.");
+}
+if (!("Button" in ui)) {
+  throw new Error("The UI button entry is missing Button.");
+}
+
+await access(fileURLToPath(import.meta.resolve("@t3tools/ui/theme.css")));
+`,
+  );
+  NodeChildProcess.execFileSync(process.execPath, ["smoke.mjs"], {
+    cwd: consumerRoot,
+    stdio: "inherit",
+  });
+
+  NodeFS.writeFileSync(
+    NodePath.resolve(consumerRoot, "smoke.ts"),
+    `import { ThreadId } from "@t3tools/contracts/integration";
+import { createT3Client } from "@t3tools/sdk";
+import { layer } from "@t3tools/sdk/effect";
+import * as unstable from "@t3tools/sdk/unstable";
+import { Button } from "@t3tools/ui/button";
+
+void [ThreadId, createT3Client, layer, unstable, Button];
+`,
+  );
+  NodeFS.writeFileSync(
+    NodePath.resolve(consumerRoot, "tsconfig.json"),
+    `${JSON.stringify(
+      {
+        compilerOptions: {
+          lib: ["ES2024", "DOM"],
+          module: "NodeNext",
+          moduleResolution: "NodeNext",
+          noEmit: true,
+          skipLibCheck: true,
+          strict: true,
+          target: "ES2024",
+        },
+        files: ["smoke.ts"],
+      },
+      null,
+      2,
+    )}\n`,
+  );
+  const tsgoPath = NodePath.resolve(
+    fixtureRoot,
+    "node_modules/.bin",
+    process.platform === "win32" ? "tsgo.cmd" : "tsgo",
+  );
+  NodeChildProcess.execFileSync(tsgoPath, ["--project", "tsconfig.json"], {
+    cwd: consumerRoot,
+    shell: process.platform === "win32",
+    stdio: "inherit",
+  });
 }
 
 function writeMacManifestFixtures(targetRoot: string): { arm64Path: string; x64Path: string } {
@@ -186,6 +492,12 @@ function assertMissing(path: string, message: string): void {
 }
 
 const tempRoot = NodeFS.mkdtempSync(NodePath.join(NodeOS.tmpdir(), "t3-release-smoke-"));
+const integrationFixtureRoot = NodeFS.mkdtempSync(
+  NodePath.join(NodeOS.tmpdir(), "t3-integration-release-smoke-"),
+);
+const integrationConsumerRoot = NodeFS.mkdtempSync(
+  NodePath.join(NodeOS.tmpdir(), "t3-integration-consumer-smoke-"),
+);
 
 try {
   copyWorkspaceManifestFixture(tempRoot);
@@ -206,10 +518,14 @@ try {
 
   NodeFS.rmSync(NodePath.resolve(tempRoot, "pnpm-lock.yaml"), { force: true });
 
-  NodeChildProcess.execFileSync("vp", ["install", "--lockfile-only", "--ignore-scripts"], {
-    cwd: tempRoot,
-    stdio: "inherit",
-  });
+  NodeChildProcess.execFileSync(
+    process.execPath,
+    [pnpmScript, "install", "--lockfile-only", "--ignore-scripts"],
+    {
+      cwd: tempRoot,
+      stdio: "inherit",
+    },
+  );
 
   const lockfile = NodeFS.readFileSync(NodePath.resolve(tempRoot, "pnpm-lock.yaml"), "utf8");
   assertContains(lockfile, "lockfileVersion:", "Expected pnpm-lock.yaml to be regenerated.");
@@ -219,6 +535,8 @@ try {
     "apps/desktop/package.json",
     "apps/web/package.json",
     "packages/contracts/package.json",
+    "packages/sdk/package.json",
+    "packages/ui/package.json",
   ]) {
     assertPackageVersion(NodePath.resolve(tempRoot, relativePath), "9.9.9-smoke.0");
   }
@@ -298,12 +616,34 @@ try {
   const mergedPreviewWindowsManifestPath = NodePath.resolve(tempRoot, "release-assets/preview.yml");
   const { arm64Path: winDebugArm64Path, x64Path: winDebugX64Path } =
     writeWindowsBuilderDebugFixtures(tempRoot);
-  NodeChildProcess.execFileSync(
-    "bash",
-    [
-      "-lc",
-      `
-        release_assets_dir=${JSON.stringify(NodePath.resolve(tempRoot, "release-assets"))}
+  if (process.platform === "win32") {
+    for (const [arm64Manifest, x64Manifest, outputManifest] of [
+      [winArm64Path, winX64Path, mergedWindowsManifestPath],
+      [nightlyWinArm64Path, nightlyWinX64Path, mergedNightlyWindowsManifestPath],
+      [previewWinArm64Path, previewWinX64Path, mergedPreviewWindowsManifestPath],
+    ] as const) {
+      NodeChildProcess.execFileSync(
+        process.execPath,
+        [
+          NodePath.resolve(repoRoot, "scripts/merge-update-manifests.ts"),
+          "--platform",
+          "win",
+          arm64Manifest,
+          x64Manifest,
+          outputManifest,
+        ],
+        { cwd: repoRoot, stdio: "inherit" },
+      );
+      NodeFS.rmSync(arm64Manifest);
+      NodeFS.rmSync(x64Manifest);
+    }
+  } else {
+    NodeChildProcess.execFileSync(
+      "bash",
+      [
+        "-lc",
+        `
+        release_assets_dir=${JSON.stringify(shellPath(NodePath.resolve(tempRoot, "release-assets")))}
         shopt -s nullglob
         found_windows_manifest=false
         for x64_manifest in "$release_assets_dir"/*-win-x64.yml; do
@@ -319,7 +659,7 @@ try {
           fi
 
           found_windows_manifest=true
-          ${JSON.stringify(process.execPath)} ${JSON.stringify(NodePath.resolve(repoRoot, "scripts/merge-update-manifests.ts"))} --platform win \
+          ${JSON.stringify(shellPath(process.execPath))} ${JSON.stringify(shellPath(NodePath.resolve(repoRoot, "scripts/merge-update-manifests.ts")))} --platform win \
             "$arm64_manifest" \
             "$x64_manifest" \
             "$output_manifest"
@@ -330,13 +670,14 @@ try {
           echo "No Windows updater manifests found to merge." >&2
           exit 1
         fi
-      `,
-    ],
-    {
-      cwd: repoRoot,
-      stdio: "inherit",
-    },
-  );
+        `,
+      ],
+      {
+        cwd: repoRoot,
+        stdio: "inherit",
+      },
+    );
+  }
 
   const mergedWindowsManifest = NodeFS.readFileSync(mergedWindowsManifestPath, "utf8");
   assertContains(
@@ -407,7 +748,11 @@ try {
     "Windows release smoke unexpectedly removed the x64 builder debug fixture.",
   );
 
+  smokeIntegrationPackages(integrationFixtureRoot, integrationConsumerRoot);
+
   Effect.runSync(Console.log("Release smoke checks passed."));
 } finally {
   NodeFS.rmSync(tempRoot, { recursive: true, force: true });
+  NodeFS.rmSync(integrationFixtureRoot, { recursive: true, force: true });
+  NodeFS.rmSync(integrationConsumerRoot, { recursive: true, force: true });
 }

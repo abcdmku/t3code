@@ -79,7 +79,7 @@ jobs:
       release_name: ${{ steps.release_meta.outputs.name }}
       short_sha: ${{ steps.release_meta.outputs.short_sha }}
       previous_tag: ${{ steps.previous_tag.outputs.previous_tag }}
-      cli_dist_tag: ${{ steps.release_meta.outputs.cli_dist_tag }}
+      npm_dist_tag: ${{ steps.release_meta.outputs.npm_dist_tag }}
       is_prerelease: ${{ steps.release_meta.outputs.is_prerelease }}
       make_latest: ${{ steps.release_meta.outputs.make_latest }}
       ref: ${{ github.sha }}
@@ -123,7 +123,7 @@ jobs:
               --github-output
 
             echo "release_channel=nightly" >> "$GITHUB_OUTPUT"
-            echo "cli_dist_tag=nightly" >> "$GITHUB_OUTPUT"
+            echo "npm_dist_tag=nightly" >> "$GITHUB_OUTPUT"
             echo "is_prerelease=true" >> "$GITHUB_OUTPUT"
             echo "make_latest=false" >> "$GITHUB_OUTPUT"
           else
@@ -147,7 +147,7 @@ jobs:
             echo "version=$version" >> "$GITHUB_OUTPUT"
             echo "tag=v$version" >> "$GITHUB_OUTPUT"
             echo "name=T3 Code v$version" >> "$GITHUB_OUTPUT"
-            echo "cli_dist_tag=latest" >> "$GITHUB_OUTPUT"
+            echo "npm_dist_tag=latest" >> "$GITHUB_OUTPUT"
             if [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
               echo "is_prerelease=false" >> "$GITHUB_OUTPUT"
               echo "make_latest=true" >> "$GITHUB_OUTPUT"
@@ -662,8 +662,8 @@ jobs:
           path: resource-monitor-publish/${{ matrix.resource_key }}/*
           if-no-files-found: error
 
-  publish_cli:
-    name: Publish CLI to npm
+  publish_npm:
+    name: Publish npm packages
     needs: [preflight, relay_public_config, build]
     if: ${{ !failure() && !cancelled() && needs.preflight.result == 'success' && needs.relay_public_config.result == 'success' && needs.build.result == 'success' }}
     runs-on: ubuntu-24.04 # blacksmith-8vcpu-ubuntu-2404
@@ -696,6 +696,9 @@ jobs:
               - --filter=t3...
               - --filter=@t3tools/web...
               - --filter=@t3tools/scripts...
+              - --filter=@t3tools/contracts...
+              - --filter=@t3tools/sdk...
+              - --filter=@t3tools/ui...
 
       - name: Download relay client tracing config
         uses: actions/download-artifact@v8
@@ -713,6 +716,15 @@ jobs:
 
       - name: Align package versions to release version
         run: node scripts/update-release-package-versions.ts "${{ needs.preflight.outputs.version }}"
+
+      - name: Build contracts package
+        run: vp run --filter @t3tools/contracts build
+
+      - name: Build SDK package
+        run: vp run --filter @t3tools/sdk build
+
+      - name: Build UI package
+        run: vp run --filter @t3tools/ui build
 
       - name: Build web package
         run: vp run --filter @t3tools/web build
@@ -738,13 +750,41 @@ jobs:
             chmod +x "$target_dir"/t3-resource-monitor 2>/dev/null || true
           done
 
+      - name: Publish integration packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${{ needs.preflight.outputs.version }}"
+          tag="${{ needs.preflight.outputs.npm_dist_tag }}"
+
+          publish_if_missing() {
+            package="$1"
+            if npm view "$package@$version" version >/dev/null 2>&1; then
+              echo "$package@$version is already published."
+              return
+            fi
+            vp pm publish --filter "$package" --access public --tag "$tag" --no-git-checks --provenance
+          }
+
+          publish_if_missing @t3tools/contracts
+          publish_if_missing @t3tools/sdk
+          publish_if_missing @t3tools/ui
+
       - name: Publish CLI package
-        run: node apps/server/scripts/cli.ts publish --tag "${{ needs.preflight.outputs.cli_dist_tag }}" --app-version "${{ needs.preflight.outputs.version }}" --verbose
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${{ needs.preflight.outputs.version }}"
+          if npm view "t3@$version" version >/dev/null 2>&1; then
+            echo "t3@$version is already published."
+            exit 0
+          fi
+          node apps/server/scripts/cli.ts publish --tag "${{ needs.preflight.outputs.npm_dist_tag }}" --app-version "$version" --verbose
 
   release:
     name: Publish GitHub Release
-    needs: [preflight, build, publish_cli]
-    if: ${{ !failure() && !cancelled() && needs.preflight.result == 'success' && needs.build.result == 'success' && needs.publish_cli.result == 'success' }}
+    needs: [preflight, build, publish_npm]
+    if: ${{ !failure() && !cancelled() && needs.preflight.result == 'success' && needs.build.result == 'success' && needs.publish_npm.result == 'success' }}
     runs-on: blacksmith-8vcpu-ubuntu-2404
     timeout-minutes: 30
     permissions:
@@ -1030,7 +1070,7 @@ jobs:
 
       - name: Format package.json files
         if: steps.update_versions.outputs.changed == 'true'
-        run: vp fmt apps/server/package.json apps/desktop/package.json apps/web/package.json packages/contracts/package.json
+        run: vp fmt apps/server/package.json apps/desktop/package.json apps/web/package.json packages/contracts/package.json packages/sdk/package.json packages/ui/package.json
 
       - name: Refresh lockfile
         if: steps.update_versions.outputs.changed == 'true'
@@ -1042,7 +1082,7 @@ jobs:
         env:
           RELEASE_TAG: ${{ needs.preflight.outputs.tag }}
         run: |
-          if git diff --quiet -- apps/server/package.json apps/desktop/package.json apps/web/package.json packages/contracts/package.json pnpm-lock.yaml; then
+          if git diff --quiet -- apps/server/package.json apps/desktop/package.json apps/web/package.json packages/contracts/package.json packages/sdk/package.json packages/ui/package.json pnpm-lock.yaml; then
             echo "No version changes to commit."
             exit 0
           fi
@@ -1050,7 +1090,7 @@ jobs:
           git config user.name "${{ steps.app_bot.outputs.name }}"
           git config user.email "${{ steps.app_bot.outputs.email }}"
 
-          git add apps/server/package.json apps/desktop/package.json apps/web/package.json packages/contracts/package.json pnpm-lock.yaml
+          git add apps/server/package.json apps/desktop/package.json apps/web/package.json packages/contracts/package.json packages/sdk/package.json packages/ui/package.json pnpm-lock.yaml
           git commit -m "chore(release): prepare $RELEASE_TAG"
           git push origin HEAD:main
 
