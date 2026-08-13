@@ -32,8 +32,8 @@ import {
   AlertDialogHeader,
   AlertDialogPopup,
   AlertDialogTitle,
-} from "./ui/alert-dialog";
-import { Button } from "./ui/button";
+} from "@t3tools/ui/alert-dialog";
+import { Button } from "@t3tools/ui/button";
 import {
   Dialog,
   DialogDescription,
@@ -42,12 +42,12 @@ import {
   DialogPanel,
   DialogPopup,
   DialogTitle,
-} from "./ui/dialog";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import { Popover, PopoverPopup, PopoverTrigger } from "./ui/popover";
-import { Switch } from "./ui/switch";
-import { Textarea } from "./ui/textarea";
+} from "@t3tools/ui/dialog";
+import { Input } from "@t3tools/ui/input";
+import { Label } from "@t3tools/ui/label";
+import { Popover, PopoverPopup, PopoverTrigger } from "@t3tools/ui/popover";
+import { Switch } from "@t3tools/ui/switch";
+import { Textarea } from "@t3tools/ui/textarea";
 
 export const SCRIPT_ICONS: Array<{ id: ProjectScriptIcon; label: string }> = [
   { id: "play", label: "Play" },

@@ -23,7 +23,7 @@ import {
   ComboboxInput,
   ComboboxItem,
   ComboboxListVirtualized,
-} from "../ui/combobox";
+} from "@t3tools/ui/combobox";
 import { ModelEsque } from "./providerIconUtils";
 import {
   modelPickerJumpCommandForIndex,
@@ -33,7 +33,7 @@ import {
 } from "../../keybindings";
 import { useClientSettings, useUpdateClientSettings } from "~/hooks/useSettings";
 import { cn } from "~/lib/utils";
-import { TooltipProvider } from "../ui/tooltip";
+import { TooltipProvider } from "@t3tools/ui/tooltip";
 import {
   isProviderInstancePickerReady,
   isProviderInstancePickerVisible,

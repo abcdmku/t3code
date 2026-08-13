@@ -4,8 +4,8 @@ import { PipetteIcon, XIcon } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent } from "react";
 
 import { ColorSelector } from "../color-selector";
-import { Button } from "../ui/button";
-import { Popover, PopoverPopup, PopoverTrigger } from "../ui/popover";
+import { Button } from "@t3tools/ui/button";
+import { Popover, PopoverPopup, PopoverTrigger } from "@t3tools/ui/popover";
 import { normalizeProviderAccentColor } from "../../providerInstances";
 import { cn } from "../../lib/utils";
 

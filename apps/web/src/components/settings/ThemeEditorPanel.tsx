@@ -26,10 +26,10 @@ import {
   type ThemeDefinition,
 } from "../../themePalette";
 import { cn } from "../../lib/utils";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Switch } from "../ui/switch";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+import { Button } from "@t3tools/ui/button";
+import { Input } from "@t3tools/ui/input";
+import { Switch } from "@t3tools/ui/switch";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import { getThemeRoleLabel, ThemeColorField } from "./ThemeColorPicker";
 import {
   clearThemeInspectorHover,

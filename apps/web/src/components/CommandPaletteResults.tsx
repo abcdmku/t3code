@@ -13,7 +13,7 @@ import {
   CommandItem,
   CommandList,
   CommandShortcut,
-} from "./ui/command";
+} from "@t3tools/ui/command";
 import { cn } from "~/lib/utils";
 
 function foldAsciiCase(value: string): string {

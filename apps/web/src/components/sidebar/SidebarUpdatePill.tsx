@@ -17,10 +17,10 @@ import {
   shouldToastDesktopUpdateActionResult,
 } from "../desktopUpdate.logic";
 import { showDesktopUpdateDownloadedToast } from "../desktopUpdate.toast";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { Separator } from "../ui/separator";
+import { Alert, AlertDescription, AlertTitle } from "@t3tools/ui/alert";
+import { Separator } from "@t3tools/ui/separator";
 import { SidebarMenuItem } from "../ui/sidebar";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 
 function keyReleaseNoteItems(items: ReadonlyArray<string>) {
   const occurrences = new Map<string, number>();

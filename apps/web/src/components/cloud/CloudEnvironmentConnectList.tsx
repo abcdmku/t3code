@@ -20,8 +20,8 @@ import { useRelayEnvironmentDiscovery } from "~/state/environments";
 import { useAtomCommand } from "~/state/use-atom-command";
 import { ConnectionStatusDot } from "../ConnectionStatusDot";
 import { ITEM_ROW_CLASSNAME, ITEM_ROW_INNER_CLASSNAME } from "../settings/itemRows";
-import { Button } from "../ui/button";
-import { Skeleton } from "../ui/skeleton";
+import { Button } from "@t3tools/ui/button";
+import { Skeleton } from "@t3tools/ui/skeleton";
 import { toastManager } from "../ui/toast";
 import { presentSavedCloudEnvironmentConnection } from "./cloudEnvironmentConnectionPresentation";
 

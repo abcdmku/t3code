@@ -43,9 +43,9 @@ import { usePrimaryEnvironment } from "../../state/environments";
 import { serverEnvironment } from "../../state/server";
 import { useAtomCommand } from "../../state/use-atom-command";
 import { formatRelativeTime } from "../../timestampFormat";
-import { Button } from "../ui/button";
-import { ScrollArea } from "../ui/scroll-area";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+import { Button } from "@t3tools/ui/button";
+import { ScrollArea } from "@t3tools/ui/scroll-area";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import { toastManager } from "../ui/toast";
 import {
   resourceHistoryBarHeight,

@@ -8,10 +8,10 @@ import { serializeComposerFileLink } from "@t3tools/shared/composerTrigger";
 import { RotateCw } from "lucide-react";
 import { useEffect, useMemo, useRef } from "react";
 
-import { Button } from "~/components/ui/button";
-import { InputGroup, InputGroupInput } from "~/components/ui/input-group";
+import { Button } from "@t3tools/ui/button";
+import { InputGroup, InputGroupInput } from "@t3tools/ui/input-group";
 import { toastManager } from "~/components/ui/toast";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "~/components/ui/tooltip";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import { useComposerHandleContext } from "~/composerHandleContext";
 import { writeTextToClipboard } from "~/hooks/useCopyToClipboard";
 import { useTheme } from "~/hooks/useTheme";

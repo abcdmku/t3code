@@ -52,11 +52,11 @@ import {
   showExternalLinkContextMenu,
 } from "./chat/externalLinkContextMenu";
 import { hasSpecificPierreIconForFileName, syntheticFileNameForLanguageId } from "../pierre-icons";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "./ui/tooltip";
-import { Button } from "./ui/button";
-import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "./ui/collapsible";
-import { ScrollArea } from "./ui/scroll-area";
-import { Menu, MenuItem, MenuPopup, MenuTrigger } from "./ui/menu";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
+import { Button } from "@t3tools/ui/button";
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@t3tools/ui/collapsible";
+import { ScrollArea } from "@t3tools/ui/scroll-area";
+import { Menu, MenuItem, MenuPopup, MenuTrigger } from "@t3tools/ui/menu";
 import { stackedThreadToast, toastManager } from "./ui/toast";
 import { recordVisitForThread } from "../browserHistoryStore";
 import { useOpenInPreferredEditor } from "../editorPreferences";

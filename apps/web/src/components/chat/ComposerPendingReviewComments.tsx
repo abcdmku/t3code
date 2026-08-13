@@ -6,7 +6,7 @@ import {
   COMPOSER_INLINE_CHIP_ICON_CLASS_NAME,
   COMPOSER_INLINE_CHIP_LABEL_CLASS_NAME,
 } from "../composerInlineChip";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import type { ReviewCommentContext } from "~/reviewCommentContext";
 import { cn } from "~/lib/utils";
 

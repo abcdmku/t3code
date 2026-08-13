@@ -13,9 +13,9 @@ import {
   useManagedRelayEnvironments,
 } from "../../cloud/managedRelayState";
 import { useAtomCommand } from "../../state/use-atom-command";
-import { Button } from "../ui/button";
-import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "../ui/collapsible";
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "../ui/empty";
+import { Button } from "@t3tools/ui/button";
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@t3tools/ui/collapsible";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@t3tools/ui/empty";
 import { toastManager } from "../ui/toast";
 import {
   ClerkUserProfilePage,

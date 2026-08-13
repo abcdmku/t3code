@@ -27,7 +27,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { cn } from "~/lib/utils";
 import { orchestrationEnvironment } from "~/state/orchestration";
-import { ScrollArea } from "~/components/ui/scroll-area";
+import { ScrollArea } from "@t3tools/ui/scroll-area";
 
 /**
  * In-flight states all present as Working (one steady state, per the

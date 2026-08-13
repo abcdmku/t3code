@@ -2,8 +2,8 @@ import type { KeyboardEvent, PointerEvent } from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { isThemeColor, themeColorToHex, type ThemeColorRole } from "../../themePalette";
 import { cn } from "../../lib/utils";
-import { Input } from "../ui/input";
-import { Popover, PopoverPopup, PopoverTrigger } from "../ui/popover";
+import { Input } from "@t3tools/ui/input";
+import { Popover, PopoverPopup, PopoverTrigger } from "@t3tools/ui/popover";
 export function getThemeRoleLabel(role: ThemeColorRole): string {
   const labels: Partial<Record<ThemeColorRole, string>> = {
     canvas: "Background",

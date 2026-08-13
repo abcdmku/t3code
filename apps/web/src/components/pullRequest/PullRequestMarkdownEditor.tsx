@@ -2,8 +2,8 @@ import { useState } from "react";
 
 import { cn } from "~/lib/utils";
 
-import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
+import { Button } from "@t3tools/ui/button";
+import { Textarea } from "@t3tools/ui/textarea";
 import { PullRequestMarkdown } from "./PullRequestMarkdown";
 
 /**

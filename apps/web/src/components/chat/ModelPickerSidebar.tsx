@@ -2,7 +2,7 @@ import { type ProviderInstanceId } from "@t3tools/contracts";
 import { memo, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { SparklesIcon, StarIcon } from "lucide-react";
 import { ProviderInstanceIcon } from "./ProviderInstanceIcon";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import { cn } from "~/lib/utils";
 import { isProviderInstancePickerReady, type ProviderInstanceEntry } from "../../providerInstances";
 

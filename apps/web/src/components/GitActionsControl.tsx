@@ -33,8 +33,8 @@ import {
 } from "lucide-react";
 import { Radio as RadioPrimitive } from "@base-ui/react/radio";
 import { AzureDevOpsIcon, BitbucketIcon, GitHubIcon, GitLabIcon } from "~/components/Icons";
-import { RadioGroup } from "~/components/ui/radio-group";
-import { Spinner } from "~/components/ui/spinner";
+import { RadioGroup } from "@t3tools/ui/radio-group";
+import { Spinner } from "@t3tools/ui/spinner";
 import { cn } from "~/lib/utils";
 import {
   buildGitActionProgressStages,
@@ -51,8 +51,8 @@ import {
   resolveThreadBranchUpdate,
 } from "./GitActionsControl.logic";
 import { AnimatedHeight } from "./AnimatedHeight";
-import { Button } from "~/components/ui/button";
-import { Checkbox } from "~/components/ui/checkbox";
+import { Button } from "@t3tools/ui/button";
+import { Checkbox } from "@t3tools/ui/checkbox";
 import {
   Dialog,
   DialogDescription,
@@ -61,15 +61,15 @@ import {
   DialogPanel,
   DialogPopup,
   DialogTitle,
-} from "~/components/ui/dialog";
-import { Group, GroupSeparator } from "~/components/ui/group";
-import { Input } from "~/components/ui/input";
-import { Menu, MenuItem, MenuPopup, MenuTrigger } from "~/components/ui/menu";
-import { Popover, PopoverPopup, PopoverTrigger } from "~/components/ui/popover";
-import { ScrollArea } from "~/components/ui/scroll-area";
-import { Textarea } from "~/components/ui/textarea";
+} from "@t3tools/ui/dialog";
+import { Group, GroupSeparator } from "@t3tools/ui/group";
+import { Input } from "@t3tools/ui/input";
+import { Menu, MenuItem, MenuPopup, MenuTrigger } from "@t3tools/ui/menu";
+import { Popover, PopoverPopup, PopoverTrigger } from "@t3tools/ui/popover";
+import { ScrollArea } from "@t3tools/ui/scroll-area";
+import { Textarea } from "@t3tools/ui/textarea";
 import { stackedThreadToast, toastManager, type ThreadToastData } from "~/components/ui/toast";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "~/components/ui/tooltip";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import { useOpenInPreferredEditor } from "~/editorPreferences";
 import {
   useGitStackedAction,

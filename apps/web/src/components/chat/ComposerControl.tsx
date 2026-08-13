@@ -2,8 +2,8 @@ import type { ComponentProps } from "react";
 import { ChevronDownIcon, type LucideIcon } from "lucide-react";
 
 import { cn } from "~/lib/utils";
-import { Button } from "../ui/button";
-import { SelectTrigger } from "../ui/select";
+import { Button } from "@t3tools/ui/button";
+import { SelectTrigger } from "@t3tools/ui/select";
 
 const composerControlClassName =
   "h-7 min-h-7 gap-1.5 px-2.5 text-secondary-label transition-none hover:text-foreground [&_svg[data-composer-control-icon]]:mx-0 [&_svg[data-composer-control-chevron]]:-mx-0.5";

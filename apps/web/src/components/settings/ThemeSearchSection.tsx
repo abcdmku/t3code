@@ -28,11 +28,11 @@ import {
   AlertDialogHeader,
   AlertDialogPopup,
   AlertDialogTitle,
-} from "../ui/alert-dialog";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue } from "../ui/select";
-import { Spinner } from "../ui/spinner";
+} from "@t3tools/ui/alert-dialog";
+import { Button } from "@t3tools/ui/button";
+import { Input } from "@t3tools/ui/input";
+import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue } from "@t3tools/ui/select";
+import { Spinner } from "@t3tools/ui/spinner";
 
 const DOWNLOAD_FORMAT = new Intl.NumberFormat(undefined, {
   notation: "compact",

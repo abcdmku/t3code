@@ -34,9 +34,9 @@ import {
 import { shellEnvironment } from "../../state/shell";
 import { usePrimaryEnvironment } from "../../state/environments";
 import { useCopyToClipboard } from "../../hooks/useCopyToClipboard";
-import { Button } from "../ui/button";
-import { ScrollArea } from "../ui/scroll-area";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+import { Button } from "@t3tools/ui/button";
+import { ScrollArea } from "@t3tools/ui/scroll-area";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import { toastManager } from "../ui/toast";
 import { ResourceTelemetryDiagnostics } from "./ResourceTelemetryDiagnostics";
 import { SettingsPageContainer, SettingsSection, useRelativeTimeTick } from "./settingsLayout";

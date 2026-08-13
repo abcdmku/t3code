@@ -15,8 +15,8 @@ import {
   AlertDialogHeader,
   AlertDialogPopup,
   AlertDialogTitle,
-} from "./ui/alert-dialog";
-import { Button } from "./ui/button";
+} from "@t3tools/ui/alert-dialog";
+import { Button } from "@t3tools/ui/button";
 
 type ConfirmationCopy = {
   readonly title: string;

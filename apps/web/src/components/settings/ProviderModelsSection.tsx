@@ -21,9 +21,9 @@ import { normalizeCustomModelSlug } from "@t3tools/shared/model";
 import { cn } from "../../lib/utils";
 import { sortModelsForProviderInstance } from "../../modelOrdering";
 import { MAX_CUSTOM_MODEL_LENGTH } from "../../modelSelection";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+import { Button } from "@t3tools/ui/button";
+import { Input } from "@t3tools/ui/input";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 
 /**
  * Placeholder text for the "add a custom model" input, keyed by driver

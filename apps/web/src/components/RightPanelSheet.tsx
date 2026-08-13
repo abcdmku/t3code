@@ -1,7 +1,7 @@
 import { type ReactNode } from "react";
 
 import { RIGHT_PANEL_SHEET_CLASS_NAME } from "../rightPanelLayout";
-import { Sheet, SheetPopup } from "./ui/sheet";
+import { Sheet, SheetPopup } from "@t3tools/ui/sheet";
 
 export function RightPanelSheet(props: {
   children: ReactNode;

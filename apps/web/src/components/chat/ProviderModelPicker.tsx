@@ -5,9 +5,9 @@ import {
 } from "@t3tools/contracts";
 import { memo, useEffect, useMemo, useState } from "react";
 import type { VariantProps } from "class-variance-authority";
-import { buttonVariants } from "../ui/button";
-import { Popover, PopoverPopup, PopoverTrigger } from "../ui/popover";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+import { buttonVariants } from "@t3tools/ui/button";
+import { Popover, PopoverPopup, PopoverTrigger } from "@t3tools/ui/popover";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import { cn } from "~/lib/utils";
 import { ModelPickerContent } from "./ModelPickerContent";
 import { ProviderInstanceIcon } from "./ProviderInstanceIcon";

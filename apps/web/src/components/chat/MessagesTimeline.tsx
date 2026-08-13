@@ -65,7 +65,7 @@ import {
   XIcon,
   ZapIcon,
 } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "@t3tools/ui/button";
 import { buildExpandedImagePreview, ExpandedImagePreview } from "./ExpandedImagePreview";
 import { ProposedPlanCard } from "./ProposedPlanCard";
 import { ChangedFilesCard } from "./ChangedFilesTree";
@@ -89,7 +89,7 @@ import {
   type TimelineLatestTurn,
 } from "./MessagesTimeline.logic";
 import { TerminalContextInlineChip } from "./TerminalContextInlineChip";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import {
   deriveDisplayedUserMessageState,
   type ParsedTerminalContextEntry,

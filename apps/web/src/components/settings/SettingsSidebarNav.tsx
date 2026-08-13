@@ -21,9 +21,9 @@ import {
 } from "lucide-react";
 import { useCanGoBack, useLocation, useNavigate } from "@tanstack/react-router";
 
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Kbd } from "../ui/kbd";
+import { Button } from "@t3tools/ui/button";
+import { Input } from "@t3tools/ui/input";
+import { Kbd } from "@t3tools/ui/kbd";
 import {
   SidebarContent,
   SidebarFooter,

@@ -24,8 +24,8 @@ import { pullRequestEnvironment } from "~/state/pullRequests";
 import { useAtomCommand } from "~/state/use-atom-command";
 import { formatRelativeTimeLabel } from "~/timestampFormat";
 
-import { Button } from "../ui/button";
-import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "../ui/collapsible";
+import { Button } from "@t3tools/ui/button";
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@t3tools/ui/collapsible";
 import { toastManager } from "../ui/toast";
 import {
   buildPullRequestTimeline,

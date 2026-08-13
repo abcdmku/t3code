@@ -26,7 +26,7 @@ import {
 } from "lucide-react";
 
 import { cn } from "~/lib/utils";
-import { buttonVariants } from "~/components/ui/button";
+import { buttonVariants } from "@t3tools/ui/button";
 import { useComposerDraftStore } from "~/composerDraftStore";
 import { useCopyToClipboard } from "~/hooks/useCopyToClipboard";
 import { resolveThreadRouteTarget } from "~/threadRoutes";
@@ -35,7 +35,7 @@ import {
   shouldHideCollapsedToastContent,
   shouldRenderThreadScopedToast,
 } from "./toast.logic";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "./tooltip";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 
 export type ThreadToastData = {
   threadRef?: ScopedThreadRef | null;

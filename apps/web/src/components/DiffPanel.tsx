@@ -46,9 +46,9 @@ import { formatShortTimestamp } from "../timestampFormat";
 import { DiffPanelLoadingState, DiffPanelShell, type DiffPanelMode } from "./DiffPanelShell";
 import { DiffStatLabel } from "./chat/DiffStatLabel";
 import { AnnotatableCodeView, type AnnotatableCodeViewHandle } from "./diffs/AnnotatableCodeView";
-import { Button } from "./ui/button";
-import { ToggleGroup, Toggle } from "./ui/toggle-group";
-import { Switch } from "./ui/switch";
+import { Button } from "@t3tools/ui/button";
+import { ToggleGroup, Toggle } from "@t3tools/ui/toggle-group";
+import { Switch } from "@t3tools/ui/switch";
 import {
   Combobox,
   ComboboxEmpty,
@@ -57,7 +57,7 @@ import {
   ComboboxList,
   ComboboxPopup,
   ComboboxTrigger,
-} from "./ui/combobox";
+} from "@t3tools/ui/combobox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -66,8 +66,8 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "./ui/menu";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "./ui/tooltip";
+} from "@t3tools/ui/menu";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import { useEnvironmentQuery } from "../state/query";
 import { useAtomCommand } from "../state/use-atom-command";
 import { serverEnvironment } from "../state/server";

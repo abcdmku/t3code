@@ -10,8 +10,8 @@ import {
   submitServerAuthCredential,
 } from "../../environments/primary";
 import { readHostedPairingRequest } from "../../hostedPairing";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import { Button } from "@t3tools/ui/button";
+import { Input } from "@t3tools/ui/input";
 import { useAtomCommand } from "../../state/use-atom-command";
 
 export function PairingPendingSurface() {

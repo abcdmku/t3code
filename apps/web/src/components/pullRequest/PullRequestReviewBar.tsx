@@ -11,8 +11,8 @@ import { useState, type ReactNode } from "react";
 import { pullRequestEnvironment } from "~/state/pullRequests";
 import { useAtomCommand } from "~/state/use-atom-command";
 
-import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
+import { Button } from "@t3tools/ui/button";
+import { Textarea } from "@t3tools/ui/textarea";
 import { toastManager } from "../ui/toast";
 import {
   pullRequestReviewKey,

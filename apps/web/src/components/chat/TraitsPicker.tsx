@@ -17,7 +17,7 @@ import {
 import { memo, useCallback, useState } from "react";
 import type { VariantProps } from "class-variance-authority";
 import { ZapIcon } from "lucide-react";
-import { buttonVariants } from "../ui/button";
+import { buttonVariants } from "@t3tools/ui/button";
 import {
   Menu,
   MenuGroup,
@@ -26,11 +26,11 @@ import {
   MenuRadioItem,
   MenuSeparator as MenuDivider,
   MenuTrigger,
-} from "../ui/menu";
+} from "@t3tools/ui/menu";
 import { useComposerDraftStore, DraftId } from "../../composerDraftStore";
 import { getProviderModelCapabilities } from "../../providerModels";
 import { cn } from "~/lib/utils";
-import { Badge } from "../ui/badge";
+import { Badge } from "@t3tools/ui/badge";
 import { ComposerControl, ComposerControlChevron, ComposerControlIcon } from "./ComposerControl";
 
 type ProviderOptions = ReadonlyArray<ProviderOptionSelection>;

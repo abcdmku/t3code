@@ -2,7 +2,7 @@ import type { EnvironmentId } from "@t3tools/contracts";
 import { Globe, History, RadioTower } from "lucide-react";
 
 import type { BrowserHistoryEntry } from "~/browserHistoryStore";
-import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "~/components/ui/empty";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@t3tools/ui/empty";
 
 import { PreviewLocalServerCard } from "./PreviewLocalServerCard";
 import { PreviewRecentUrlCard } from "./PreviewRecentUrlCard";

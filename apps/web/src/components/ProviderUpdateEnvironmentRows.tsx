@@ -24,8 +24,8 @@ import {
   type ProviderUpdateRowStatusKind,
   type ProviderUpdateToastView,
 } from "./ProviderUpdateLaunchNotification.logic";
-import { Button } from "./ui/button";
-import { Spinner } from "./ui/spinner";
+import { Button } from "@t3tools/ui/button";
+import { Spinner } from "@t3tools/ui/spinner";
 
 type ProviderUpdateCommandResult = AtomCommandResult<
   { readonly providers: ReadonlyArray<ServerProvider> },

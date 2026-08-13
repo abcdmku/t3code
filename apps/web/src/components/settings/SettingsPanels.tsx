@@ -80,8 +80,8 @@ import { primaryServerObservabilityAtom, primaryServerProvidersAtom } from "../.
 import { useProjects } from "../../state/entities";
 import { useArchivedThreadSnapshots } from "../../lib/archivedThreadsState";
 import { formatRelativeTimeLabel } from "../../timestampFormat";
-import { Button } from "../ui/button";
-import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "../ui/collapsible";
+import { Button } from "@t3tools/ui/button";
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@t3tools/ui/collapsible";
 import {
   Dialog,
   DialogDescription,
@@ -90,9 +90,9 @@ import {
   DialogPanel,
   DialogPopup,
   DialogTitle,
-} from "../ui/dialog";
+} from "@t3tools/ui/dialog";
 import { DraftInput } from "../ui/draft-input";
-import { Input } from "../ui/input";
+import { Input } from "@t3tools/ui/input";
 import {
   DEFAULT_CODE_FONT_STACK,
   DEFAULT_SANS_FONT_STACK,
@@ -111,11 +111,11 @@ import {
   NumberFieldGroup,
   NumberFieldIncrement,
   NumberFieldInput,
-} from "../ui/number-field";
-import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue } from "../ui/select";
-import { Switch } from "../ui/switch";
+} from "@t3tools/ui/number-field";
+import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue } from "@t3tools/ui/select";
+import { Switch } from "@t3tools/ui/switch";
 import { stackedThreadToast, toastManager } from "../ui/toast";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import { ThemeLibrary } from "./ThemeSettings";
 import {
   backgroundActivityOverrideSettings,

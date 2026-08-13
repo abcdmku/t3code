@@ -3,9 +3,9 @@ import { memo, useCallback, useEffect, useMemo } from "react";
 import { isOpenFavoriteEditorShortcut, shortcutLabelForCommand } from "../../keybindings";
 import { usePreferredEditor } from "../../editorPreferences";
 import { ChevronDownIcon, FolderClosedIcon } from "lucide-react";
-import { Button } from "../ui/button";
-import { Group, GroupSeparator } from "../ui/group";
-import { Menu, MenuItem, MenuPopup, MenuShortcut, MenuTrigger } from "../ui/menu";
+import { Button } from "@t3tools/ui/button";
+import { Group, GroupSeparator } from "@t3tools/ui/group";
+import { Menu, MenuItem, MenuPopup, MenuShortcut, MenuTrigger } from "@t3tools/ui/menu";
 import {
   AntigravityIcon,
   CursorIcon,

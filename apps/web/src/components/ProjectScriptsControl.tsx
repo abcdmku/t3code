@@ -21,8 +21,8 @@ import {
   type ProjectScriptActionResult,
   type ProjectScriptEditorRequest,
 } from "./projectScriptEditor";
-import { Button } from "./ui/button";
-import { Group, GroupSeparator } from "./ui/group";
+import { Button } from "@t3tools/ui/button";
+import { Group, GroupSeparator } from "@t3tools/ui/group";
 import {
   Menu,
   MenuGroup,
@@ -32,8 +32,8 @@ import {
   MenuSeparator,
   MenuShortcut,
   MenuTrigger,
-} from "./ui/menu";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "./ui/tooltip";
+} from "@t3tools/ui/menu";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 
 export type { NewProjectScriptInput, ProjectScriptActionResult };
 

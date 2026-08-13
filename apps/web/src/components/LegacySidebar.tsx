@@ -122,7 +122,7 @@ import {
 } from "../threadRoutes";
 import { stackedThreadToast, toastManager } from "./ui/toast";
 import { formatRelativeTimeLabel } from "../timestampFormat";
-import { Kbd } from "./ui/kbd";
+import { Kbd } from "@t3tools/ui/kbd";
 import {
   getArm64IntelBuildWarningDescription,
   getDesktopUpdateActionError,
@@ -133,8 +133,8 @@ import {
   shouldToastDesktopUpdateActionResult,
 } from "./desktopUpdate.logic";
 import { showDesktopUpdateDownloadedToast } from "./desktopUpdate.toast";
-import { Alert, AlertAction, AlertDescription, AlertTitle } from "./ui/alert";
-import { Button } from "./ui/button";
+import { Alert, AlertAction, AlertDescription, AlertTitle } from "@t3tools/ui/alert";
+import { Button } from "@t3tools/ui/button";
 import {
   Dialog,
   DialogDescription,
@@ -143,18 +143,18 @@ import {
   DialogPanel,
   DialogPopup,
   DialogTitle,
-} from "./ui/dialog";
-import { Input } from "./ui/input";
-import { Menu, MenuGroup, MenuPopup, MenuRadioGroup, MenuRadioItem, MenuTrigger } from "./ui/menu";
+} from "@t3tools/ui/dialog";
+import { Input } from "@t3tools/ui/input";
+import { Menu, MenuGroup, MenuPopup, MenuRadioGroup, MenuRadioItem, MenuTrigger } from "@t3tools/ui/menu";
 import {
   NumberField,
   NumberFieldDecrement,
   NumberFieldGroup,
   NumberFieldIncrement,
   NumberFieldInput,
-} from "./ui/number-field";
-import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue } from "./ui/select";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "./ui/tooltip";
+} from "@t3tools/ui/number-field";
+import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue } from "@t3tools/ui/select";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import {
   SidebarContent,
   SidebarGroup,
@@ -189,7 +189,7 @@ import { sortThreads } from "../lib/threadSort";
 import { SidebarChromeFooter, SidebarChromeHeader } from "./sidebar/SidebarChrome";
 import { useCopyToClipboard } from "~/hooks/useCopyToClipboard";
 import { useIsMobile } from "~/hooks/useMediaQuery";
-import { CommandDialogTrigger } from "./ui/command";
+import { CommandDialogTrigger } from "@t3tools/ui/command";
 import { useClientSettings, useUpdateClientSettings } from "~/hooks/useSettings";
 import { primaryServerKeybindingsAtom } from "../state/server";
 import {

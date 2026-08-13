@@ -1,4 +1,4 @@
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "./ui/empty";
+import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@t3tools/ui/empty";
 import { SidebarInset } from "./ui/sidebar";
 import { isElectron } from "../env";
 import { cn } from "~/lib/utils";

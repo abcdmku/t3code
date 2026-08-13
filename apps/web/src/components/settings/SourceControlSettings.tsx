@@ -22,9 +22,9 @@ import { cn } from "../../lib/utils";
 import { useEnvironments, usePrimaryEnvironment } from "../../state/environments";
 import { useEnvironmentQuery } from "../../state/query";
 import { sourceControlEnvironment } from "../../state/sourceControl";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
-import { Collapsible, CollapsibleContent } from "../ui/collapsible";
+import { Badge } from "@t3tools/ui/badge";
+import { Button } from "@t3tools/ui/button";
+import { Collapsible, CollapsibleContent } from "@t3tools/ui/collapsible";
 import {
   Empty,
   EmptyContent,
@@ -32,17 +32,17 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "../ui/empty";
-import { Skeleton } from "../ui/skeleton";
+} from "@t3tools/ui/empty";
+import { Skeleton } from "@t3tools/ui/skeleton";
 import {
   NumberField,
   NumberFieldDecrement,
   NumberFieldGroup,
   NumberFieldIncrement,
   NumberFieldInput,
-} from "../ui/number-field";
-import { Switch } from "../ui/switch";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+} from "@t3tools/ui/number-field";
+import { Switch } from "@t3tools/ui/switch";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import {
   AzureDevOpsIcon,
   BitbucketIcon,

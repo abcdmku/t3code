@@ -11,7 +11,7 @@ import {
   SelectPopup,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "@t3tools/ui/select";
 
 interface BranchToolbarEnvironmentSelectorProps {
   envLocked: boolean;

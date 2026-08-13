@@ -1,6 +1,6 @@
 import { GitPullRequestIcon, RefreshCwIcon } from "lucide-react";
 
-import { Button } from "../ui/button";
+import { Button } from "@t3tools/ui/button";
 import {
   Empty,
   EmptyContent,
@@ -8,7 +8,7 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "../ui/empty";
+} from "@t3tools/ui/empty";
 
 export function PullRequestsUnavailableState({
   title = "Could not load pull requests",

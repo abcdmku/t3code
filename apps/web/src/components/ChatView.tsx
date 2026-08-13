@@ -323,7 +323,7 @@ import { sanitizeThreadErrorMessage } from "~/rpc/transportError";
 import { RightPanelSheet } from "./RightPanelSheet";
 import { previewEnvironment } from "../state/preview";
 import { useAtomCommand } from "../state/use-atom-command";
-import { Button } from "./ui/button";
+import { Button } from "@t3tools/ui/button";
 import {
   AlertDialog,
   AlertDialogClose,
@@ -332,8 +332,8 @@ import {
   AlertDialogHeader,
   AlertDialogPopup,
   AlertDialogTitle,
-} from "./ui/alert-dialog";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "./ui/tooltip";
+} from "@t3tools/ui/alert-dialog";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import { ServerUpdateAction, ServerUpdateProgress } from "./ServerUpdateAction";
 import {
   buildVersionMismatchDismissalKey,

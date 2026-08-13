@@ -52,8 +52,8 @@ import {
   useRelativeTimeTick,
 } from "./settingsLayout";
 import { searchableSetting } from "./settingsSearch";
-import { Input } from "../ui/input";
-import { Checkbox } from "../ui/checkbox";
+import { Input } from "@t3tools/ui/input";
+import { Checkbox } from "@t3tools/ui/checkbox";
 import {
   Dialog,
   DialogClose,
@@ -64,8 +64,8 @@ import {
   DialogPopup,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import { ScrollArea } from "../ui/scroll-area";
+} from "@t3tools/ui/dialog";
+import { ScrollArea } from "@t3tools/ui/scroll-area";
 import {
   AlertDialog,
   AlertDialogClose,
@@ -74,18 +74,18 @@ import {
   AlertDialogHeader,
   AlertDialogPopup,
   AlertDialogTitle,
-} from "../ui/alert-dialog";
-import { Popover, PopoverPopup, PopoverTrigger } from "../ui/popover";
+} from "@t3tools/ui/alert-dialog";
+import { Popover, PopoverPopup, PopoverTrigger } from "@t3tools/ui/popover";
 import { QRCodeSvg } from "../ui/qr-code";
-import { Spinner } from "../ui/spinner";
-import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue } from "../ui/select";
-import { Switch } from "../ui/switch";
+import { Spinner } from "@t3tools/ui/spinner";
+import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue } from "@t3tools/ui/select";
+import { Switch } from "@t3tools/ui/switch";
 import { stackedThreadToast, toastManager } from "../ui/toast";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
-import { Button } from "../ui/button";
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "../ui/empty";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
+import { Button } from "@t3tools/ui/button";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@t3tools/ui/empty";
 import { AnimatedHeight } from "../AnimatedHeight";
-import { Textarea } from "../ui/textarea";
+import { Textarea } from "@t3tools/ui/textarea";
 import { getPairingTokenFromUrl, setPairingTokenOnUrl } from "../../pairingUrl";
 import { readHostedPairingRequest } from "../../hostedPairing";
 import {

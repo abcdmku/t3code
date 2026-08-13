@@ -1,8 +1,8 @@
 import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
 
-import { Command, CommandFooter, CommandInput, CommandPanel } from "./ui/command";
-import { Kbd, KbdGroup } from "./ui/kbd";
+import { Command, CommandFooter, CommandInput, CommandPanel } from "@t3tools/ui/command";
+import { Kbd, KbdGroup } from "@t3tools/ui/kbd";
 
 type CommandPaletteContentProps = Omit<ComponentProps<typeof Command>, "children"> & {
   readonly children: ReactNode;

@@ -1,7 +1,7 @@
 import { ProviderInteractionMode, RuntimeMode } from "@t3tools/contracts";
 import { memo, type ReactNode } from "react";
 import { EllipsisIcon } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "@t3tools/ui/button";
 import {
   Menu,
   MenuPopup,
@@ -9,7 +9,7 @@ import {
   MenuRadioItem,
   MenuSeparator as MenuDivider,
   MenuTrigger,
-} from "../ui/menu";
+} from "@t3tools/ui/menu";
 
 export const CompactComposerControlsMenu = memo(function CompactComposerControlsMenu(props: {
   interactionMode: ProviderInteractionMode;

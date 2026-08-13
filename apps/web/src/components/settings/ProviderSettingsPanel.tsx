@@ -60,16 +60,16 @@ import {
   isProviderUpdateActive,
   type ProviderUpdateCandidate,
 } from "../ProviderUpdateLaunchNotification.logic";
-import { Button } from "../ui/button";
+import { Button } from "@t3tools/ui/button";
 import {
   NumberField,
   NumberFieldDecrement,
   NumberFieldGroup,
   NumberFieldIncrement,
   NumberFieldInput,
-} from "../ui/number-field";
+} from "@t3tools/ui/number-field";
 import { stackedThreadToast, toastManager } from "../ui/toast";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import { AddProviderInstanceDialog } from "./AddProviderInstanceDialog";
 import { ProviderInstanceCard } from "./ProviderInstanceCard";
 import { DRIVER_OPTIONS, getDriverOption } from "./providerDriverMeta";

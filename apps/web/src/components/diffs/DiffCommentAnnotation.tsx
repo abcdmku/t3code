@@ -1,8 +1,8 @@
 import { MessageCircle, Trash2 } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
-import { Button } from "~/components/ui/button";
-import { Textarea } from "~/components/ui/textarea";
+import { Button } from "@t3tools/ui/button";
+import { Textarea } from "@t3tools/ui/textarea";
 
 import { isCommentSubmitShortcut } from "./commentSubmitShortcut";
 

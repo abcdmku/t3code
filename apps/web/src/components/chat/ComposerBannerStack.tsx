@@ -2,8 +2,8 @@ import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 
 import { XIcon } from "lucide-react";
 
 import { cn } from "~/lib/utils";
-import { Alert, AlertAction, AlertDescription, AlertTitle } from "../ui/alert";
-import { Button } from "../ui/button";
+import { Alert, AlertAction, AlertDescription, AlertTitle } from "@t3tools/ui/alert";
+import { Button } from "@t3tools/ui/button";
 
 const DISMISS_TRANSITION_MS = 220;
 const frontExitStyle = {

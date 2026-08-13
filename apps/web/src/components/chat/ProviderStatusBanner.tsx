@@ -3,7 +3,7 @@ import { memo } from "react";
 import { InfoIcon, XIcon } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { formatProviderDriverKindLabel } from "../../providerModels";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 
 export function getProviderStatusBannerKey(status: ServerProvider | null): string | null {
   return !status || status.status === "ready" || status.status === "disabled"

@@ -14,11 +14,11 @@ import {
 } from "../../proposedPlan";
 import ChatMarkdown from "../ChatMarkdown";
 import { EllipsisIcon } from "lucide-react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Menu, MenuItem, MenuPopup, MenuTrigger } from "../ui/menu";
+import { Button } from "@t3tools/ui/button";
+import { Input } from "@t3tools/ui/input";
+import { Menu, MenuItem, MenuPopup, MenuTrigger } from "@t3tools/ui/menu";
 import { cn } from "~/lib/utils";
-import { Badge } from "../ui/badge";
+import { Badge } from "@t3tools/ui/badge";
 import {
   Dialog,
   DialogDescription,
@@ -27,7 +27,7 @@ import {
   DialogPanel,
   DialogPopup,
   DialogTitle,
-} from "../ui/dialog";
+} from "@t3tools/ui/dialog";
 import { stackedThreadToast, toastManager } from "../ui/toast";
 import { projectEnvironment } from "~/state/projects";
 import { useCopyToClipboard } from "~/hooks/useCopyToClipboard";

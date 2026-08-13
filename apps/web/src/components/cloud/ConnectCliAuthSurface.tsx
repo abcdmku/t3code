@@ -12,7 +12,7 @@ import { isElectron } from "../../env";
 import { useCopyToClipboard } from "../../hooks/useCopyToClipboard";
 import { AuthSurfaceShell } from "../auth/AuthSurfaceShell";
 import { resolveClerkSignInProps } from "../clerk/authRedirect";
-import { Button } from "../ui/button";
+import { Button } from "@t3tools/ui/button";
 
 function ConnectCliAuthMessage({
   eyebrow,

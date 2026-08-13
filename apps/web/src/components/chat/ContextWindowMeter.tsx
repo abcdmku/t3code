@@ -1,6 +1,6 @@
 import { cn } from "~/lib/utils";
 import { type ContextWindowSnapshot, formatContextWindowTokens } from "~/lib/contextWindow";
-import { Popover, PopoverPopup, PopoverTrigger } from "../ui/popover";
+import { Popover, PopoverPopup, PopoverTrigger } from "@t3tools/ui/popover";
 
 function formatPercentage(value: number | null): string | null {
   if (value === null || !Number.isFinite(value)) {

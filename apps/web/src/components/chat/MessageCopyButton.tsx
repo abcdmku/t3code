@@ -1,10 +1,10 @@
 import { memo, useRef } from "react";
 import { CopyIcon, CheckIcon } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "@t3tools/ui/button";
 import { useCopyToClipboard } from "~/hooks/useCopyToClipboard";
 import { cn } from "~/lib/utils";
 import { anchoredToastManager } from "../ui/toast";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 
 const ANCHORED_TOAST_TIMEOUT_MS = 1000;
 const onCopy = (ref: React.RefObject<HTMLButtonElement | null>) => {

@@ -10,7 +10,7 @@ import { useProjectContentSearch } from "~/state/queries";
 
 import { PierreEntryIcon } from "../chat/PierreEntryIcon";
 import { CommandPaletteContent } from "../CommandPaletteContent";
-import { ScrollArea } from "../ui/scroll-area";
+import { ScrollArea } from "@t3tools/ui/scroll-area";
 import { HighlightedSearchLine } from "./HighlightedSearchLine";
 
 interface ProjectContentSearchDialogProps {

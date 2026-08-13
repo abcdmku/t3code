@@ -74,8 +74,8 @@ import {
   WorkspaceBreadcrumbSeparator,
 } from "../components/WorkspaceBreadcrumb";
 import { PanelLayoutControls } from "../components/chat/PanelLayoutControls";
-import { Button } from "../components/ui/button";
-import { Menu, MenuPopup, MenuRadioGroup, MenuRadioItem, MenuTrigger } from "../components/ui/menu";
+import { Button } from "@t3tools/ui/button";
+import { Menu, MenuPopup, MenuRadioGroup, MenuRadioItem, MenuTrigger } from "@t3tools/ui/menu";
 import { SidebarInset } from "../components/ui/sidebar";
 import { useLiveRefresh } from "../hooks/useLiveRefresh";
 import {

@@ -49,8 +49,8 @@ import {
   prStatusIndicator,
   resolveThreadPr,
 } from "./ThreadStatusIndicators";
-import { Button } from "./ui/button";
-import { Switch } from "./ui/switch";
+import { Button } from "@t3tools/ui/button";
+import { Switch } from "@t3tools/ui/switch";
 import {
   Combobox,
   ComboboxEmpty,
@@ -60,9 +60,9 @@ import {
   ComboboxPopup,
   ComboboxStatus,
   ComboboxTrigger,
-} from "./ui/combobox";
+} from "@t3tools/ui/combobox";
 import { stackedThreadToast, toastManager } from "./ui/toast";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "./ui/tooltip";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 
 interface BranchToolbarBranchSelectorProps {
   className?: string;

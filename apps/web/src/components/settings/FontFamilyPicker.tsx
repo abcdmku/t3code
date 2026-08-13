@@ -10,7 +10,7 @@ import {
   ComboboxListVirtualized,
   ComboboxPopup,
   ComboboxTrigger,
-} from "../ui/combobox";
+} from "@t3tools/ui/combobox";
 
 const DEFAULT_FONT_VALUE = "__default__";
 

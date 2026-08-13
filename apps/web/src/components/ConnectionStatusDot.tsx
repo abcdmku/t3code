@@ -1,7 +1,7 @@
 import type { EnvironmentConnectionPhase } from "@t3tools/client-runtime/connection";
 
 import { cn } from "~/lib/utils";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "~/components/ui/tooltip";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 
 /** Canonical connection-phase → dot color mapping shared by every status dot. */
 export function connectionPhaseDotClassName(phase: EnvironmentConnectionPhase): string {

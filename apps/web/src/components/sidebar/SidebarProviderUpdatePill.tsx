@@ -9,7 +9,7 @@ import {
   getProviderUpdateSidebarPillView,
   type ProviderUpdateSidebarPillView,
 } from "../ProviderUpdateLaunchNotification.logic";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 
 const PROVIDER_UPDATE_PILL_STYLES = {
   loading:

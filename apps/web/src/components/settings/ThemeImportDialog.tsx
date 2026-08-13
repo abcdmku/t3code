@@ -18,8 +18,8 @@ import {
   parseVsCodeThemeFile,
   resolveThemeLabelCollisions,
 } from "../../vscodeThemeImport";
-import { Alert } from "../ui/alert";
-import { Button } from "../ui/button";
+import { Alert } from "@t3tools/ui/alert";
+import { Button } from "@t3tools/ui/button";
 import {
   Dialog,
   DialogFooter,
@@ -27,7 +27,7 @@ import {
   DialogPanel,
   DialogPopup,
   DialogTitle,
-} from "../ui/dialog";
+} from "@t3tools/ui/dialog";
 import { ThemeSearchSection } from "./ThemeSearchSection";
 
 /**

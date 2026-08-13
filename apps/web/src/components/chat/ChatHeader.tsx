@@ -23,7 +23,7 @@ import {
 } from "react";
 import GitActionsControl from "../GitActionsControl";
 import { type DraftId } from "~/composerDraftStore";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import { toastManager } from "../ui/toast";
 import ProjectScriptsControl, {
   type NewProjectScriptInput,

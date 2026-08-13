@@ -83,8 +83,8 @@ import {
 } from "../projectScriptEditor";
 import { cn } from "../../lib/utils";
 import { COLLAPSED_SIDEBAR_TITLEBAR_INSET_CLASS } from "../../workspaceTitlebar";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import { Button } from "@t3tools/ui/button";
+import { Input } from "@t3tools/ui/input";
 import {
   Menu,
   MenuGroup,
@@ -93,8 +93,8 @@ import {
   MenuPopup,
   MenuSeparator,
   MenuTrigger,
-} from "../ui/menu";
-import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue } from "../ui/select";
+} from "@t3tools/ui/menu";
+import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue } from "@t3tools/ui/select";
 import { SidebarInset } from "../ui/sidebar";
 import { stackedThreadToast, toastManager } from "../ui/toast";
 import {

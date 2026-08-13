@@ -33,7 +33,7 @@ import {
   MenuRadioItem,
   MenuSeparator,
   MenuTrigger,
-} from "../ui/menu";
+} from "@t3tools/ui/menu";
 
 export interface PullRequestFilterOption<Value extends string> {
   readonly value: Value;

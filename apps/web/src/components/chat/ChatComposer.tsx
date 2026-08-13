@@ -105,7 +105,7 @@ import { ContextWindowMeter } from "./ContextWindowMeter";
 import { buildExpandedImagePreview, type ExpandedImagePreview } from "./ExpandedImagePreview";
 import { basenameOfPath } from "../../pierre-icons";
 import { cn, randomUUID } from "~/lib/utils";
-import { Separator } from "../ui/separator";
+import { Separator } from "@t3tools/ui/separator";
 
 type ComposerCommandMenuPosition = {
   bottom: number;
@@ -187,9 +187,9 @@ function ComposerCommandMenuLayer(props: { anchor: HTMLElement | null; children:
     document.body,
   );
 }
-import { Button } from "../ui/button";
-import { Select, SelectItem, SelectPopup, SelectValue } from "../ui/select";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+import { Button } from "@t3tools/ui/button";
+import { Select, SelectItem, SelectPopup, SelectValue } from "@t3tools/ui/select";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import { toastManager } from "../ui/toast";
 import {
   BotIcon,

@@ -9,7 +9,7 @@ import { useCopyToClipboard } from "~/hooks/useCopyToClipboard";
 import { serverEnvironment } from "~/state/server";
 import { useAtomCommand } from "~/state/use-atom-command";
 import { manualServerUpdateCommand } from "~/versionSkew";
-import { Button } from "./ui/button";
+import { Button } from "@t3tools/ui/button";
 import { toastManager } from "./ui/toast";
 
 // The wire "installing" stage is a sub-second launcher handoff, so the UI

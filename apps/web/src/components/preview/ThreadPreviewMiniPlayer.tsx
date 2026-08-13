@@ -6,7 +6,7 @@ import { type PointerEvent as ReactPointerEvent, useLayoutEffect, useRef } from 
 
 import { BrowserSurfaceSlot } from "~/browser/BrowserSurfaceSlot";
 import { previewRuntimeTabId } from "~/browser/previewRuntimeTabId";
-import { Button } from "~/components/ui/button";
+import { Button } from "@t3tools/ui/button";
 import { toastManager } from "~/components/ui/toast";
 import { useThreadPreviewState } from "~/previewStateStore";
 import { selectThreadPreviewMiniPlayer, usePreviewMiniPlayerStore } from "~/previewMiniPlayerStore";

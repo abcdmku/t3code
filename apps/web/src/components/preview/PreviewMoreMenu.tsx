@@ -3,7 +3,7 @@
 import type { DesktopPreviewColorScheme } from "@t3tools/contracts";
 import { Minus, MoreVertical, Plus as PlusIcon, RotateCcw } from "lucide-react";
 
-import { Button } from "~/components/ui/button";
+import { Button } from "@t3tools/ui/button";
 import {
   Menu,
   MenuItem,
@@ -15,8 +15,8 @@ import {
   MenuSubPopup,
   MenuSubTrigger,
   MenuTrigger,
-} from "~/components/ui/menu";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "~/components/ui/tooltip";
+} from "@t3tools/ui/menu";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 
 import { previewBridge } from "./previewBridge";
 

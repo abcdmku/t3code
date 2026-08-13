@@ -14,9 +14,9 @@
 import { PlusIcon, RefreshCwIcon, SearchIcon } from "lucide-react";
 
 import { openCommandPalette } from "../../commandPaletteBus";
-import { Button } from "../ui/button";
+import { Button } from "@t3tools/ui/button";
 import { PullRequestListGhost } from "./PullRequestGhosts";
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "../ui/empty";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@t3tools/ui/empty";
 
 /**
  * Drawn at the weight of the icons beside it rather than as an illustration with its own

@@ -13,7 +13,7 @@ import {
 import { useEnvironmentSettings, useUpdateEnvironmentSettings } from "../../hooks/useSettings";
 import { cn } from "../../lib/utils";
 import { normalizeProviderAccentColor } from "../../providerInstances";
-import { Button } from "../ui/button";
+import { Button } from "@t3tools/ui/button";
 import { ACPRegistryIcon, Gemini, GithubCopilotIcon, PiAgentIcon, type Icon } from "../Icons";
 import {
   Dialog,
@@ -22,10 +22,10 @@ import {
   DialogHeader,
   DialogPopup,
   DialogTitle,
-} from "../ui/dialog";
-import { Badge } from "../ui/badge";
-import { Input } from "../ui/input";
-import { RadioGroup } from "../ui/radio-group";
+} from "@t3tools/ui/dialog";
+import { Badge } from "@t3tools/ui/badge";
+import { Input } from "@t3tools/ui/input";
+import { RadioGroup } from "@t3tools/ui/radio-group";
 import { toastManager } from "../ui/toast";
 import { DRIVER_OPTION_BY_VALUE, DRIVER_OPTIONS } from "./providerDriverMeta";
 import { ProviderSettingsForm, deriveProviderSettingsFields } from "./ProviderSettingsForm";

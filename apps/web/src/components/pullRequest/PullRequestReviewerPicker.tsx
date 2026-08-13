@@ -18,9 +18,9 @@ import { useEnvironmentQuery } from "~/state/query";
 import { useAtomCommand } from "~/state/use-atom-command";
 import { squashAtomCommandFailure } from "@t3tools/client-runtime/state/runtime";
 
-import { Button } from "../ui/button";
-import { Menu, MenuPopup, MenuTrigger } from "../ui/menu";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+import { Button } from "@t3tools/ui/button";
+import { Menu, MenuPopup, MenuTrigger } from "@t3tools/ui/menu";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import { toastManager } from "../ui/toast";
 import { PullRequestPeopleGhost } from "./PullRequestGhosts";
 import { PullRequestActorLabel } from "./pullRequestPresentation";

@@ -8,7 +8,7 @@ import {
   respondToRelayClientInstallConfirmation,
   subscribeRelayClientInstallDialog,
 } from "../../cloud/relayClientInstallDialog";
-import { Button } from "../ui/button";
+import { Button } from "@t3tools/ui/button";
 import {
   Dialog,
   DialogDescription,
@@ -17,7 +17,7 @@ import {
   DialogPanel,
   DialogPopup,
   DialogTitle,
-} from "../ui/dialog";
+} from "@t3tools/ui/dialog";
 const installSteps: ReadonlyArray<{
   readonly stage: RelayClientInstallProgressStage;
   readonly label: string;

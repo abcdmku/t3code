@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Badge } from "../ui/badge";
+import { Badge } from "@t3tools/ui/badge";
 
 export const ComposerPlanFollowUpBanner = memo(function ComposerPlanFollowUpBanner({
   planTitle,

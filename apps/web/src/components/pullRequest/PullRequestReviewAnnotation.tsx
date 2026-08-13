@@ -21,8 +21,8 @@ import { useRef, useState } from "react";
 import { formatRelativeTimeLabel } from "~/timestampFormat";
 import { cn } from "~/lib/utils";
 
-import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
+import { Button } from "@t3tools/ui/button";
+import { Textarea } from "@t3tools/ui/textarea";
 import { isCommentSubmitShortcut } from "../diffs/commentSubmitShortcut";
 import { PullRequestActorLabel } from "./pullRequestPresentation";
 import { PullRequestMarkdown } from "./PullRequestMarkdown";

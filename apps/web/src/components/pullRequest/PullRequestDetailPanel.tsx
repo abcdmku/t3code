@@ -70,10 +70,10 @@ import {
   AlertDialogHeader,
   AlertDialogPopup,
   AlertDialogTitle,
-} from "../ui/alert-dialog";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+} from "@t3tools/ui/alert-dialog";
+import { Badge } from "@t3tools/ui/badge";
+import { Button } from "@t3tools/ui/button";
+import { Input } from "@t3tools/ui/input";
 import {
   Menu,
   MenuItem,
@@ -82,8 +82,8 @@ import {
   MenuRadioItem,
   MenuSeparator,
   MenuTrigger,
-} from "../ui/menu";
-import { Popover, PopoverPopup, PopoverTrigger } from "../ui/popover";
+} from "@t3tools/ui/menu";
+import { Popover, PopoverPopup, PopoverTrigger } from "@t3tools/ui/popover";
 import { toastManager } from "../ui/toast";
 import { PullRequestDetailGhost, PullRequestTimelineGhost } from "./PullRequestGhosts";
 import { PullRequestActivityUnavailableState } from "./PullRequestActivityUnavailableState";

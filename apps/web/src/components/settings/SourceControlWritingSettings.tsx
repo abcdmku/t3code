@@ -17,9 +17,9 @@ import {
 } from "../../modelSelection";
 import { primaryServerProvidersAtom } from "../../state/server";
 import { ProviderModelPicker } from "../chat/ProviderModelPicker";
-import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue } from "../ui/select";
-import { Switch } from "../ui/switch";
-import { Textarea } from "../ui/textarea";
+import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue } from "@t3tools/ui/select";
+import { Switch } from "@t3tools/ui/switch";
+import { Textarea } from "@t3tools/ui/textarea";
 import { SettingResetButton, SettingsRow, SettingsSection } from "./settingsLayout";
 
 const MODE_OPTIONS: Record<SourceControlWritingStyleMode, { label: string; description: string }> =

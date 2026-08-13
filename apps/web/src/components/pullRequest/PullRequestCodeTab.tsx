@@ -52,17 +52,17 @@ import { DiffPanelLoadingState } from "../DiffPanelShell";
 import { DiffWorkerPoolProvider } from "../DiffWorkerPoolProvider";
 import { DiffCommentAnnotation } from "../diffs/DiffCommentAnnotation";
 import { StyledDiffCodeView } from "../diffs/StyledDiffCodeView";
-import { Button } from "../ui/button";
-import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "../ui/collapsible";
+import { Button } from "@t3tools/ui/button";
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@t3tools/ui/collapsible";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/menu";
+} from "@t3tools/ui/menu";
 import { toastManager } from "../ui/toast";
-import { Toggle, ToggleGroup } from "../ui/toggle-group";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+import { Toggle, ToggleGroup } from "@t3tools/ui/toggle-group";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import { PendingReviewCommentCard, ReviewThreadCard } from "./PullRequestReviewAnnotation";
 import { PullRequestReviewBar } from "./PullRequestReviewBar";
 import {

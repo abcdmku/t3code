@@ -11,9 +11,9 @@ import type {
 
 import { cn } from "../../lib/utils";
 import { DraftInput } from "../ui/draft-input";
-import { Input } from "../ui/input";
-import { Switch } from "../ui/switch";
-import { Textarea } from "../ui/textarea";
+import { Input } from "@t3tools/ui/input";
+import { Switch } from "@t3tools/ui/switch";
+import { Textarea } from "@t3tools/ui/textarea";
 import type { ProviderClientDefinition } from "./providerDriverMeta";
 
 export interface ProviderSettingsFieldModel {

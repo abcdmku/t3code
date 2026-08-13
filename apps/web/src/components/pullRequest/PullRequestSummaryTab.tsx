@@ -24,11 +24,11 @@ import { cn } from "~/lib/utils";
 import { readLocalApi } from "~/localApi";
 import { formatRelativeTimeLabel } from "~/timestampFormat";
 
-import { Button } from "../ui/button";
-import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "../ui/collapsible";
-import { Textarea } from "../ui/textarea";
+import { Button } from "@t3tools/ui/button";
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@t3tools/ui/collapsible";
+import { Textarea } from "@t3tools/ui/textarea";
 import { toastManager } from "../ui/toast";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import {
   PullRequestActorAvatar,
   PullRequestActorLabel,

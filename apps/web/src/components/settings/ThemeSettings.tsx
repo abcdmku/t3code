@@ -33,10 +33,10 @@ import {
   AlertDialogHeader,
   AlertDialogPopup,
   AlertDialogTitle,
-} from "../ui/alert-dialog";
-import { Button } from "../ui/button";
+} from "@t3tools/ui/alert-dialog";
+import { Button } from "@t3tools/ui/button";
 import { stackedThreadToast, toastManager } from "../ui/toast";
-import { Tooltip, TooltipPopup, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { Tooltip, TooltipPopup, TooltipProvider, TooltipTrigger } from "@t3tools/ui/tooltip";
 import { ThemeImportDialog } from "./ThemeImportDialog";
 import { useThemeEditorStore } from "./themeEditorStore";
 import {

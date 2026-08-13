@@ -10,7 +10,7 @@ import { cn } from "~/lib/utils";
 import { pullRequestEnvironment } from "~/state/pullRequests";
 import { useEnvironmentQuery } from "~/state/query";
 
-import { Popover, PopoverPopup, PopoverTrigger } from "../ui/popover";
+import { Popover, PopoverPopup, PopoverTrigger } from "@t3tools/ui/popover";
 import {
   PullRequestCheckStatusIcon,
   pullRequestCheckStatusLabel,

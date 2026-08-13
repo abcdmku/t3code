@@ -21,7 +21,7 @@ import { SshPasswordPromptDialog } from "../components/desktop/SshPasswordPrompt
 import { ProviderUpdateLaunchNotification } from "../components/ProviderUpdateLaunchNotification";
 import { SlowRpcRequestToastCoordinator } from "../components/SlowRpcRequestToastCoordinator";
 import { ThemeEditorHost } from "../components/settings/ThemeEditorHost";
-import { Button } from "../components/ui/button";
+import { Button } from "@t3tools/ui/button";
 import {
   AnchoredToastProvider,
   stackedThreadToast,

@@ -22,7 +22,7 @@ import {
   MenuRadioItem,
   MenuSeparator,
   MenuTrigger,
-} from "../ui/menu";
+} from "@t3tools/ui/menu";
 
 interface DraftHeroHeadlineProps {
   readonly activeProjectRef: ScopedProjectRef | null;

@@ -44,14 +44,14 @@ import {
   serverEnvironment,
 } from "../../state/server";
 import { usePrimaryEnvironment } from "../../state/environments";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Kbd, KbdGroup } from "../ui/kbd";
-import { Menu, MenuItem, MenuPopup, MenuTrigger } from "../ui/menu";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { ScrollArea } from "../ui/scroll-area";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { Toggle } from "../ui/toggle";
+import { Button } from "@t3tools/ui/button";
+import { Input } from "@t3tools/ui/input";
+import { Kbd, KbdGroup } from "@t3tools/ui/kbd";
+import { Menu, MenuItem, MenuPopup, MenuTrigger } from "@t3tools/ui/menu";
+import { Popover, PopoverContent, PopoverTrigger } from "@t3tools/ui/popover";
+import { ScrollArea } from "@t3tools/ui/scroll-area";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@t3tools/ui/select";
+import { Toggle } from "@t3tools/ui/toggle";
 import { toastManager } from "../ui/toast";
 import {
   buildKeybindingRows,
@@ -71,7 +71,7 @@ import {
 } from "./KeybindingsSettings.logic";
 import { SettingsPageContainer, SettingsSection } from "./settingsLayout";
 import { searchableSetting } from "./settingsSearch";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import { useAtomCommand } from "../../state/use-atom-command";
 
 function KeybindingPill({ value }: { value: string }) {

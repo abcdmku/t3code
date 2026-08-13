@@ -16,9 +16,9 @@ import {
   useState,
 } from "react";
 
-import { Button } from "~/components/ui/button";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "~/components/ui/input-group";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "~/components/ui/tooltip";
+import { Button } from "@t3tools/ui/button";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@t3tools/ui/input-group";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import { cn } from "~/lib/utils";
 
 interface Props {

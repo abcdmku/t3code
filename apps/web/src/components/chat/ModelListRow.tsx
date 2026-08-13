@@ -7,10 +7,10 @@ import {
   type ModelEsque,
   PROVIDER_ICON_BY_PROVIDER,
 } from "./providerIconUtils";
-import { ComboboxItem } from "../ui/combobox";
-import { Button } from "../ui/button";
-import { Kbd } from "../ui/kbd";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "../ui/tooltip";
+import { ComboboxItem } from "@t3tools/ui/combobox";
+import { Button } from "@t3tools/ui/button";
+import { Kbd } from "@t3tools/ui/kbd";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import { cn } from "~/lib/utils";
 import { modelPickerModelKey } from "./modelPickerKeys";
 

@@ -133,11 +133,11 @@ import {
   type ProviderInstanceEntry,
 } from "../providerInstances";
 import { resolveShortcutCommand, threadJumpIndexFromCommand } from "../keybindings";
-import { CommandDialog, CommandDialogPopup } from "./ui/command";
-import { Button } from "./ui/button";
-import { Kbd, KbdGroup } from "./ui/kbd";
+import { CommandDialog, CommandDialogPopup } from "@t3tools/ui/command";
+import { Button } from "@t3tools/ui/button";
+import { Kbd, KbdGroup } from "@t3tools/ui/kbd";
 import { stackedThreadToast, toastManager } from "./ui/toast";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "./ui/tooltip";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import { ComposerHandleContext, useComposerHandleContext } from "../composerHandleContext";
 import type { ChatComposerHandle } from "./chat/ChatComposer";
 import { getProjectOrderKey, selectProjectGroupingSettings } from "../logicalProject";

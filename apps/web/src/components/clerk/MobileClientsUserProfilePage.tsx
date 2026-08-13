@@ -2,10 +2,10 @@ import type { RelayClientDeviceRecord } from "@t3tools/contracts/relay";
 import { SmartphoneIcon } from "lucide-react";
 
 import { useManagedRelayDevices } from "../../cloud/managedRelayState";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "../ui/empty";
-import { Skeleton } from "../ui/skeleton";
+import { Badge } from "@t3tools/ui/badge";
+import { Button } from "@t3tools/ui/button";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@t3tools/ui/empty";
+import { Skeleton } from "@t3tools/ui/skeleton";
 import {
   mobileClientNotificationDetail,
   mobileClientPlatformLabel,

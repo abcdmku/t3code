@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Button } from "~/components/ui/button";
+import { Button } from "@t3tools/ui/button";
 
 import { describePreviewError } from "./errorCodeMessages";
 

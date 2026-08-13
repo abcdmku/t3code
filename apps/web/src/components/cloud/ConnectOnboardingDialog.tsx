@@ -15,8 +15,8 @@ import { useLocalStorage } from "~/hooks/useLocalStorage";
 import { cn } from "~/lib/utils";
 import { useEnvironments, usePrimaryEnvironment } from "~/state/environments";
 import { CloudEnvironmentConnectRows } from "./CloudEnvironmentConnectList";
-import { Button } from "../ui/button";
-import { Checkbox } from "../ui/checkbox";
+import { Button } from "@t3tools/ui/button";
+import { Checkbox } from "@t3tools/ui/checkbox";
 import {
   Dialog,
   DialogDescription,
@@ -25,8 +25,8 @@ import {
   DialogPanel,
   DialogPopup,
   DialogTitle,
-} from "../ui/dialog";
-import { Switch } from "../ui/switch";
+} from "@t3tools/ui/dialog";
+import { Switch } from "@t3tools/ui/switch";
 import { toastManager } from "../ui/toast";
 
 /**

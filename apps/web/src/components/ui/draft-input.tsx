@@ -1,7 +1,7 @@
 "use client";
 
 import { useCommitOnBlur } from "~/hooks/useCommitOnBlur";
-import { Input, type InputProps } from "./input";
+import { Input, type InputProps } from "@t3tools/ui/input";
 
 export type DraftInputProps = Omit<InputProps, "value" | "onChange" | "defaultValue"> & {
   readonly value: string;

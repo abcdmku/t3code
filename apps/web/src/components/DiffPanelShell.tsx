@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { isElectron } from "~/env";
 import { cn } from "~/lib/utils";
 
-import { Skeleton } from "./ui/skeleton";
+import { Skeleton } from "@t3tools/ui/skeleton";
 
 export type DiffPanelMode = "inline" | "sheet" | "sidebar" | "embedded";
 

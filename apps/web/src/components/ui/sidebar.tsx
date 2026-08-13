@@ -4,19 +4,19 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { PanelLeftCloseIcon, PanelLeftIcon } from "lucide-react";
 import * as React from "react";
 import { cn } from "~/lib/utils";
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { ScrollArea } from "~/components/ui/scroll-area";
-import { Separator } from "~/components/ui/separator";
+import { Button } from "@t3tools/ui/button";
+import { Input } from "@t3tools/ui/input";
+import { ScrollArea } from "@t3tools/ui/scroll-area";
+import { Separator } from "@t3tools/ui/separator";
 import {
   Sheet,
   SheetDescription,
   SheetHeader,
   SheetPopup,
   SheetTitle,
-} from "~/components/ui/sheet";
-import { Skeleton } from "~/components/ui/skeleton";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "~/components/ui/tooltip";
+} from "@t3tools/ui/sheet";
+import { Skeleton } from "@t3tools/ui/skeleton";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@t3tools/ui/tooltip";
 import { useIsMobile } from "~/hooks/useMediaQuery";
 import { getLocalStorageItem, setLocalStorageItem } from "~/hooks/useLocalStorage";
 import { resolveSidebarState, type ResponsiveSidebarState } from "./sidebarState";

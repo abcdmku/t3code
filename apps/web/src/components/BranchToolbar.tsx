@@ -28,7 +28,7 @@ import {
 import { BranchToolbarBranchSelector } from "./BranchToolbarBranchSelector";
 import { BranchToolbarEnvironmentSelector } from "./BranchToolbarEnvironmentSelector";
 import { BranchToolbarEnvModeSelector } from "./BranchToolbarEnvModeSelector";
-import { Button } from "./ui/button";
+import { Button } from "@t3tools/ui/button";
 import {
   Menu,
   MenuGroup,
@@ -38,8 +38,8 @@ import {
   MenuRadioItem,
   MenuSeparator,
   MenuTrigger,
-} from "./ui/menu";
-import { Separator } from "./ui/separator";
+} from "@t3tools/ui/menu";
+import { Separator } from "@t3tools/ui/separator";
 
 interface BranchToolbarProps {
   environmentId: EnvironmentId;

@@ -15,7 +15,7 @@ import {
   SelectPopup,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "@t3tools/ui/select";
 
 export const PREVIOUS_WORKTREE_SELECT_VALUE = "previous-worktree";
 

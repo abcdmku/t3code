@@ -13,7 +13,7 @@ import {
   PROJECT_FILE_PICKER_RESULT_LIMIT,
 } from "../files/ProjectFilePicker.logic";
 import { useProjectFilePickerQuery } from "../files/projectFilesQueryState";
-import { CommandDialog, CommandDialogPopup } from "../ui/command";
+import { CommandDialog, CommandDialogPopup } from "@t3tools/ui/command";
 
 function emptyMessage(query: string, error: string | null, isPending: boolean): string {
   if (error) return error;

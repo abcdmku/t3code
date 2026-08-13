@@ -4,8 +4,8 @@ import { memo, useEffect, useState } from "react";
 import { formatRelativeTimeLabel } from "../../timestampFormat";
 import { cn } from "~/lib/utils";
 import { type PromptStashEntry } from "../../promptStashStore";
-import { Command, CommandGroup, CommandGroupLabel, CommandItem, CommandList } from "../ui/command";
-import { Button } from "../ui/button";
+import { Command, CommandGroup, CommandGroupLabel, CommandItem, CommandList } from "@t3tools/ui/command";
+import { Button } from "@t3tools/ui/button";
 
 const SNIPPET_MAX_CHARS = 90;
 

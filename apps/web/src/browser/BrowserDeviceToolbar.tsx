@@ -10,8 +10,8 @@ import { PREVIEW_VIEWPORT_PRESETS, resolvePreviewViewport } from "@t3tools/share
 import { Link2, X } from "lucide-react";
 import { useState } from "react";
 
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
+import { Button } from "@t3tools/ui/button";
+import { Input } from "@t3tools/ui/input";
 import {
   Select,
   SelectGroup,
@@ -20,7 +20,7 @@ import {
   SelectPopup,
   SelectTrigger,
   SelectValue,
-} from "~/components/ui/select";
+} from "@t3tools/ui/select";
 import { cn } from "~/lib/utils";
 
 import { BROWSER_DEVICE_TOOLBAR_HEIGHT, resizeFreeformViewport } from "./browserViewportLayout";
