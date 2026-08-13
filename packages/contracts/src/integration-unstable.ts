@@ -5,6 +5,7 @@ import {
   EnvironmentAuthHttpApi,
   EnvironmentMetadataHttpApi,
   EnvironmentOrchestrationHttpApi,
+  EnvironmentUiHttpApi,
 } from "./environmentHttp.ts";
 import { WsOrchestrationSubscribeShellRpc, WsOrchestrationSubscribeThreadRpc } from "./rpc.ts";
 
@@ -27,7 +28,8 @@ export {
 export const IntegrationEnvironmentHttpApi = HttpApi.make("environment")
   .add(EnvironmentMetadataHttpApi)
   .add(EnvironmentAuthHttpApi)
-  .add(EnvironmentOrchestrationHttpApi);
+  .add(EnvironmentOrchestrationHttpApi)
+  .add(EnvironmentUiHttpApi);
 
 export const IntegrationWsRpcGroup = RpcGroup.make(
   WsOrchestrationSubscribeShellRpc,

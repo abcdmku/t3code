@@ -13,7 +13,13 @@ import * as Stream from "effect/Stream";
 import { T3Client } from "./Client.ts";
 import type { DispatchableCommandInput } from "./commands.ts";
 import { T3CapabilityError } from "./errors.ts";
-import { archiveThread, createThread, requireCapability, startTurn } from "./operations.ts";
+import {
+  archiveThread,
+  createThread,
+  requireCapability,
+  revealThread,
+  startTurn,
+} from "./operations.ts";
 
 const isT3CapabilityError = (value: unknown): value is T3CapabilityError =>
   value instanceof T3CapabilityError;
@@ -41,6 +47,7 @@ const makeStubClient = (descriptor: ExecutionEnvironmentDescriptor) => {
           dispatched.push(command);
           return { sequence: dispatched.length };
         }),
+      invokeUi: () => Effect.die(new Error("invokeUi is not stubbed")),
       subscribeShell: Stream.empty,
       subscribeThread: () => Stream.empty,
     }),
@@ -126,6 +133,41 @@ describe("operations", () => {
       if (isT3CapabilityError(error)) {
         expect(error.capability).toBe("threadSnooze");
       }
+    }),
+  );
+
+  it.effect("revealThread checks the capability before invoking the host", () =>
+    Effect.gen(function* () {
+      const calls: Array<readonly [string, unknown]> = [];
+      const descriptor = makeDescriptor({ repositoryIdentity: true, uiControl: true });
+      const clientLayer = Layer.succeed(
+        T3Client,
+        T3Client.of({
+          descriptor: Effect.succeed(descriptor),
+          shell: Effect.die(new Error("shell is not stubbed")),
+          thread: () => Effect.die(new Error("thread is not stubbed")),
+          dispatch: () => Effect.die(new Error("dispatch is not stubbed")),
+          invokeUi: (operation, input) =>
+            Effect.sync(() => {
+              calls.push([operation, input]);
+              return { delivered: true } as const;
+            }),
+          subscribeShell: Stream.empty,
+          subscribeThread: () => Stream.empty,
+        }),
+      );
+
+      const result = yield* revealThread("thread-1").pipe(Effect.provide(clientLayer));
+      expect(result).toEqual({ delivered: true });
+      expect(calls).toEqual([["ui.revealThread", { threadId: "thread-1" }]]);
+    }),
+  );
+
+  it.effect("revealThread rejects older servers before invoking the endpoint", () =>
+    Effect.gen(function* () {
+      const { clientLayer } = makeStubClient(makeDescriptor({ repositoryIdentity: true }));
+      const error = yield* revealThread("thread-1").pipe(Effect.provide(clientLayer), Effect.flip);
+      expect(error).toBeInstanceOf(T3CapabilityError);
     }),
   );
 });

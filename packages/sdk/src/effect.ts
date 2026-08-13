@@ -6,7 +6,13 @@ import { layer, T3Client } from "./Client.ts";
 export { layer };
 export type { T3AccessToken, T3ClientAuth, T3ClientConfig } from "./Client.ts";
 export type { ArchiveThreadInput, CreateThreadInput, StartTurnInput } from "./commands.ts";
-export { archiveThread, createThread, requireCapability, startTurn } from "./operations.ts";
+export {
+  archiveThread,
+  createThread,
+  requireCapability,
+  revealThread,
+  startTurn,
+} from "./operations.ts";
 export * from "./errors.ts";
 
 export const descriptor = Effect.gen(function* () {

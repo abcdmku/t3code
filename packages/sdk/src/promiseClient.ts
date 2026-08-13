@@ -20,7 +20,7 @@ import type {
   CreateThreadInput as EffectCreateThreadInput,
   StartTurnInput as EffectStartTurnInput,
 } from "./commands.ts";
-import { archiveThread, createThread, startTurn } from "./operations.ts";
+import { archiveThread, createThread, revealThread, startTurn } from "./operations.ts";
 import { T3InputError, T3TransportError, type T3ClientError } from "./errors.ts";
 
 type Plain<T> = T extends string
@@ -91,6 +91,9 @@ export interface T3PromiseClient {
   readonly createThread: (input: CreateThreadInput) => Promise<DispatchResult>;
   readonly startTurn: (input: StartTurnInput) => Promise<DispatchResult>;
   readonly archiveThread: (input: ArchiveThreadInput) => Promise<DispatchResult>;
+  readonly revealThread: (
+    threadId: string,
+  ) => Promise<import("@t3tools/contracts/integration").UiControlInvokeResult>;
   readonly subscribeShell: () => AsyncIterable<OrchestrationShellStreamItem>;
   readonly subscribeThread: (threadId: string) => AsyncIterable<OrchestrationThreadStreamItem>;
   /**
@@ -254,6 +257,8 @@ export const createT3ClientFromLayer = (
     createThread: (input) => run(validateCreateThread(input).pipe(Effect.flatMap(createThread))),
     startTurn: (input) => run(validateStartTurn(input).pipe(Effect.flatMap(startTurn))),
     archiveThread: (input) => run(validateArchiveThread(input).pipe(Effect.flatMap(archiveThread))),
+    revealThread: (threadId) =>
+      run(nonEmptyId(threadId, "threadId").pipe(Effect.flatMap((id) => revealThread(id)))),
     subscribeShell: () => iterate((service) => service.subscribeShell),
     subscribeThread: (threadId) =>
       iterate((service) =>

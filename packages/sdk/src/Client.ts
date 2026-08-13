@@ -11,6 +11,7 @@ import {
   type OrchestrationThreadDetailSnapshot,
   type OrchestrationThreadStreamItem,
   type ThreadId,
+  type UiControlInvokeResult,
 } from "@t3tools/contracts/integration";
 import {
   ORCHESTRATION_WS_METHODS,
@@ -49,6 +50,7 @@ import {
 import { T3WsConnector, type T3WsRpcClient } from "./ws.ts";
 
 const DEFAULT_RESUBSCRIBE_DELAY_MS = 1_000;
+const UI_CONTROL_REQUEST_TIMEOUT_MS = 20_000;
 
 // Mirrors packages/client-runtime's connection supervisor RETRY_DELAYS_MS
 // ([1s, 2s, 4s, 8s, 16s], then stay at the cap): the base is
@@ -155,6 +157,10 @@ export class T3Client extends Context.Service<
     readonly dispatch: (
       command: DispatchableCommandInput,
     ) => Effect.Effect<DispatchResult, T3ClientError>;
+    readonly invokeUi: (
+      operation: "ui.revealThread",
+      input: unknown,
+    ) => Effect.Effect<UiControlInvokeResult, T3ClientError>;
     readonly subscribeShell: Stream.Stream<OrchestrationShellStreamItem, T3ClientError>;
     readonly subscribeThread: (
       threadId: ThreadId,
@@ -468,6 +474,18 @@ const make = (config: T3ClientConfig) =>
       );
     });
 
+    const invokeUi = Effect.fn("T3Client.invokeUi")(function* (
+      operation: "ui.revealThread",
+      input: unknown,
+    ) {
+      const headers = yield* authHeaders;
+      return yield* executeRequest(
+        endpointUrl(config.baseUrl, "/api/ui/invoke"),
+        Math.max(timeoutMs, UI_CONTROL_REQUEST_TIMEOUT_MS),
+        api.ui.invoke({ headers, payload: { operation, input } }),
+      );
+    });
+
     const socketUrl = (ticket: string): string => {
       const url = new URL(config.wsUrl ?? config.baseUrl);
       if (config.wsUrl === undefined) {
@@ -590,6 +608,7 @@ const make = (config: T3ClientConfig) =>
         shell,
         thread,
         dispatch,
+        invokeUi,
         subscribeShell,
         subscribeThread,
       }),

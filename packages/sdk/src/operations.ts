@@ -31,6 +31,12 @@ export const archiveThread = Effect.fn("T3Client.archiveThread")(function* (
   return yield* client.dispatch({ ...input, type: "thread.archive" });
 });
 
+export const revealThread = Effect.fn("T3Client.revealThread")(function* (threadId: string) {
+  const client = yield* T3Client;
+  yield* requireCapability("uiControl");
+  return yield* client.invokeUi("ui.revealThread", { threadId });
+});
+
 /**
  * Fails with `T3CapabilityError` unless the environment's descriptor
  * advertises the capability. The descriptor is how clients handle version

@@ -129,6 +129,22 @@ for await (const item of client.subscribeThread(threadId)) {
 The client fetches a fresh WebSocket ticket after a dropped connection and resumes after the last
 sequence it received. `close()` ends active iterators and releases their sockets.
 
+## Reveal a thread in T3 Code
+
+Servers that advertise `capabilities.uiControl` can ask a connected web or desktop client to open a
+thread. The token needs the `ui:operate` scope.
+
+```ts
+const result = await client.revealThread(threadId);
+if (!result.delivered) {
+  console.error(result.error);
+}
+```
+
+`delivered: false` means that no compatible client handled the request before the broker timeout.
+The SDK waits longer than that server timeout so it can return the result instead of failing first.
+Older servers fail with `T3CapabilityError` before the invoke request is sent.
+
 ## Use Effect
 
 ```ts

@@ -17,3 +17,4 @@ export {
   OrchestrationThreadStreamItem,
 } from "./orchestration.ts";
 export { ProviderInstanceId } from "./providerInstance.ts";
+export type { UiControlInvokeResult } from "./uiControl.ts";

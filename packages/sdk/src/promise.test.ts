@@ -126,6 +126,31 @@ describe("promise facade", () => {
     }
   });
 
+  it("reveals a thread through the Promise client", async () => {
+    const fetch = recordedFetch(
+      Response.json({
+        ...descriptorJson,
+        capabilities: { repositoryIdentity: true, uiControl: true },
+      }),
+      Response.json({ delivered: true }),
+    );
+    const client = createT3Client({
+      baseUrl: BASE_URL,
+      fetch: fetch.fetchFn,
+      auth: { type: "bearer", token: "token-1" },
+    });
+    try {
+      await expect(client.revealThread("thread-1")).resolves.toEqual({ delivered: true });
+      expect(String(fetch.calls[1]?.[0])).toBe(`${BASE_URL}/api/ui/invoke`);
+      expect(decodeJsonBody(bodyText(fetch.calls[1]![1]))).toEqual({
+        operation: "ui.revealThread",
+        input: { threadId: "thread-1" },
+      });
+    } finally {
+      await client.close();
+    }
+  });
+
   it("rejects with the typed error classes", async () => {
     const fetch = recordedFetch(
       Response.json(
