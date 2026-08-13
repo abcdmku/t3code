@@ -2,6 +2,13 @@
   "name": "@t3tools/contracts",
   "version": "0.0.33",
   "private": true,
+  "description": "Public wire contracts for T3 Code integrations",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pingdotgg/t3code",
+    "directory": "packages/contracts"
+  },
   "files": [
     "dist"
   ],
@@ -18,17 +25,45 @@
     "./relay": {
       "types": "./src/relay.ts",
       "import": "./src/relay.ts"
+    },
+    "./integration": {
+      "types": "./src/integration.ts",
+      "import": "./src/integration.ts"
+    },
+    "./integration/unstable": {
+      "types": "./src/integration-unstable.ts",
+      "import": "./src/integration-unstable.ts"
     }
   },
+  "publishConfig": {
+    "exports": {
+      "./integration": {
+        "types": "./dist/integration.d.mts",
+        "import": "./dist/integration.mjs"
+      },
+      "./integration/unstable": {
+        "types": "./dist/integration-unstable.d.mts",
+        "import": "./dist/integration-unstable.mjs"
+      }
+    },
+    "access": "public"
+  },
   "scripts": {
+    "build": "vp pack",
+    "prepack": "vp pack",
+    "smoke:package": "node scripts/package-smoke.ts",
     "typecheck": "tsgo --noEmit",
     "test": "vp test run"
   },
-  "dependencies": {
-    "effect": "catalog:"
-  },
   "devDependencies": {
     "@effect/vitest": "catalog:",
+    "effect": "catalog:",
     "vite-plus": "catalog:"
+  },
+  "peerDependencies": {
+    "effect": "4.0.0-beta.103"
+  },
+  "engines": {
+    "node": "^22.16 || ^23.11 || >=24.10"
   }
 }
