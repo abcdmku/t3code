@@ -1,0 +1,70 @@
+{
+  "name": "@t3tools/sdk",
+  "version": "0.0.33",
+  "private": true,
+  "description": "Client for T3 Code environments",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pingdotgg/t3code",
+    "directory": "packages/sdk"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "examples"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
+    "./effect": {
+      "types": "./src/effect.ts",
+      "import": "./src/effect.ts"
+    },
+    "./unstable": {
+      "types": "./src/unstable.ts",
+      "import": "./src/unstable.ts"
+    }
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.mts",
+        "import": "./dist/index.mjs"
+      },
+      "./effect": {
+        "types": "./dist/effect.d.mts",
+        "import": "./dist/effect.mjs"
+      },
+      "./unstable": {
+        "types": "./dist/unstable.d.mts",
+        "import": "./dist/unstable.mjs"
+      }
+    },
+    "access": "public"
+  },
+  "scripts": {
+    "build": "vp pack",
+    "prepack": "vp pack",
+    "smoke:package": "node scripts/package-smoke.ts",
+    "typecheck": "tsgo --noEmit",
+    "test": "vp test run"
+  },
+  "dependencies": {
+    "@t3tools/contracts": "workspace:*"
+  },
+  "devDependencies": {
+    "@effect/vitest": "catalog:",
+    "effect": "4.0.0-beta.103",
+    "vite-plus": "catalog:"
+  },
+  "peerDependencies": {
+    "effect": "4.0.0-beta.103"
+  },
+  "engines": {
+    "node": "^22.16 || ^23.11 || >=24.10"
+  }
+}
