@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 400" width="960" height="400" role="img">
+  <rect width="960" height="400" fill="#0d1117"/>
+
+  <rect x="64" y="52" width="250" height="62" rx="10" fill="#151b23" stroke="#3d444d" stroke-width="1.25"/>
+  <text x="189" y="78" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#e6edf3">Local app</text>
+  <text x="189" y="97" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#9198a1">your own process</text>
+
+  <rect x="646" y="52" width="250" height="62" rx="10" fill="#151b23" stroke="#3d444d" stroke-width="1.25"/>
+  <text x="771" y="78" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#e6edf3">T3 server</text>
+  <text x="771" y="97" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#9198a1">HTTP and WebSocket</text>
+
+  <rect x="64" y="214" width="250" height="62" rx="10" fill="#151b23" stroke="#3d444d" stroke-width="1.25"/>
+  <text x="189" y="240" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#e6edf3">Local app UI</text>
+  <text x="189" y="259" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#9198a1">the page T3 embeds</text>
+
+  <rect x="646" y="214" width="250" height="62" rx="10" fill="#151b23" stroke="#3d444d" stroke-width="1.25"/>
+  <text x="771" y="240" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#e6edf3">T3 client</text>
+  <text x="771" y="259" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#9198a1">desktop or web</text>
+
+  <line x1="314" y1="83" x2="638" y2="83" stroke="#4493f8" stroke-width="1.75"/>
+  <polygon points="646,83 638,78.5 638,87.5" fill="#4493f8"/>
+
+  <text x="480" y="46" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace" font-size="12.5" font-weight="600" fill="#e6edf3"><tspan font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" fill="#4493f8" font-weight="700">1</tspan>  @t3tools/sdk</text>
+
+  <text x="480" y="64" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#9198a1">snapshots, dispatch, resumable subscribe</text>
+
+  <line x1="771" y1="114" x2="771" y2="206" stroke="#b083f0" stroke-width="1.75"/>
+  <polygon points="771,214 766.5,206 775.5,206" fill="#b083f0"/>
+
+  <text x="788" y="152" text-anchor="start" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace" font-size="12.5" font-weight="600" fill="#e6edf3"><tspan font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" fill="#b083f0" font-weight="700">2</tspan>  ui.revealThread</text>
+
+  <text x="788" y="170" text-anchor="start" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#9198a1">to the focused client</text>
+
+  <line x1="646" y1="245" x2="322" y2="245" stroke="#b083f0" stroke-width="1.75"/>
+  <polygon points="314,245 322,240.5 322,249.5" fill="#b083f0"/>
+
+  <text x="480" y="268" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace" font-size="12.5" font-weight="600" fill="#e6edf3"><tspan font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" fill="#b083f0" font-weight="700">2</tspan>  t3.json surfaces</text>
+
+  <text x="480" y="286" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#9198a1">T3 loads the declared URL in its browser</text>
+  <line x1="189" y1="276" x2="189" y2="318" stroke="#39c5bb" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <line x1="771" y1="276" x2="771" y2="318" stroke="#39c5bb" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <rect x="64" y="318" width="832" height="54" rx="12" fill="#39c5bb" fill-opacity="0.1" stroke="#39c5bb" stroke-width="1.25" stroke-dasharray="6 4"/>
+
+  <text x="480" y="342" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace" font-size="12.5" font-weight="600" fill="#e6edf3"><tspan font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" fill="#39c5bb" font-weight="700">3</tspan>  @t3tools/ui + theme.css</text>
+
+  <text x="480" y="360" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#9198a1">the same components on both sides</text>
+</svg>
