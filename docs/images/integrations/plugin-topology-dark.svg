@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 384" width="960" height="384" role="img">
+  <rect width="960" height="384" fill="#0d1117"/>
+  <rect x="300" y="32" width="360" height="140" rx="14" fill="none" stroke="#3d444d" stroke-width="1.25"/>
+  <text x="480" y="58" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#9198a1">T3 client, desktop or web</text>
+
+  <rect x="322" y="74" width="316" height="76" rx="10" fill="#b083f0" fill-opacity="0.12" stroke="#b083f0" stroke-width="1.25" stroke-dasharray="5 4"/>
+  <text x="480" y="100" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#e6edf3">plugin page</text>
+  <text x="480" y="119" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#9198a1">your URL, inside T3's browser surface</text>
+
+  <rect x="40" y="250" width="270" height="64" rx="10" fill="#151b23" stroke="#3d444d" stroke-width="1.25"/>
+  <text x="175" y="276" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#e6edf3">Your app</text>
+  <text x="175" y="295" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#9198a1">serves that page, optional MCP</text>
+
+  <rect x="650" y="250" width="270" height="64" rx="10" fill="#151b23" stroke="#3d444d" stroke-width="1.25"/>
+  <text x="785" y="276" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#e6edf3">T3 server</text>
+  <text x="785" y="295" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#9198a1">HTTP and WebSocket</text>
+
+  <polyline points="300,112 175,112 175,242" fill="none" stroke="#b083f0" stroke-width="1.75"/>
+  <polygon points="175,250 170.5,242 179.5,242" fill="#b083f0"/>
+
+  <text x="165" y="182" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#b083f0">T3 opens your URL</text>
+
+  <text x="165" y="200" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" fill="#9198a1">with {threadId} and</text>
+
+  <text x="165" y="216" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" fill="#9198a1">a one-time code</text>
+
+  <polyline points="660,112 785,112 785,242" fill="none" stroke="#4493f8" stroke-width="1.75"/>
+  <polygon points="785,250 780.5,242 789.5,242" fill="#4493f8"/>
+
+  <text x="795" y="182" text-anchor="start" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#4493f8">the page calls T3 directly</text>
+
+  <text x="795" y="200" text-anchor="start" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" fill="#9198a1">exchange the code, then</text>
+
+  <text x="795" y="216" text-anchor="start" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" fill="#9198a1">read, dispatch, subscribe</text>
+
+  <polyline points="785,314 785,352 175,352 175,322" fill="none" stroke="#39c5bb" stroke-width="1.75"/>
+  <polygon points="175,314 170.5,322 179.5,322" fill="#39c5bb"/>
+
+  <text x="480" y="344" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" fill="#9198a1">optional MCP calls from agent sessions</text>
+</svg>
