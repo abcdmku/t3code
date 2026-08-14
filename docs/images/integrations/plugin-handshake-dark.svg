@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" width="960" height="420" role="img">
+  <rect width="960" height="420" fill="#0d1117"/>
+
+  <rect x="55" y="20" width="190" height="44" rx="10" fill="#151b23" stroke="#3d444d" stroke-width="1.25"/>
+  <text x="150" y="48" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#e6edf3">T3 client</text>
+  <line x1="150" y1="64" x2="150" y2="392" stroke="#7d8590" stroke-width="1.25" stroke-dasharray="3 5" stroke-opacity="0.75"/>
+  <rect x="385" y="20" width="190" height="44" rx="10" fill="#151b23" stroke="#3d444d" stroke-width="1.25"/>
+  <text x="480" y="48" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#e6edf3">Plugin</text>
+  <line x1="480" y1="64" x2="480" y2="392" stroke="#7d8590" stroke-width="1.25" stroke-dasharray="3 5" stroke-opacity="0.75"/>
+  <rect x="715" y="20" width="190" height="44" rx="10" fill="#151b23" stroke="#3d444d" stroke-width="1.25"/>
+  <text x="810" y="48" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#e6edf3">T3 server</text>
+  <line x1="810" y1="64" x2="810" y2="392" stroke="#7d8590" stroke-width="1.25" stroke-dasharray="3 5" stroke-opacity="0.75"/>
+
+
+  <line x1="150" y1="100" x2="472" y2="100" stroke="#b083f0" stroke-width="1.75"/>
+  <polygon points="480,100 472,95.5 472,104.5" fill="#b083f0"/>
+  <text x="315" y="91" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#e6edf3">GET the URL, read title, favicon, description</text>
+  <rect x="55" y="120" width="190" height="70" rx="8" fill="#151b23" stroke="#b083f0" stroke-width="1.25" stroke-dasharray="5 4"/>
+  <text x="150" y="140" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" fill="#e6edf3">consent, keyed to origin</text>
+  <text x="150" y="156" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" fill="#e6edf3">page grant and MCP grant</text>
+  <text x="150" y="176" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#9198a1">saved in settings.json</text>
+
+
+  <line x1="150" y1="216" x2="472" y2="216" stroke="#b083f0" stroke-width="1.75"/>
+  <polygon points="480,216 472,211.5 472,220.5" fill="#b083f0"/>
+  <text x="315" y="207" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#e6edf3">open with {threadId} and a one-time code</text>
+
+
+  <line x1="480" y1="258" x2="802" y2="258" stroke="#4493f8" stroke-width="1.75"/>
+  <polygon points="810,258 802,253.5 802,262.5" fill="#4493f8"/>
+  <text x="645" y="249" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace" font-size="11.5" fill="#e6edf3">POST /oauth/token, exchange the code</text>
+
+
+  <line x1="810" y1="296" x2="488" y2="296" stroke="#4493f8" stroke-width="1.75" stroke-dasharray="5 4"/>
+  <polygon points="480,296 488,291.5 488,300.5" fill="#4493f8"/>
+  <text x="645" y="287" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#e6edf3">short-lived token, orchestration:read</text>
+
+
+  <line x1="480" y1="334" x2="802" y2="334" stroke="#4493f8" stroke-width="1.75"/>
+  <polygon points="810,334 802,329.5 802,338.5" fill="#4493f8"/>
+  <text x="645" y="325" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace" font-size="11.5" fill="#e6edf3">/api/* and WS /ws with the bearer</text>
+
+
+  <line x1="810" y1="376" x2="488" y2="376" stroke="#39c5bb" stroke-width="1.75"/>
+  <polygon points="480,376 488,371.5 488,380.5" fill="#39c5bb"/>
+  <text x="645" y="367" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#e6edf3">optional MCP calls from agent sessions</text>
+</svg>
