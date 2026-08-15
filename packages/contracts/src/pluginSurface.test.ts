@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vite-plus/test";
 import * as Schema from "effect/Schema";
 
+import { ProjectId } from "./baseSchemas.ts";
 import {
   PluginSurfaceEntry,
   PluginSurfaceGrant,
@@ -8,6 +9,8 @@ import {
   pluginSurfaceGrantCovers,
   pluginSurfaceOrigin,
   pluginSurfaceTemplateOrigin,
+  buildPluginSurfaceHandoffFragment,
+  readPluginSurfaceHandoffFragment,
 } from "./pluginSurface.ts";
 import { DEFAULT_SERVER_SETTINGS, ServerSettings } from "./settings.ts";
 
@@ -156,8 +159,8 @@ describe("ServerSettings plugin surface storage", () => {
       },
     });
 
-    expect(settings.pluginSurfaces["project-a"]?.[0]?.name).toBe("my-plugin");
-    expect(settings.pluginSurfaces["project-b"]).toBeUndefined();
+    expect(settings.pluginSurfaces[ProjectId.make("project-a")]?.[0]?.name).toBe("my-plugin");
+    expect(settings.pluginSurfaces[ProjectId.make("project-b")]).toBeUndefined();
   });
 
   it("rejects an entry with an invalid name rather than dropping it silently", () => {
@@ -166,5 +169,49 @@ describe("ServerSettings plugin surface storage", () => {
         pluginSurfaces: { "project-a": [{ name: "Bad Name", url: "https://example.test" }] },
       }),
     ).toThrow();
+  });
+});
+
+describe("plugin surface handoff fragment", () => {
+  it("round-trips a base URL and code", () => {
+    const fragment = buildPluginSurfaceHandoffFragment({
+      serverUrl: "https://env.test:3000",
+      code: "ABC123",
+    });
+
+    expect(readPluginSurfaceHandoffFragment(`#${fragment}`)).toEqual({
+      serverUrl: "https://env.test:3000",
+      code: "ABC123",
+    });
+  });
+
+  it("reads a fragment with or without the leading hash", () => {
+    const fragment = buildPluginSurfaceHandoffFragment({
+      serverUrl: "http://localhost:1234",
+      code: "XYZ",
+    });
+
+    expect(readPluginSurfaceHandoffFragment(fragment)?.code).toBe("XYZ");
+  });
+
+  it("splits on the last separator, so a base URL containing one still parses", () => {
+    expect(
+      readPluginSurfaceHandoffFragment(
+        `#${buildPluginSurfaceHandoffFragment({ serverUrl: "https://env.test/a|b", code: "CODE" })}`,
+      ),
+    ).toEqual({ serverUrl: "https://env.test/a|b", code: "CODE" });
+  });
+
+  it("ignores other fragment keys", () => {
+    expect(readPluginSurfaceHandoffFragment("#other=1")).toBeNull();
+    expect(readPluginSurfaceHandoffFragment("")).toBeNull();
+  });
+
+  it.each([
+    ["missing code", "#t3=https%3A%2F%2Fenv.test%7C"],
+    ["missing base URL", "#t3=%7CCODE"],
+    ["no separator", "#t3=nope"],
+  ])("rejects a malformed fragment (%s)", (_label, hash) => {
+    expect(readPluginSurfaceHandoffFragment(hash)).toBeNull();
   });
 });

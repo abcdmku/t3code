@@ -82,6 +82,87 @@ export type PluginSurfaceGrant = typeof PluginSurfaceGrant.Type;
 export const PluginSurfaceGrants = Schema.Array(PluginSurfaceGrant);
 export type PluginSurfaceGrants = typeof PluginSurfaceGrants.Type;
 
+/**
+ * What T3 learned by fetching the URL once when the entry is added. The name
+ * is only a suggestion; the user can type their own.
+ */
+export const PluginSurfaceInspection = Schema.Struct({
+  origin: TrimmedNonEmptyString,
+  suggestedName: Schema.NullOr(PluginSurfaceName),
+  presentation: PluginSurfacePresentation,
+  /** True when the fetch failed. The entry can still be added blind. */
+  unreachable: Schema.Boolean,
+});
+export type PluginSurfaceInspection = typeof PluginSurfaceInspection.Type;
+
+/**
+ * The code half of the handoff. The client pairs it with the base URL it is
+ * already connected on, because a server behind a tunnel or relay does not
+ * know the URL the plugin page will be able to reach it at.
+ */
+export const PluginSurfaceHandoff = Schema.Struct({
+  code: TrimmedNonEmptyString,
+  expiresAt: TrimmedNonEmptyString,
+});
+export type PluginSurfaceHandoff = typeof PluginSurfaceHandoff.Type;
+
+/** The fragment key T3 appends when opening a plugin surface. */
+export const PLUGIN_SURFACE_HANDOFF_FRAGMENT_KEY = "t3";
+
+/**
+ * Builds the `#t3=<base url>|<code>` fragment a plugin page reads on load.
+ * Fragments are not sent to the plugin's own web server, so the code stays out
+ * of its access logs.
+ */
+export function buildPluginSurfaceHandoffFragment(input: {
+  readonly serverUrl: string;
+  readonly code: string;
+}): string {
+  const value = `${input.serverUrl}|${input.code}`;
+  return `${PLUGIN_SURFACE_HANDOFF_FRAGMENT_KEY}=${encodeURIComponent(value)}`;
+}
+
+/** The page-side half of {@link buildPluginSurfaceHandoffFragment}. */
+export function readPluginSurfaceHandoffFragment(
+  hash: string,
+): { readonly serverUrl: string; readonly code: string } | null {
+  const params = new URLSearchParams(hash.startsWith("#") ? hash.slice(1) : hash);
+  const raw = params.get(PLUGIN_SURFACE_HANDOFF_FRAGMENT_KEY);
+  if (raw === null) return null;
+  const separator = raw.lastIndexOf("|");
+  if (separator <= 0 || separator === raw.length - 1) return null;
+  return { serverUrl: raw.slice(0, separator), code: raw.slice(separator + 1) };
+}
+
+export const PluginSurfaceFailureReason = Schema.Literals([
+  "invalid-url",
+  "no-grant",
+  "scope-not-granted",
+  "issue-failed",
+]);
+export type PluginSurfaceFailureReason = typeof PluginSurfaceFailureReason.Type;
+
+export class PluginSurfaceError extends Schema.TaggedErrorClass<PluginSurfaceError>()(
+  "PluginSurfaceError",
+  {
+    reason: PluginSurfaceFailureReason,
+    url: Schema.optional(Schema.String),
+  },
+) {
+  override get message(): string {
+    switch (this.reason) {
+      case "invalid-url":
+        return "Plugin surface URLs must be absolute http or https URLs with a fixed host.";
+      case "no-grant":
+        return "This origin has not been granted access to act on your behalf.";
+      case "scope-not-granted":
+        return "This plugin asked for scopes beyond what you granted its origin.";
+      case "issue-failed":
+        return "Failed to issue a one-time code for this plugin surface.";
+    }
+  }
+}
+
 const ALLOWED_PLUGIN_SURFACE_PROTOCOLS = new Set(["http:", "https:"]);
 
 /**
