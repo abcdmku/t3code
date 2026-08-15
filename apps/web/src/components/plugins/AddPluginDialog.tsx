@@ -107,23 +107,6 @@ export function AddPluginDialog(props: AddPluginDialogProps) {
     if (result?.suggestedName != null && name.trim() === "") setName(result.suggestedName);
   }, [name, props, url]);
 
-  const handleContinue = useCallback(() => {
-    const request = {
-      origin: origin ?? "",
-      scopes,
-      mcpApproved: mcpUrl.trim() !== "" && mcpApproved,
-    };
-    if (origin === null) {
-      setError(ADD_FAILURE_MESSAGES["invalid-url"]);
-      return;
-    }
-    if (needsPluginSurfaceConsent({ grants: settings.pluginSurfaceGrants, request })) {
-      setStep("consent");
-      return;
-    }
-    void save();
-  }, [mcpApproved, mcpUrl, origin, scopes, settings.pluginSurfaceGrants]);
-
   const save = useCallback(async () => {
     const trimmedMcpUrl = mcpUrl.trim();
     const entry: PluginSurfaceEntry = {
@@ -166,6 +149,23 @@ export function AddPluginDialog(props: AddPluginDialogProps) {
     updateSettings,
     url,
   ]);
+
+  const handleContinue = useCallback(() => {
+    const request = {
+      origin: origin ?? "",
+      scopes,
+      mcpApproved: mcpUrl.trim() !== "" && mcpApproved,
+    };
+    if (origin === null) {
+      setError(ADD_FAILURE_MESSAGES["invalid-url"]);
+      return;
+    }
+    if (needsPluginSurfaceConsent({ grants: settings.pluginSurfaceGrants, request })) {
+      setStep("consent");
+      return;
+    }
+    void save();
+  }, [mcpApproved, mcpUrl, origin, save, scopes, settings.pluginSurfaceGrants]);
 
   return (
     <Dialog open={props.open} onOpenChange={close}>
