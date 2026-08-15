@@ -136,6 +136,8 @@ import {
   useThreadPreviewState,
 } from "../previewStateStore";
 import { addBrowserSurface } from "./preview/addBrowserSurface";
+import { AddPluginDialog } from "./plugins/AddPluginDialog";
+import { usePluginSurfaces } from "./plugins/usePluginSurfaces";
 import { closePreviewSession } from "./preview/closePreviewSession";
 import { ThreadPreviewMiniPlayer } from "./preview/ThreadPreviewMiniPlayer";
 import { subscribePreviewAction } from "./preview/previewActionBus";
@@ -3260,6 +3262,18 @@ function ChatViewContent(props: ChatViewProps) {
     if (!activeThreadRef) return;
     void addBrowserSurface({ threadRef: activeThreadRef, openPreview });
   }, [activeThreadRef, openPreview]);
+  const [addPluginOpen, setAddPluginOpen] = useState(false);
+  const pluginSurfaces = usePluginSurfaces({
+    environmentId: activeThreadRef?.environmentId ?? environmentId,
+    projectId: activeProject?.id ?? null,
+  });
+  const openPluginSurfaceEntry = useCallback(
+    (entry: Parameters<typeof pluginSurfaces.openPlugin>[0]) => {
+      if (!activeThreadRef) return;
+      pluginSurfaces.openPlugin(entry, activeThreadRef);
+    },
+    [activeThreadRef, pluginSurfaces],
+  );
   const addDiffSurface = useCallback(() => {
     if (!activeThreadRef || !isServerThread || !isGitRepo) return;
     useRightPanelStore.getState().open(activeThreadRef, "diff");
@@ -6550,6 +6564,9 @@ function ChatViewContent(props: ChatViewProps) {
           onCloseAllSurfaces={closeAllRightPanelSurfaces}
           onCopyFilePath={copyRightPanelFilePath}
           onAddBrowser={createBrowserSurface}
+          onAddPlugin={() => setAddPluginOpen(true)}
+          onOpenPlugin={openPluginSurfaceEntry}
+          pluginSurfaces={pluginSurfaces.entries}
           onAddTerminal={addTerminalSurface}
           onAddDiff={addDiffSurface}
           onAddFiles={addFilesSurface}
@@ -6584,6 +6601,9 @@ function ChatViewContent(props: ChatViewProps) {
             onCloseAllSurfaces={closeAllRightPanelSurfaces}
             onCopyFilePath={copyRightPanelFilePath}
             onAddBrowser={createBrowserSurface}
+            onAddPlugin={() => setAddPluginOpen(true)}
+            onOpenPlugin={openPluginSurfaceEntry}
+            pluginSurfaces={pluginSurfaces.entries}
             onAddTerminal={addTerminalSurface}
             onAddDiff={addDiffSurface}
             onAddFiles={addFilesSurface}
@@ -6610,6 +6630,15 @@ function ChatViewContent(props: ChatViewProps) {
           onClose={closeExpandedImage}
         />
       )}
+      {activeProject && activeThreadRef ? (
+        <AddPluginDialog
+          open={addPluginOpen}
+          onOpenChange={setAddPluginOpen}
+          environmentId={activeThreadRef.environmentId}
+          projectId={activeProject.id}
+          inspect={pluginSurfaces.inspect}
+        />
+      ) : null}
     </div>
   );
 }

@@ -11,6 +11,7 @@ This is a living glossary for T3 Code. It explains what common terms mean in thi
 - [Orchestration](#orchestration)
 - [Provider runtime](#provider-runtime)
 - [Checkpointing](#checkpointing)
+- [Plugin surfaces](#plugin-surfaces)
 
 ## Concepts
 
@@ -139,6 +140,22 @@ The patch difference between two checkpoints. Query logic lives in [CheckpointDi
 #### Turn diff
 
 The file patch and changed-file summary for one turn. It is usually computed in [CheckpointDiffQuery.ts][20], represented in [the contracts][1], and recorded into thread state by [projector.ts][4].
+
+### Plugin surfaces
+
+A plugin surface is a page an outside app serves that T3 renders in its browser panel and hands a one-time code. Entries live per project in `settings.json`; consent grants live per origin. See [pluginSurface.ts](../../packages/contracts/src/pluginSurface.ts).
+
+#### Plugin surface entry
+
+A registered page: a name, a URL template, optional MCP URL, and the scopes it asked for. The name is held to `[a-z0-9-]` because it becomes the agent-facing tool prefix `mcp__<name>__<tool>`.
+
+#### Plugin surface grant
+
+Recorded consent for an origin, carrying the scopes approved and whether agents may call the entry's MCP server. Keyed to origin rather than name, because a page's title and icon are self-reported. Issued through [PairingGrantStore.ts](../../apps/server/src/auth/PairingGrantStore.ts), so it appears in `t3 auth session list`.
+
+#### Handoff fragment
+
+The `#t3=<base url>|<code>` fragment T3 appends when opening a plugin. Browsers do not send fragments to web servers, so the code stays out of the plugin's access logs. Built and read in [pluginSurface.ts](../../packages/contracts/src/pluginSurface.ts).
 
 ## Practical Shortcuts
 
