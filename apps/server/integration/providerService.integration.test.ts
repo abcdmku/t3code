@@ -27,6 +27,7 @@ import * as ServerConfig from "../src/config.ts";
 import { ServerSettingsService } from "../src/serverSettings.ts";
 import { AnalyticsService } from "../src/telemetry/Services/AnalyticsService.ts";
 import { SqlitePersistenceMemory } from "../src/persistence/Layers/Sqlite.ts";
+import { ProjectionThreadRepositoryLive } from "../src/persistence/Layers/ProjectionThreads.ts";
 import * as ProviderSessionRuntime from "../src/persistence/ProviderSessionRuntime.ts";
 
 import {
@@ -98,6 +99,8 @@ const makeIntegrationFixture = (options?: { readonly analytics?: Layer.Layer<Ana
       ServerSettingsService.layerTest(DEFAULT_SERVER_SETTINGS),
       options?.analytics ?? AnalyticsService.layerTest,
       Layer.succeed(ProviderEventLoggers, NoOpProviderEventLoggers),
+      // ProviderService maps a thread to its project to resolve plugin MCP servers.
+      ProjectionThreadRepositoryLive,
     ).pipe(Layer.provide(SqlitePersistenceMemory));
 
     const layer = makeProviderServiceLive().pipe(Layer.provide(shared));

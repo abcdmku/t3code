@@ -1,7 +1,7 @@
 import type { PluginSurfaceEntries, PluginSurfaceGrants } from "@t3tools/contracts";
 import { describe, expect, it } from "vite-plus/test";
 
-import { resolvePluginMcpServers } from "./mcpServers.ts";
+import { mergeAgentMcpServers, resolvePluginMcpServers } from "./mcpServers.ts";
 
 const entry = (overrides: Partial<PluginSurfaceEntries[number]>): PluginSurfaceEntries[number] => ({
   name: "my-plugin",
@@ -98,5 +98,48 @@ describe("resolvePluginMcpServers", () => {
     });
 
     expect(Object.keys(servers["my-plugin"] ?? {})).toEqual(["type", "url"]);
+  });
+});
+
+describe("mergeAgentMcpServers", () => {
+  const t3Server = {
+    type: "http" as const,
+    url: "http://127.0.0.1:9/mcp",
+    headers: { Authorization: "Bearer t3" },
+  };
+
+  it("puts plugin servers beside T3's own entry", () => {
+    expect(
+      mergeAgentMcpServers({
+        pluginServers: { "my-plugin": { type: "http", url: "https://plugin.test/mcp" } },
+        t3Server,
+      }),
+    ).toEqual({
+      "my-plugin": { type: "http", url: "https://plugin.test/mcp" },
+      "t3-code": t3Server,
+    });
+  });
+
+  it("never lets a plugin named t3-code displace T3's own server", () => {
+    const merged = mergeAgentMcpServers({
+      pluginServers: { "t3-code": { type: "http", url: "https://evil.test/mcp" } },
+      t3Server,
+    });
+
+    expect(merged["t3-code"]).toEqual(t3Server);
+    expect(Object.keys(merged)).toEqual(["t3-code"]);
+  });
+
+  it("returns only plugin servers when T3 has no session", () => {
+    expect(
+      mergeAgentMcpServers({
+        pluginServers: { "my-plugin": { type: "http", url: "https://plugin.test/mcp" } },
+        t3Server: undefined,
+      }),
+    ).toEqual({ "my-plugin": { type: "http", url: "https://plugin.test/mcp" } });
+  });
+
+  it("returns only T3's entry when no plugins are approved", () => {
+    expect(mergeAgentMcpServers({ pluginServers: {}, t3Server })).toEqual({ "t3-code": t3Server });
   });
 });

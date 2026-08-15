@@ -75,6 +75,7 @@ import * as Stream from "effect/Stream";
 import { resolveAttachmentPath } from "../../attachmentStore.ts";
 import { ServerConfig } from "../../config.ts";
 import * as McpProviderSession from "../../mcp/McpProviderSession.ts";
+import { mergeAgentMcpServers } from "../../pluginSurface/mcpServers.ts";
 import { resolveClaudeSdkExecutablePath } from "../Drivers/ClaudeExecutable.ts";
 import { makeClaudeEnvironment } from "../Drivers/ClaudeHome.ts";
 import {
@@ -4090,6 +4091,12 @@ export const makeClaudeAdapter = Effect.fn("makeClaudeAdapter")(function* (
         ...(ultracode ? { ultracode: true } : {}),
       };
       const mcpSession = McpProviderSession.readMcpProviderSession(input.threadId);
+      // Plugin surfaces registered for this thread's project, already filtered
+      // to origins the user approved for agent use. They sit beside T3's own
+      // `t3-code` entry, so their tools reach the agent as
+      // `mcp__<entry-name>__<tool>`. The `t3-code` key is written last so a
+      // plugin named `t3-code` cannot displace T3's own server.
+      const pluginMcpServers = McpProviderSession.readPluginMcpServers(input.threadId);
       // The attachments dir grant lets the agent Read/copy pasted images at
       // the paths ProviderService injects into the turn text, without an
       // approval prompt. It is a leaf directory holding only attachment
@@ -4123,17 +4130,18 @@ export const makeClaudeAdapter = Effect.fn("makeClaudeAdapter")(function* (
         env: claudeEnvironment,
         additionalDirectories,
         ...(Object.keys(extraArgs).length > 0 ? { extraArgs } : {}),
-        ...(mcpSession
+        ...(mcpSession || Object.keys(pluginMcpServers).length > 0
           ? {
-              mcpServers: {
-                "t3-code": {
-                  type: "http",
-                  url: mcpSession.endpoint,
-                  headers: {
-                    Authorization: mcpSession.authorizationHeader,
-                  },
-                },
-              },
+              mcpServers: mergeAgentMcpServers({
+                pluginServers: pluginMcpServers,
+                t3Server: mcpSession
+                  ? {
+                      type: "http",
+                      url: mcpSession.endpoint,
+                      headers: { Authorization: mcpSession.authorizationHeader },
+                    }
+                  : undefined,
+              }),
             }
           : {}),
       };

@@ -52,3 +52,29 @@ export function resolvePluginMcpServers(input: {
   }
   return servers;
 }
+
+/** T3's own MCP server, which is always reachable under this exact key. */
+export const T3_MCP_SERVER_KEY = "t3-code";
+
+export interface T3McpServer {
+  readonly type: "http";
+  readonly url: string;
+  readonly headers: Record<string, string>;
+}
+
+/**
+ * Merges plugin servers with T3's own entry for an agent session.
+ *
+ * T3's entry is written last on purpose. An entry named `t3-code` would
+ * otherwise displace the server that carries the agent's own tools, and entry
+ * names are user input.
+ */
+export function mergeAgentMcpServers(input: {
+  readonly pluginServers: Record<string, PluginMcpServer>;
+  readonly t3Server: T3McpServer | undefined;
+}): Record<string, PluginMcpServer | T3McpServer> {
+  return {
+    ...input.pluginServers,
+    ...(input.t3Server === undefined ? {} : { [T3_MCP_SERVER_KEY]: input.t3Server }),
+  };
+}

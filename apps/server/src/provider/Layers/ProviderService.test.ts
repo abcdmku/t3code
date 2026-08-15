@@ -55,12 +55,17 @@ import {
   makeSqlitePersistenceLive,
   SqlitePersistenceMemory,
 } from "../../persistence/Layers/Sqlite.ts";
+import { ProjectionThreadRepositoryLive } from "../../persistence/Layers/ProjectionThreads.ts";
 import * as ServerConfig from "../../config.ts";
 import * as ServerSettings from "../../serverSettings.ts";
 import * as AnalyticsService from "../../telemetry/AnalyticsService.ts";
 import { makeAdapterRegistryMock } from "../testUtils/providerAdapterRegistryMock.ts";
 
 const defaultServerSettingsLayer = ServerSettings.ServerSettingsService.layerTest();
+// ProviderService maps a thread to its project to resolve plugin MCP servers.
+const threadRepositoryLayer = ProjectionThreadRepositoryLive.pipe(
+  Layer.provide(SqlitePersistenceMemory),
+);
 const serverConfigTestLayer = ServerConfig.layerTest(process.cwd(), process.cwd()).pipe(
   Layer.provide(NodeServices.layer),
 );
@@ -296,6 +301,7 @@ function makeProviderServiceLayer() {
         Layer.provide(providerAdapterLayer),
         Layer.provide(directoryLayer),
         Layer.provide(defaultServerSettingsLayer),
+        Layer.provide(threadRepositoryLayer),
         Layer.provide(serverConfigTestLayer),
         Layer.provideMerge(AnalyticsService.layerTest),
         Layer.provide(
@@ -348,6 +354,7 @@ it.effect("ProviderServiceLive catches stopAll failures during shutdown", () =>
         Layer.provide(providerAdapterLayer),
         Layer.provide(directoryLayer),
         Layer.provide(defaultServerSettingsLayer),
+        Layer.provide(threadRepositoryLayer),
         Layer.provide(serverConfigTestLayer),
         Layer.provideMerge(AnalyticsService.layerTest),
         Layer.provide(
@@ -408,6 +415,7 @@ it.effect("ProviderServiceLive rejects new sessions for disabled providers", () 
       Layer.provide(providerAdapterLayer),
       Layer.provide(directoryLayer),
       Layer.provide(defaultServerSettingsLayer),
+      Layer.provide(threadRepositoryLayer),
       Layer.provide(serverConfigTestLayer),
       Layer.provide(AnalyticsService.layerTest),
       Layer.provide(
@@ -493,6 +501,7 @@ it.effect(
         Layer.provide(providerAdapterLayer),
         Layer.provide(directoryLayer),
         Layer.provide(serverSettingsLayer),
+        Layer.provide(threadRepositoryLayer),
         Layer.provide(serverConfigTestLayer),
         Layer.provide(AnalyticsService.layerTest),
         Layer.provide(
@@ -564,6 +573,7 @@ it.effect("ProviderServiceLive rejects new sessions for disabled custom instance
       Layer.provide(providerAdapterLayer),
       Layer.provide(directoryLayer),
       Layer.provide(defaultServerSettingsLayer),
+      Layer.provide(threadRepositoryLayer),
       Layer.provide(serverConfigTestLayer),
       Layer.provide(AnalyticsService.layerTest),
       Layer.provide(
@@ -620,6 +630,7 @@ it.effect("ProviderServiceLive writes canonical events to the emitting thread se
       Layer.provide(Layer.succeed(ProviderAdapterRegistry.ProviderAdapterRegistry, registry)),
       Layer.provide(directoryLayer),
       Layer.provide(defaultServerSettingsLayer),
+      Layer.provide(threadRepositoryLayer),
       Layer.provide(serverConfigTestLayer),
       Layer.provide(AnalyticsService.layerTest),
       Layer.provide(
@@ -681,6 +692,7 @@ it.effect("ProviderServiceLive keeps persisted resumable sessions on startup", (
       Layer.provide(Layer.succeed(ProviderAdapterRegistry.ProviderAdapterRegistry, registry)),
       Layer.provide(directoryLayer),
       Layer.provide(defaultServerSettingsLayer),
+      Layer.provide(threadRepositoryLayer),
       Layer.provide(serverConfigTestLayer),
       Layer.provide(AnalyticsService.layerTest),
       Layer.provide(
@@ -733,6 +745,11 @@ it.effect(
       const runtimeRepositoryLayer = ProviderSessionRuntime.layer.pipe(
         Layer.provide(persistenceLayer),
       );
+      // Backed by this test's own database, not the shared in-memory one, so
+      // the restart halves keep reading the same file.
+      const localThreadRepositoryLayer = ProjectionThreadRepositoryLive.pipe(
+        Layer.provide(persistenceLayer),
+      );
 
       const firstCodex = makeFakeCodexAdapter();
       const firstRegistry = makeAdapterRegistryMock({
@@ -748,6 +765,7 @@ it.effect(
         ),
         Layer.provide(firstDirectoryLayer),
         Layer.provide(defaultServerSettingsLayer),
+        Layer.provide(localThreadRepositoryLayer),
         Layer.provide(serverConfigTestLayer),
         Layer.provide(AnalyticsService.layerTest),
         Layer.provide(
@@ -808,6 +826,7 @@ it.effect(
         ),
         Layer.provide(secondDirectoryLayer),
         Layer.provide(defaultServerSettingsLayer),
+        Layer.provide(localThreadRepositoryLayer),
         Layer.provide(serverConfigTestLayer),
         Layer.provide(AnalyticsService.layerTest),
         Layer.provide(
@@ -1354,6 +1373,11 @@ routing.layer("ProviderServiceLive routing", (it) => {
       const runtimeRepositoryLayer = ProviderSessionRuntime.layer.pipe(
         Layer.provide(persistenceLayer),
       );
+      // Backed by this test's own database, not the shared in-memory one, so
+      // the restart halves keep reading the same file.
+      const localThreadRepositoryLayer = ProjectionThreadRepositoryLive.pipe(
+        Layer.provide(persistenceLayer),
+      );
 
       const firstClaude = makeFakeCodexAdapter(CLAUDE_AGENT_DRIVER);
       const firstRegistry = makeAdapterRegistryMock({
@@ -1368,6 +1392,7 @@ routing.layer("ProviderServiceLive routing", (it) => {
         ),
         Layer.provide(firstDirectoryLayer),
         Layer.provide(defaultServerSettingsLayer),
+        Layer.provide(localThreadRepositoryLayer),
         Layer.provide(serverConfigTestLayer),
         Layer.provide(AnalyticsService.layerTest),
         Layer.provide(
@@ -1407,6 +1432,7 @@ routing.layer("ProviderServiceLive routing", (it) => {
         ),
         Layer.provide(secondDirectoryLayer),
         Layer.provide(defaultServerSettingsLayer),
+        Layer.provide(localThreadRepositoryLayer),
         Layer.provide(serverConfigTestLayer),
         Layer.provide(AnalyticsService.layerTest),
         Layer.provide(
@@ -1462,6 +1488,10 @@ routing.layer("ProviderServiceLive routing", (it) => {
         const runtimeRepositoryLayer = ProviderSessionRuntime.layer.pipe(
           Layer.provide(persistenceLayer),
         );
+        // Backed by this test's own database, not the shared in-memory one.
+        const localThreadRepositoryLayer = ProjectionThreadRepositoryLive.pipe(
+          Layer.provide(persistenceLayer),
+        );
 
         const firstClaude = makeFakeCodexAdapter(CLAUDE_AGENT_DRIVER);
         const firstRegistry = makeAdapterRegistryMock({
@@ -1476,6 +1506,7 @@ routing.layer("ProviderServiceLive routing", (it) => {
           ),
           Layer.provide(firstDirectoryLayer),
           Layer.provide(defaultServerSettingsLayer),
+          Layer.provide(localThreadRepositoryLayer),
           Layer.provide(serverConfigTestLayer),
           Layer.provide(AnalyticsService.layerTest),
           Layer.provide(
@@ -1510,6 +1541,7 @@ routing.layer("ProviderServiceLive routing", (it) => {
           ),
           Layer.provide(secondDirectoryLayer),
           Layer.provide(defaultServerSettingsLayer),
+          Layer.provide(localThreadRepositoryLayer),
           Layer.provide(serverConfigTestLayer),
           Layer.provide(AnalyticsService.layerTest),
           Layer.provide(
