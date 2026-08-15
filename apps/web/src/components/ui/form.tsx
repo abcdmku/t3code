@@ -1,17 +1,2 @@
-"use client";
-
-import { Form as FormPrimitive } from "@base-ui/react/form";
-
-import { cn } from "~/lib/utils";
-
-function Form({ className, ...props }: FormPrimitive.Props) {
-  return (
-    <FormPrimitive
-      className={cn("flex w-full flex-col gap-4", className)}
-      data-slot="form"
-      {...props}
-    />
-  );
-}
-
-export { Form };
+// Re-export: the source moved to @t3tools/ui so plugin pages can use the same primitives.
+export * from "@t3tools/ui/form";

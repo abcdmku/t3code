@@ -1,0 +1,355 @@
+{
+  "name": "@t3tools/ui",
+  "version": "0.0.33",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pingdotgg/t3code.git",
+    "directory": "packages/ui"
+  },
+  "files": [
+    "dist",
+    "theme.css"
+  ],
+  "type": "module",
+  "exports": {
+    "./alert": {
+      "types": "./src/alert.tsx",
+      "import": "./src/alert.tsx"
+    },
+    "./alert-dialog": {
+      "types": "./src/alert-dialog.tsx",
+      "import": "./src/alert-dialog.tsx"
+    },
+    "./autocomplete": {
+      "types": "./src/autocomplete.tsx",
+      "import": "./src/autocomplete.tsx"
+    },
+    "./badge": {
+      "types": "./src/badge.tsx",
+      "import": "./src/badge.tsx"
+    },
+    "./button": {
+      "types": "./src/button.tsx",
+      "import": "./src/button.tsx"
+    },
+    "./card": {
+      "types": "./src/card.tsx",
+      "import": "./src/card.tsx"
+    },
+    "./checkbox": {
+      "types": "./src/checkbox.tsx",
+      "import": "./src/checkbox.tsx"
+    },
+    "./cn": {
+      "types": "./src/cn.ts",
+      "import": "./src/cn.ts"
+    },
+    "./collapsible": {
+      "types": "./src/collapsible.tsx",
+      "import": "./src/collapsible.tsx"
+    },
+    "./combobox": {
+      "types": "./src/combobox.tsx",
+      "import": "./src/combobox.tsx"
+    },
+    "./command": {
+      "types": "./src/command.tsx",
+      "import": "./src/command.tsx"
+    },
+    "./dialog": {
+      "types": "./src/dialog.tsx",
+      "import": "./src/dialog.tsx"
+    },
+    "./dialog-styles": {
+      "types": "./src/dialog-styles.ts",
+      "import": "./src/dialog-styles.ts"
+    },
+    "./empty": {
+      "types": "./src/empty.tsx",
+      "import": "./src/empty.tsx"
+    },
+    "./field": {
+      "types": "./src/field.tsx",
+      "import": "./src/field.tsx"
+    },
+    "./fieldset": {
+      "types": "./src/fieldset.tsx",
+      "import": "./src/fieldset.tsx"
+    },
+    "./form": {
+      "types": "./src/form.tsx",
+      "import": "./src/form.tsx"
+    },
+    "./group": {
+      "types": "./src/group.tsx",
+      "import": "./src/group.tsx"
+    },
+    "./input": {
+      "types": "./src/input.tsx",
+      "import": "./src/input.tsx"
+    },
+    "./input-group": {
+      "types": "./src/input-group.tsx",
+      "import": "./src/input-group.tsx"
+    },
+    "./kbd": {
+      "types": "./src/kbd.tsx",
+      "import": "./src/kbd.tsx"
+    },
+    "./label": {
+      "types": "./src/label.tsx",
+      "import": "./src/label.tsx"
+    },
+    "./menu": {
+      "types": "./src/menu.tsx",
+      "import": "./src/menu.tsx"
+    },
+    "./number-field": {
+      "types": "./src/number-field.tsx",
+      "import": "./src/number-field.tsx"
+    },
+    "./popover": {
+      "types": "./src/popover.tsx",
+      "import": "./src/popover.tsx"
+    },
+    "./radio-group": {
+      "types": "./src/radio-group.tsx",
+      "import": "./src/radio-group.tsx"
+    },
+    "./scroll-area": {
+      "types": "./src/scroll-area.tsx",
+      "import": "./src/scroll-area.tsx"
+    },
+    "./select": {
+      "types": "./src/select.tsx",
+      "import": "./src/select.tsx"
+    },
+    "./separator": {
+      "types": "./src/separator.tsx",
+      "import": "./src/separator.tsx"
+    },
+    "./sheet": {
+      "types": "./src/sheet.tsx",
+      "import": "./src/sheet.tsx"
+    },
+    "./skeleton": {
+      "types": "./src/skeleton.tsx",
+      "import": "./src/skeleton.tsx"
+    },
+    "./spinner": {
+      "types": "./src/spinner.tsx",
+      "import": "./src/spinner.tsx"
+    },
+    "./switch": {
+      "types": "./src/switch.tsx",
+      "import": "./src/switch.tsx"
+    },
+    "./table": {
+      "types": "./src/table.tsx",
+      "import": "./src/table.tsx"
+    },
+    "./textarea": {
+      "types": "./src/textarea.tsx",
+      "import": "./src/textarea.tsx"
+    },
+    "./toggle": {
+      "types": "./src/toggle.tsx",
+      "import": "./src/toggle.tsx"
+    },
+    "./toggle-group": {
+      "types": "./src/toggle-group.tsx",
+      "import": "./src/toggle-group.tsx"
+    },
+    "./tooltip": {
+      "types": "./src/tooltip.tsx",
+      "import": "./src/tooltip.tsx"
+    },
+    "./theme.css": "./theme.css"
+  },
+  "publishConfig": {
+    "exports": {
+      "./alert": {
+        "types": "./dist/alert.d.mts",
+        "import": "./dist/alert.mjs"
+      },
+      "./alert-dialog": {
+        "types": "./dist/alert-dialog.d.mts",
+        "import": "./dist/alert-dialog.mjs"
+      },
+      "./autocomplete": {
+        "types": "./dist/autocomplete.d.mts",
+        "import": "./dist/autocomplete.mjs"
+      },
+      "./badge": {
+        "types": "./dist/badge.d.mts",
+        "import": "./dist/badge.mjs"
+      },
+      "./button": {
+        "types": "./dist/button.d.mts",
+        "import": "./dist/button.mjs"
+      },
+      "./card": {
+        "types": "./dist/card.d.mts",
+        "import": "./dist/card.mjs"
+      },
+      "./checkbox": {
+        "types": "./dist/checkbox.d.mts",
+        "import": "./dist/checkbox.mjs"
+      },
+      "./cn": {
+        "types": "./dist/cn.d.mts",
+        "import": "./dist/cn.mjs"
+      },
+      "./collapsible": {
+        "types": "./dist/collapsible.d.mts",
+        "import": "./dist/collapsible.mjs"
+      },
+      "./combobox": {
+        "types": "./dist/combobox.d.mts",
+        "import": "./dist/combobox.mjs"
+      },
+      "./command": {
+        "types": "./dist/command.d.mts",
+        "import": "./dist/command.mjs"
+      },
+      "./dialog": {
+        "types": "./dist/dialog.d.mts",
+        "import": "./dist/dialog.mjs"
+      },
+      "./dialog-styles": {
+        "types": "./dist/dialog-styles.d.mts",
+        "import": "./dist/dialog-styles.mjs"
+      },
+      "./empty": {
+        "types": "./dist/empty.d.mts",
+        "import": "./dist/empty.mjs"
+      },
+      "./field": {
+        "types": "./dist/field.d.mts",
+        "import": "./dist/field.mjs"
+      },
+      "./fieldset": {
+        "types": "./dist/fieldset.d.mts",
+        "import": "./dist/fieldset.mjs"
+      },
+      "./form": {
+        "types": "./dist/form.d.mts",
+        "import": "./dist/form.mjs"
+      },
+      "./group": {
+        "types": "./dist/group.d.mts",
+        "import": "./dist/group.mjs"
+      },
+      "./input": {
+        "types": "./dist/input.d.mts",
+        "import": "./dist/input.mjs"
+      },
+      "./input-group": {
+        "types": "./dist/input-group.d.mts",
+        "import": "./dist/input-group.mjs"
+      },
+      "./kbd": {
+        "types": "./dist/kbd.d.mts",
+        "import": "./dist/kbd.mjs"
+      },
+      "./label": {
+        "types": "./dist/label.d.mts",
+        "import": "./dist/label.mjs"
+      },
+      "./menu": {
+        "types": "./dist/menu.d.mts",
+        "import": "./dist/menu.mjs"
+      },
+      "./number-field": {
+        "types": "./dist/number-field.d.mts",
+        "import": "./dist/number-field.mjs"
+      },
+      "./popover": {
+        "types": "./dist/popover.d.mts",
+        "import": "./dist/popover.mjs"
+      },
+      "./radio-group": {
+        "types": "./dist/radio-group.d.mts",
+        "import": "./dist/radio-group.mjs"
+      },
+      "./scroll-area": {
+        "types": "./dist/scroll-area.d.mts",
+        "import": "./dist/scroll-area.mjs"
+      },
+      "./select": {
+        "types": "./dist/select.d.mts",
+        "import": "./dist/select.mjs"
+      },
+      "./separator": {
+        "types": "./dist/separator.d.mts",
+        "import": "./dist/separator.mjs"
+      },
+      "./sheet": {
+        "types": "./dist/sheet.d.mts",
+        "import": "./dist/sheet.mjs"
+      },
+      "./skeleton": {
+        "types": "./dist/skeleton.d.mts",
+        "import": "./dist/skeleton.mjs"
+      },
+      "./spinner": {
+        "types": "./dist/spinner.d.mts",
+        "import": "./dist/spinner.mjs"
+      },
+      "./switch": {
+        "types": "./dist/switch.d.mts",
+        "import": "./dist/switch.mjs"
+      },
+      "./table": {
+        "types": "./dist/table.d.mts",
+        "import": "./dist/table.mjs"
+      },
+      "./textarea": {
+        "types": "./dist/textarea.d.mts",
+        "import": "./dist/textarea.mjs"
+      },
+      "./toggle": {
+        "types": "./dist/toggle.d.mts",
+        "import": "./dist/toggle.mjs"
+      },
+      "./toggle-group": {
+        "types": "./dist/toggle-group.d.mts",
+        "import": "./dist/toggle-group.mjs"
+      },
+      "./tooltip": {
+        "types": "./dist/tooltip.d.mts",
+        "import": "./dist/tooltip.mjs"
+      },
+      "./theme.css": "./theme.css"
+    },
+    "access": "public"
+  },
+  "scripts": {
+    "build": "vp pack",
+    "prepack": "pnpm run build",
+    "smoke:package": "node scripts/smoke-package.mjs",
+    "typecheck": "tsgo --noEmit",
+    "test": "vp test run"
+  },
+  "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "lucide-react": "^0.564.0",
+    "tailwind-merge": "^3.4.0"
+  },
+  "devDependencies": {
+    "@base-ui/react": "^1.4.1",
+    "@types/react": "~19.2.14",
+    "@types/react-dom": "~19.2.3",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "tailwindcss": "^4.0.0",
+    "vite-plus": "catalog:"
+  },
+  "peerDependencies": {
+    "@base-ui/react": "^1.4.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^4.0.0"
+  }
+}
