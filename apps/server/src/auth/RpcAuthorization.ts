@@ -39,6 +39,10 @@ export const RPC_REQUIRED_SCOPES = {
   [WS_METHODS.serverRemoveKeybinding]: AuthOrchestrationOperateScope,
   [WS_METHODS.serverGetSettings]: AuthOrchestrationReadScope,
   [WS_METHODS.serverUpdateSettings]: AuthOrchestrationOperateScope,
+  // Both plugin-surface methods act on the user's behalf: one makes the server
+  // fetch an arbitrary URL, the other mints a credential. Neither is a read.
+  [WS_METHODS.serverInspectPluginSurface]: AuthOrchestrationOperateScope,
+  [WS_METHODS.serverIssuePluginSurfaceCode]: AuthOrchestrationOperateScope,
   [WS_METHODS.serverDiscoverSourceControl]: AuthOrchestrationReadScope,
   [WS_METHODS.serverGetTraceDiagnostics]: AuthOrchestrationReadScope,
   [WS_METHODS.serverGetProcessDiagnostics]: AuthOrchestrationReadScope,

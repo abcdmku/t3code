@@ -1,4 +1,9 @@
-import type { ContextMenuItem, PreviewSessionSnapshot, PullRequestState } from "@t3tools/contracts";
+import type {
+  ContextMenuItem,
+  PluginSurfaceEntry,
+  PreviewSessionSnapshot,
+  PullRequestState,
+} from "@t3tools/contracts";
 import { getTerminalLabel } from "@t3tools/shared/terminalLabels";
 import {
   Bot,
@@ -7,6 +12,7 @@ import {
   GitPullRequest,
   Globe2,
   Plus,
+  Puzzle,
   TerminalSquare,
   X,
 } from "lucide-react";
@@ -56,6 +62,9 @@ interface RightPanelTabsProps {
   onCloseAllSurfaces: () => void;
   onCopyFilePath: (relativePath: string) => void;
   onAddBrowser: () => void;
+  onAddPlugin: () => void;
+  onOpenPlugin: (entry: PluginSurfaceEntry) => void;
+  pluginSurfaces: ReadonlyArray<PluginSurfaceEntry>;
   onAddTerminal: () => void;
   onAddDiff: () => void;
   onAddFiles: () => void;
@@ -151,6 +160,9 @@ function SurfaceMenuItem(props: {
  */
 function RightPanelEmptyState(props: {
   onAddBrowser: () => void;
+  onAddPlugin: () => void;
+  onOpenPlugin: (entry: PluginSurfaceEntry) => void;
+  pluginSurfaces: ReadonlyArray<PluginSurfaceEntry>;
   onAddTerminal: () => void;
   onAddDiff: () => void;
   onAddFiles: () => void;
@@ -176,6 +188,27 @@ function RightPanelEmptyState(props: {
       available: props.browserAvailable,
       disabledReason: SURFACE_UNAVAILABLE_HINTS.browser,
       onClick: props.onAddBrowser,
+      badgeCount: 0,
+    },
+    // One row per registered plugin, then the row that registers a new one.
+    ...props.pluginSurfaces.map((entry) => ({
+      label: entry.presentation.title ?? entry.name,
+      description: entry.presentation.description ?? "Open this plugin in a panel.",
+      icon: Puzzle,
+      shortcut: "",
+      available: props.browserAvailable,
+      disabledReason: SURFACE_UNAVAILABLE_HINTS.browser,
+      onClick: () => props.onOpenPlugin(entry),
+      badgeCount: 0,
+    })),
+    {
+      label: "Add plugin",
+      description: "Point T3 at a page your app serves.",
+      icon: Puzzle,
+      shortcut: "",
+      available: true,
+      disabledReason: undefined,
+      onClick: props.onAddPlugin,
       badgeCount: 0,
     },
     {
@@ -682,6 +715,21 @@ export function RightPanelTabs(props: RightPanelTabsProps) {
                     <Globe2 />
                     Browser
                   </SurfaceMenuItem>
+                  {props.pluginSurfaces.map((entry) => (
+                    <SurfaceMenuItem
+                      key={entry.name}
+                      available={props.browserAvailable}
+                      disabledReason={SURFACE_DISABLED_REASONS.browser}
+                      onClick={() => props.onOpenPlugin(entry)}
+                    >
+                      <Puzzle />
+                      {entry.presentation.title ?? entry.name}
+                    </SurfaceMenuItem>
+                  ))}
+                  <SurfaceMenuItem available onClick={props.onAddPlugin}>
+                    <Puzzle />
+                    Add plugin
+                  </SurfaceMenuItem>
                   <SurfaceMenuItem
                     available={props.terminalAvailable}
                     disabledReason={SURFACE_DISABLED_REASONS.terminal}
@@ -733,6 +781,9 @@ export function RightPanelTabs(props: RightPanelTabsProps) {
         {props.activeSurfaceId === null ? (
           <RightPanelEmptyState
             onAddBrowser={props.onAddBrowser}
+            onAddPlugin={props.onAddPlugin}
+            onOpenPlugin={props.onOpenPlugin}
+            pluginSurfaces={props.pluginSurfaces}
             onAddTerminal={props.onAddTerminal}
             onAddDiff={props.onAddDiff}
             onAddFiles={props.onAddFiles}

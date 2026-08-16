@@ -57,6 +57,9 @@ import * as ProviderEventLoggers from "./ProviderEventLoggers.ts";
 import * as AnalyticsService from "../../telemetry/AnalyticsService.ts";
 import * as McpProviderSession from "../../mcp/McpProviderSession.ts";
 import * as McpSessionRegistry from "../../mcp/McpSessionRegistry.ts";
+import * as ProjectionThreads from "../../persistence/Services/ProjectionThreads.ts";
+import { resolvePluginMcpServers } from "../../pluginSurface/mcpServers.ts";
+import * as ServerSettings from "../../serverSettings.ts";
 const isModelSelection = Schema.is(ModelSelection);
 
 /**
@@ -215,14 +218,53 @@ const makeProviderService = Effect.fn("makeProviderService")(function* (
 
   const registry = yield* ProviderAdapterRegistry.ProviderAdapterRegistry;
   const directory = yield* ProviderSessionDirectory.ProviderSessionDirectory;
+  // Needed to map a thread to its project, since plugin surfaces are
+  // registered per project while MCP sessions are prepared per thread.
+  const projectionThreads = yield* ProjectionThreads.ProjectionThreadRepository;
+  const serverSettings = yield* ServerSettings.ServerSettingsService;
   const runtimeEventPubSub = yield* PubSub.unbounded<ProviderRuntimeEvent>();
   const nowIso = Effect.map(DateTime.now, DateTime.formatIso);
+
+  /**
+   * Resolves the plugin surfaces registered for this thread's project into MCP
+   * servers the agent session can call. Resolved per thread at session start,
+   * because a surface is registered per project and threads move between them.
+   *
+   * Failures here are logged and dropped: a settings read or a missing thread
+   * row must not stop a turn from starting. The agent simply sees no plugin
+   * tools, which is the same as having none registered.
+   */
+  const resolvePluginMcpServersForThread = (threadId: ThreadId) =>
+    Effect.gen(function* () {
+      const thread = yield* projectionThreads.getById({ threadId });
+      if (Option.isNone(thread)) return {};
+      const settings = yield* serverSettings.getSettings;
+      return resolvePluginMcpServers({
+        entries: settings.pluginSurfaces[thread.value.projectId] ?? [],
+        grants: settings.pluginSurfaceGrants,
+      });
+    }).pipe(
+      Effect.catch((cause) =>
+        Effect.logWarning("Failed to resolve plugin MCP servers for thread", {
+          cause,
+          threadId,
+        }).pipe(Effect.as({})),
+      ),
+    );
+
   const prepareMcpSession = (threadId: ThreadId, providerInstanceId: ProviderInstanceId) =>
     McpSessionRegistry.issueActiveMcpCredential({ threadId, providerInstanceId }).pipe(
       Effect.tap((credential) =>
         credential
           ? Effect.sync(() => McpProviderSession.setMcpProviderSession(credential.config))
           : Effect.void,
+      ),
+      Effect.tap(() =>
+        resolvePluginMcpServersForThread(threadId).pipe(
+          Effect.flatMap((servers) =>
+            Effect.sync(() => McpProviderSession.setPluginMcpServers(threadId, servers)),
+          ),
+        ),
       ),
     );
   const clearMcpSession = (threadId: ThreadId) =>

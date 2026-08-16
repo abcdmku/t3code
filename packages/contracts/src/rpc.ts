@@ -6,8 +6,15 @@ import { ExternalLauncherError, LaunchEditorInput } from "./editor.ts";
 import {
   AuthAccessStreamError,
   AuthAccessStreamEvent,
+  AuthEnvironmentScope,
   EnvironmentAuthorizationError,
 } from "./auth.ts";
+import { TrimmedNonEmptyString } from "./baseSchemas.ts";
+import {
+  PluginSurfaceError,
+  PluginSurfaceHandoff,
+  PluginSurfaceInspection,
+} from "./pluginSurface.ts";
 import {
   BackgroundPolicySnapshot,
   ClientActivityReportInput,
@@ -259,6 +266,8 @@ export const WS_METHODS = {
   serverRemoveKeybinding: "server.removeKeybinding",
   serverGetSettings: "server.getSettings",
   serverUpdateSettings: "server.updateSettings",
+  serverInspectPluginSurface: "server.inspectPluginSurface",
+  serverIssuePluginSurfaceCode: "server.issuePluginSurfaceCode",
   serverDiscoverSourceControl: "server.discoverSourceControl",
   serverGetTraceDiagnostics: "server.getTraceDiagnostics",
   serverGetProcessDiagnostics: "server.getProcessDiagnostics",
@@ -381,6 +390,30 @@ export const WsServerUpdateSettingsRpc = Rpc.make(WS_METHODS.serverUpdateSetting
   payload: Schema.Struct({ patch: ServerSettingsPatch }),
   success: ServerSettings,
   error: Schema.Union([ServerSettingsError, EnvironmentAuthorizationError]),
+});
+
+/**
+ * The page is fetched server-side because a browser cannot read a
+ * cross-origin document, and the add-plugin dialog needs its title and icon.
+ */
+export const WsServerInspectPluginSurfaceRpc = Rpc.make(WS_METHODS.serverInspectPluginSurface, {
+  payload: Schema.Struct({ url: TrimmedNonEmptyString }),
+  success: PluginSurfaceInspection,
+  error: Schema.Union([PluginSurfaceError, EnvironmentAuthorizationError]),
+});
+
+/**
+ * Minted per open and never stored. The code rides the URL fragment, which
+ * browsers do not send to the plugin's own web server.
+ */
+export const WsServerIssuePluginSurfaceCodeRpc = Rpc.make(WS_METHODS.serverIssuePluginSurfaceCode, {
+  payload: Schema.Struct({
+    url: TrimmedNonEmptyString,
+    label: TrimmedNonEmptyString,
+    scopes: Schema.Array(AuthEnvironmentScope),
+  }),
+  success: PluginSurfaceHandoff,
+  error: Schema.Union([PluginSurfaceError, EnvironmentAuthorizationError]),
 });
 
 export const WsServerDiscoverSourceControlRpc = Rpc.make(WS_METHODS.serverDiscoverSourceControl, {
@@ -981,6 +1014,8 @@ export const WsRpcGroup = RpcGroup.make(
   WsServerRemoveKeybindingRpc,
   WsServerGetSettingsRpc,
   WsServerUpdateSettingsRpc,
+  WsServerInspectPluginSurfaceRpc,
+  WsServerIssuePluginSurfaceCodeRpc,
   WsServerDiscoverSourceControlRpc,
   WsServerGetTraceDiagnosticsRpc,
   WsServerGetProcessDiagnosticsRpc,

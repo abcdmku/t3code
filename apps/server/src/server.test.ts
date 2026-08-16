@@ -16,6 +16,7 @@ import {
   KeybindingRule,
   MessageId,
   ExternalLauncherCommandNotFoundError,
+  PluginSurfaceError,
   OrchestrationThreadDetailSnapshot,
   type OrchestrationThreadStreamItem,
   type OrchestrationThreadShell,
@@ -117,6 +118,7 @@ import { makeManualOnlyProviderMaintenanceCapabilities } from "./provider/provid
 import * as ServerLifecycleEvents from "./serverLifecycleEvents.ts";
 import * as ServerRuntimeStartup from "./serverRuntimeStartup.ts";
 import * as ServiceLauncherClient from "./cloud/serviceLauncherClient.ts";
+import * as PluginSurfaceService from "./pluginSurface/PluginSurfaceService.ts";
 import * as ServerSettings from "./serverSettings.ts";
 import * as TerminalManager from "./terminal/Manager.ts";
 import * as PreviewManager from "./preview/Manager.ts";
@@ -386,6 +388,7 @@ const buildAppUnderTest = (options?: {
     keybindings?: Partial<Keybindings.Keybindings["Service"]>;
     providerRegistry?: Partial<ProviderRegistry.ProviderRegistry["Service"]>;
     serverSettings?: Partial<ServerSettings.ServerSettingsService["Service"]>;
+    pluginSurfaces?: Partial<PluginSurfaceService.PluginSurfaceService["Service"]>;
     externalLauncher?: Partial<ExternalLauncher.ExternalLauncher["Service"]>;
     vcsDriver?: Partial<VcsDriver.VcsDriver["Service"]>;
     vcsDriverRegistry?: Partial<VcsDriverRegistry.VcsDriverRegistry["Service"]>;
@@ -639,15 +642,29 @@ const buildAppUnderTest = (options?: {
           ...options?.layers?.providerRegistry,
         }),
       ),
+      // Merged into one `provide` because `.pipe` tops out at 20 arguments.
       Layer.provide(
-        Layer.mock(ServerSettings.ServerSettingsService)({
-          start: Effect.void,
-          ready: Effect.void,
-          getSettings: Effect.succeed(DEFAULT_SERVER_SETTINGS),
-          updateSettings: () => Effect.succeed(DEFAULT_SERVER_SETTINGS),
-          streamChanges: Stream.empty,
-          ...options?.layers?.serverSettings,
-        }),
+        Layer.mergeAll(
+          Layer.mock(ServerSettings.ServerSettingsService)({
+            start: Effect.void,
+            ready: Effect.void,
+            getSettings: Effect.succeed(DEFAULT_SERVER_SETTINGS),
+            updateSettings: () => Effect.succeed(DEFAULT_SERVER_SETTINGS),
+            streamChanges: Stream.empty,
+            ...options?.layers?.serverSettings,
+          }),
+          Layer.mock(PluginSurfaceService.PluginSurfaceService)({
+            inspect: (url) =>
+              Effect.succeed({
+                origin: new URL(url).origin,
+                suggestedName: null,
+                presentation: {},
+                unreachable: true,
+              }),
+            issueCode: () => Effect.fail(new PluginSurfaceError({ reason: "no-grant" })),
+            ...options?.layers?.pluginSurfaces,
+          }),
+        ),
       ),
       Layer.provide(
         Layer.mock(ExternalLauncher.ExternalLauncher)({

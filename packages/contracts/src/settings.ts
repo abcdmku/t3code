@@ -2,8 +2,9 @@ import * as Effect from "effect/Effect";
 import * as Duration from "effect/Duration";
 import * as Schema from "effect/Schema";
 import * as SchemaTransformation from "effect/SchemaTransformation";
-import { TrimmedNonEmptyString, TrimmedString } from "./baseSchemas.ts";
+import { ProjectId, TrimmedNonEmptyString, TrimmedString } from "./baseSchemas.ts";
 import { ThreadEnvMode } from "./environment.ts";
+import { PluginSurfaceEntries, PluginSurfaceGrants } from "./pluginSurface.ts";
 import {
   DEFAULT_TEXT_GENERATION_MODEL,
   DEFAULT_TEXT_GENERATION_REASONING_EFFORT,
@@ -611,6 +612,14 @@ export const ServerSettings = Schema.Struct({
     Schema.withDecodingDefault(Effect.succeed({})),
   ),
   observability: ObservabilitySettings.pipe(Schema.withDecodingDefault(Effect.succeed({}))),
+  // Plugin surfaces a user added, keyed by project. Right-panel surfaces are
+  // already per thread, so each thread opens its own instance of an entry.
+  pluginSurfaces: Schema.Record(ProjectId, PluginSurfaceEntries).pipe(
+    Schema.withDecodingDefault(Effect.succeed({})),
+  ),
+  // Consent is keyed to origin and shared across projects, because the thing
+  // being trusted is the origin, not the entry that happens to point at it.
+  pluginSurfaceGrants: PluginSurfaceGrants.pipe(Schema.withDecodingDefault(Effect.succeed([]))),
 });
 export type ServerSettings = typeof ServerSettings.Type;
 
@@ -751,6 +760,10 @@ export const ServerSettingsPatch = Schema.Struct({
   // patches risk leaving driver-specific config in a half-merged state.
   // The web UI sends a fully-formed map every time it edits this field.
   providerInstances: Schema.optionalKey(Schema.Record(ProviderInstanceId, ProviderInstanceConfig)),
+  // Whole-map replacement, same reasoning as `providerInstances`. Adding and
+  // removing a plugin surface both send the full list for that project.
+  pluginSurfaces: Schema.optionalKey(Schema.Record(ProjectId, PluginSurfaceEntries)),
+  pluginSurfaceGrants: Schema.optionalKey(PluginSurfaceGrants),
 });
 export type ServerSettingsPatch = typeof ServerSettingsPatch.Type;
 

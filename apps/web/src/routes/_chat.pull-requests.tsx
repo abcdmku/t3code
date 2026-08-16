@@ -1546,6 +1546,11 @@ function PullRequestsRouteView() {
             onCloseAllSurfaces={closeAllSurfaces}
             onCopyFilePath={() => undefined}
             onAddBrowser={() => undefined}
+            // The pull-request route has no project or thread in view, so it
+            // offers no plugin surfaces.
+            onAddPlugin={() => undefined}
+            onOpenPlugin={() => undefined}
+            pluginSurfaces={[]}
             onAddTerminal={() => undefined}
             onAddDiff={() => undefined}
             onAddFiles={() => undefined}

@@ -756,6 +756,19 @@ export function createServerEnvironmentAtoms<R, E>(
       scheduler: configScheduler,
       concurrency: configConcurrency,
     }),
+    inspectPluginSurface: createEnvironmentRpcCommand(runtime, {
+      label: "environment-data:server:inspect-plugin-surface",
+      tag: WS_METHODS.serverInspectPluginSurface,
+      scheduler: configScheduler,
+      concurrency: configConcurrency,
+    }),
+    // Deliberately not single-flighted: every open needs its own code, and two
+    // threads can open the same plugin at once.
+    issuePluginSurfaceCode: createEnvironmentRpcCommand(runtime, {
+      label: "environment-data:server:issue-plugin-surface-code",
+      tag: WS_METHODS.serverIssuePluginSurfaceCode,
+      scheduler: configScheduler,
+    }),
     signalProcess: createEnvironmentRpcCommand(runtime, {
       label: "environment-data:server:signal-process",
       tag: WS_METHODS.serverSignalProcess,

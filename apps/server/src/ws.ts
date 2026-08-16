@@ -83,6 +83,7 @@ import * as ProviderMaintenanceRunner from "./provider/providerMaintenanceRunner
 import * as ServerSelfUpdate from "./cloud/selfUpdate.ts";
 import * as ServerLifecycleEvents from "./serverLifecycleEvents.ts";
 import * as ServerRuntimeStartup from "./serverRuntimeStartup.ts";
+import * as PluginSurfaceService from "./pluginSurface/PluginSurfaceService.ts";
 import * as ServerSettings from "./serverSettings.ts";
 import * as TerminalManager from "./terminal/Manager.ts";
 import * as PreviewAutomationBroker from "./mcp/PreviewAutomationBroker.ts";
@@ -374,6 +375,7 @@ const makeWsRpcLayer = (
       const config = yield* ServerConfig.ServerConfig;
       const lifecycleEvents = yield* ServerLifecycleEvents.ServerLifecycleEvents;
       const serverSettings = yield* ServerSettings.ServerSettingsService;
+      const pluginSurfaces = yield* PluginSurfaceService.PluginSurfaceService;
       const startup = yield* ServerRuntimeStartup.ServerRuntimeStartup;
       const workspaceEntries = yield* WorkspaceEntries.WorkspaceEntries;
       const workspaceFileSystem = yield* WorkspaceFileSystem.WorkspaceFileSystem;
@@ -1523,6 +1525,16 @@ const makeWsRpcLayer = (
             {
               "rpc.aggregate": "server",
             },
+          ),
+        [WS_METHODS.serverInspectPluginSurface]: ({ url }) =>
+          observeRpcEffect(WS_METHODS.serverInspectPluginSurface, pluginSurfaces.inspect(url), {
+            "rpc.aggregate": "server",
+          }),
+        [WS_METHODS.serverIssuePluginSurfaceCode]: ({ url, label, scopes }) =>
+          observeRpcEffect(
+            WS_METHODS.serverIssuePluginSurfaceCode,
+            pluginSurfaces.issueCode({ url, label, scopes }),
+            { "rpc.aggregate": "server" },
           ),
         [WS_METHODS.serverDiscoverSourceControl]: (_input) =>
           observeRpcEffect(
